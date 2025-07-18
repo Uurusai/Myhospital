@@ -17,13 +17,13 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.AdminDash">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="border-top" stylesheets="@DashboardStyle.css">
             <children>
-                <BorderPane layoutX="118.0" layoutY="111.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <BorderPane layoutX="11.0" layoutY="12.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="12.666666666666742" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.333333333333258" AnchorPane.topAnchor="12.0">
                     <top>
-                        <AnchorPane prefHeight="31.0" prefWidth="1092.0" styleClass="white-bg" stylesheets="@DashboardStyle.css" BorderPane.alignment="CENTER">
+                        <AnchorPane prefHeight="36.0" prefWidth="1095.0" styleClass="white-bg" stylesheets="@DashboardStyle.css" BorderPane.alignment="CENTER">
                             <children>
                                 <FontAwesomeIconView layoutX="21.0" layoutY="-2.0" wrappingWidth="17.333343505859375" />
                                 <AnchorPane layoutY="-3.0" prefHeight="41.0" prefWidth="200.0">
@@ -31,12 +31,12 @@
                                         <Label alignment="CENTER" layoutY="3.0" prefHeight="39.0" prefWidth="170.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css" text="Hospital Management System" textFill="WHITE" />
                                     </children>
                                 </AnchorPane>
-                                <Circle fill="DODGERBLUE" layoutX="1011.0" layoutY="18.0" radius="10.0" stroke="DODGERBLUE" strokeType="INSIDE" AnchorPane.rightAnchor="79.0" />
+                                <Circle id="top_profile" fill="DODGERBLUE" layoutX="1011.0" layoutY="18.0" radius="10.0" stroke="DODGERBLUE" strokeType="INSIDE" AnchorPane.rightAnchor="79.0" />
                                 <Label layoutX="1027.0" layoutY="8.0" prefHeight="17.0" prefWidth="34.0" text="Active" AnchorPane.rightAnchor="39.0" />
-                                <Label alignment="CENTER" layoutX="822.0" layoutY="1.0" prefHeight="35.0" prefWidth="147.0" text="Welcome, Admin" AnchorPane.rightAnchor="130.66666666666666" />
+                                <Label id="top_username" fx:id="top_username" alignment="CENTER" layoutX="822.0" layoutY="1.0" prefHeight="35.0" prefWidth="147.0" text="Welcome, Admin" AnchorPane.rightAnchor="130.66666666666666" />
                                 <Circle fill="#5eef4e" layoutX="1070.0" layoutY="19.0" radius="5.0" stroke="#5eef4e" strokeType="INSIDE" AnchorPane.rightAnchor="25.0" />
-                                <Label alignment="CENTER" layoutX="720.0" layoutY="3.0" prefHeight="33.0" prefWidth="86.0" text="MM/DD/YY" AnchorPane.rightAnchor="294.0" />
-                                <Label layoutX="185.0" layoutY="5.0" prefHeight="29.0" prefWidth="119.0" styleClass="header-1" stylesheets="@DashboardStyle.css" text="Dashboard Form" />
+                                <Label id="date_time" fx:id="date_time" alignment="CENTER" layoutX="720.0" layoutY="3.0" prefHeight="33.0" prefWidth="86.0" text="MM/DD/YY" AnchorPane.rightAnchor="294.0" />
+                                <Label id="current_form" fx:id="current_form" layoutX="185.0" layoutY="5.0" prefHeight="29.0" prefWidth="119.0" styleClass="header-1" stylesheets="@DashboardStyle.css" text="Dashboard Form" />
                             </children>
                         </AnchorPane>
                     </top>
@@ -49,7 +49,7 @@
                                         <Font size="14.0" />
                                     </font>
                                 </Label>
-                                <Label layoutX="100.0" layoutY="79.0" text="1" textFill="#f6f5f5">
+                                <Label id="admin_id" fx:id="admin_id" layoutX="100.0" layoutY="79.0" text="1" textFill="#f6f5f5">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
@@ -59,33 +59,33 @@
                                         <Font size="14.0" />
                                     </font>
                                 </Label>
-                                <Label layoutX="100.0" layoutY="96.0" text="admin" textFill="#fffdfd">
+                                <Label id="user_name" fx:id="username" layoutX="100.0" layoutY="96.0" text="admin" textFill="#fffdfd">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
                                 <Line endX="42.66667175292969" layoutX="118.0" layoutY="124.0" startX="-106.50001525878906" stroke="#efeded" />
-                                <Button layoutX="25.0" layoutY="149.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Dashboard">
+                                <Button id="dashboard_btn" fx:id="db_btn" layoutX="25.0" layoutY="149.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Dashboard">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Button>
-                                <Button layoutX="25.0" layoutY="196.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Doctor">
+                                <Button id="doctor_btn" fx:id="doctor_btn" layoutX="25.0" layoutY="196.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Doctor">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Button>
-                                <Button layoutX="25.0" layoutY="247.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Patient">
+                                <Button id="patient_btn" fx:id="patient_btn" layoutX="25.0" layoutY="247.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Patient">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Button>
-                                <Button layoutX="25.0" layoutY="296.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Appointment">
+                                <Button id="appointment__btn" fx:id="appointment_btn" layoutX="25.0" layoutY="296.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Appointment">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Button>
-                                <Button layoutX="25.0" layoutY="386.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="123.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Profile Settings">
+                                <Button id="profile_settings_btn" layoutX="25.0" layoutY="386.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="123.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Profile Settings">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
@@ -102,7 +102,7 @@
                     <center>
                         <AnchorPane prefHeight="443.0" prefWidth="952.0" styleClass="shadow" stylesheets="@DashboardStyle.css" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane layoutX="9.0" layoutY="6.0" prefHeight="165.0" prefWidth="911.0" stylesheets="@DashboardStyle.css">
+                                <AnchorPane fx:id="db_top" layoutX="9.0" layoutY="6.0" prefHeight="165.0" prefWidth="911.0" stylesheets="@DashboardStyle.css" visible="false">
                                     <styleClass>
                                         <String fx:value="white-bg" />
                                         <String fx:value="radius" />
@@ -125,36 +125,44 @@
                                                                         <Font size="18.0" />
                                                                     </font>
                                                                 </Label>
-                                                            </children>
-                                                        </AnchorPane>
-                                                        <AnchorPane layoutX="310.0" layoutY="18.0" prefHeight="126.0" prefWidth="270.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
-                                                            <children>
-                                                                <Label layoutX="168.0" layoutY="92.0" prefHeight="20.0" prefWidth="87.0" text="Total Patients" textFill="WHITE">
-                                                                    <font>
-                                                                        <Font size="14.0" />
-                                                                    </font>
-                                                                </Label>
-                                                                <Label layoutX="245.0" layoutY="7.0" text="0" textFill="#f2eded">
-                                                                    <font>
-                                                                        <Font size="18.0" />
-                                                                    </font>
-                                                                </Label>
-                                                                <FontAwesomeIconView fill="#fbf8f8" glyphName="USER" layoutX="14.0" layoutY="68.0" size="55" />
-                                                            </children>
-                                                        </AnchorPane>
-                                                        <AnchorPane layoutX="607.0" layoutY="18.0" prefHeight="126.0" prefWidth="269.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
-                                                            <children>
-                                                                <FontAwesomeIconView fill="#fbf8f8" glyphName="USERS" layoutX="14.0" layoutY="70.0" size="55" />
-                                                                <Label layoutX="155.0" layoutY="92.0" prefHeight="20.0" prefWidth="99.0" text="Active Patients" textFill="WHITE">
-                                                                    <font>
-                                                                        <Font size="14.0" />
-                                                                    </font>
-                                                                </Label>
-                                                                <Label layoutX="245.0" layoutY="9.0" text="0" textFill="#f2eded">
-                                                                    <font>
-                                                                        <Font size="18.0" />
-                                                                    </font>
-                                                                </Label>
+                                                <AnchorPane layoutX="-15.0" layoutY="-22.0" prefHeight="178.0" prefWidth="309.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <AnchorPane layoutY="-21.0" prefHeight="527.0" prefWidth="902.0">
+                                                         <children>
+                                                                          <AnchorPane layoutX="332.0" layoutY="26.0" prefHeight="126.0" prefWidth="270.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
+                                                                              <children>
+                                                                                  <Label layoutX="168.0" layoutY="92.0" prefHeight="20.0" prefWidth="87.0" text="Total Patients" textFill="WHITE">
+                                                                                      <font>
+                                                                                          <Font size="14.0" />
+                                                                                      </font>
+                                                                                  </Label>
+                                                                                  <Label layoutX="245.0" layoutY="7.0" text="0" textFill="#f2eded">
+                                                                                      <font>
+                                                                                          <Font size="18.0" />
+                                                                                      </font>
+                                                                                  </Label>
+                                                                                  <FontAwesomeIconView fill="#fbf8f8" glyphName="USER" layoutX="14.0" layoutY="68.0" size="55" />
+                                                                              </children>
+                                                                          </AnchorPane>
+                                                                          <AnchorPane layoutX="592.0" layoutY="26.0" prefHeight="126.0" prefWidth="269.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
+                                                                              <children>
+                                                                                  <FontAwesomeIconView fill="#fbf8f8" glyphName="USERS" layoutX="14.0" layoutY="70.0" size="55" />
+                                                                                  <Label layoutX="155.0" layoutY="92.0" prefHeight="20.0" prefWidth="99.0" text="Active Patients" textFill="WHITE">
+                                                                                      <font>
+                                                                                          <Font size="14.0" />
+                                                                                      </font>
+                                                                                  </Label>
+                                                                                  <Label layoutX="245.0" layoutY="9.0" text="0" textFill="#f2eded">
+                                                                                      <font>
+                                                                                          <Font size="18.0" />
+                                                                                      </font>
+                                                                                  </Label>
+                                                                              </children>
+                                                                          </AnchorPane>
+                                                         </children>
+                                                      </AnchorPane>
+                                                   </children>
+                                                </AnchorPane>
                                                             </children>
                                                         </AnchorPane>
                                                     </children>
@@ -163,18 +171,18 @@
                                         </ScrollPane>
                                     </children>
                                 </AnchorPane>
-                                <AnchorPane layoutX="9.0" layoutY="182.0" prefHeight="365.0" prefWidth="911.0" stylesheets="@DashboardStyle.css">
+                                <AnchorPane fx:id="db_btm" layoutX="9.0" layoutY="182.0" prefHeight="365.0" prefWidth="911.0" stylesheets="@DashboardStyle.css" visible="false">
                                     <styleClass>
                                         <String fx:value="white-bg" />
                                         <String fx:value="radius" />
                                     </styleClass>
                                     <children>
-                                        <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="365.3333333333333" prefWidth="911.3333333333334" styleClass="shadow" stylesheets="@DashboardStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <AnchorPane fx:id="db_bottom" layoutX="14.0" layoutY="14.0" prefHeight="365.3333333333333" prefWidth="911.3333333333334" styleClass="shadow" stylesheets="@DashboardStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
                                                 <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="332.0" prefWidth="519.0" styleClass="white-bg" stylesheets="@DashboardStyle.css">
                                                     <children>
                                                         <Label layoutX="14.0" layoutY="14.0" styleClass="header-1" stylesheets="@DashboardStyle.css" text="Doctor Information" />
-                                                        <TableView layoutX="16.0" layoutY="42.0" prefHeight="289.0" prefWidth="487.0" stylesheets="@DashboardStyle.css">
+                                                        <TableView fx:id="db_doctor_table" layoutX="16.0" layoutY="42.0" prefHeight="289.0" prefWidth="487.0" stylesheets="@DashboardStyle.css">
                                                             <columns>
                                                                 <TableColumn prefWidth="75.0" text="Doctor ID" />
                                                                 <TableColumn prefWidth="149.33333587646484" text="Name" />
@@ -186,7 +194,7 @@
                                                 </AnchorPane>
                                                 <AnchorPane layoutX="552.0" layoutY="14.0" prefHeight="161.0" prefWidth="341.0" styleClass="white-bg" stylesheets="@DashboardStyle.css">
                                                     <children>
-                                                        <AreaChart layoutX="-173.0" layoutY="-146.0" prefHeight="254.0" prefWidth="341.3333333333333" title="Doctor Data" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <AreaChart fx:id="db_doc_chart" layoutX="-173.0" layoutY="-146.0" prefHeight="254.0" prefWidth="341.3333333333333" title="Doctor Data" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <xAxis>
                                                                 <CategoryAxis side="BOTTOM" />
                                                             </xAxis>
@@ -197,7 +205,7 @@
                                                     </children></AnchorPane>
                                                 <AnchorPane layoutX="550.0" layoutY="188.0" prefHeight="163.0" prefWidth="343.0" styleClass="white-bg" stylesheets="@DashboardStyle.css">
                                                     <children>
-                                                        <AreaChart layoutX="25.0" layoutY="-33.0" prefHeight="221.33333333333334" prefWidth="366.6666666666667" title="Patient Data" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <AreaChart fx:id="db_patient_chart" layoutX="25.0" layoutY="-33.0" prefHeight="221.33333333333334" prefWidth="366.6666666666667" title="Patient Data" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <xAxis>
                                                                 <CategoryAxis side="BOTTOM" />
                                                             </xAxis>
@@ -210,6 +218,70 @@
                                         </AnchorPane>
                                     </children>
                                 </AnchorPane>
+                        <AnchorPane layoutX="9.0" layoutY="14.0" prefHeight="547.3333333333334" prefWidth="920.6666666666666" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label layoutX="14.0" layoutY="14.0" text="Doctors">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TableView layoutX="14.0" layoutY="53.0" prefHeight="490.0" prefWidth="901.0">
+                                <columns>
+                                  <TableColumn prefWidth="75.0" text="Doctor ID" />
+                                  <TableColumn prefWidth="120.00003814697266" text="Name" />
+                                    <TableColumn prefWidth="65.99992370605469" text="Gender" />
+                                    <TableColumn prefWidth="110.00003051757812" text="Contact No" />
+                                    <TableColumn prefWidth="132.66671752929688" text="Email Address" />
+                                    <TableColumn prefWidth="130.66668701171875" text="Specialization" />
+                                    <TableColumn prefWidth="104.666748046875" text="Address" />
+                                    <TableColumn prefWidth="83.33331298828125" text="Status" />
+                                    <TableColumn prefWidth="83.33331298828125" text="Action" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="6.0" prefHeight="547.3333333333334" prefWidth="920.6666666666666" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label layoutX="14.0" layoutY="14.0" text="Patients">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TableView layoutX="14.0" layoutY="41.0" prefHeight="499.0" prefWidth="898.0">
+                                <columns>
+                                  <TableColumn prefWidth="73.33332538604736" text="ID" />
+                                  <TableColumn prefWidth="146.00000762939453" text="Name" />
+                                    <TableColumn minWidth="0.0" prefWidth="71.33329772949219" text="Gender" />
+                                    <TableColumn prefWidth="118.66665649414062" text="Contact No" />
+                                    <TableColumn prefWidth="163.99996948242188" text="Doctors" />
+                                    <TableColumn prefWidth="155.33331298828125" text="Diagnosis" />
+                                    <TableColumn prefWidth="78.66668701171875" text="Status" />
+                                    <TableColumn prefWidth="95.333251953125" text="Action" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="9.0" layoutY="14.0" prefHeight="547.3333333333334" prefWidth="920.6666666666666" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label layoutX="14.0" layoutY="14.0" text="Appointments">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TableView layoutX="14.0" layoutY="53.0" prefHeight="482.0" prefWidth="897.0">
+                                <columns>
+                                  <TableColumn prefWidth="75.0" text="ID" />
+                                  <TableColumn prefWidth="75.0" text="Name" />
+                                    <TableColumn prefWidth="75.0" text="Gender" />
+                                    <TableColumn prefWidth="122.66667175292969" text="Contact Number" />
+                                    <TableColumn prefWidth="122.66667175292969" text="Doctor" />
+                                    <TableColumn prefWidth="122.66667175292969" text="Date Scheduled" />
+                                    <TableColumn prefWidth="132.6666259765625" text="Date of Appointment" />
+                                    <TableColumn prefWidth="165.333251953125" text="Status" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
                             </children>
                         </AnchorPane>
                     </center>

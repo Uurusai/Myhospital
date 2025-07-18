@@ -11,7 +11,6 @@ public class HelloApplication extends Application {
             AdminDash root = new AdminDash();
             Scene scene = new Scene(root);
 
-            // Apply CSS if needed
             scene.getStylesheets().add(
                     getClass().getResource("/com/hms/myhospital/DashboardStyle.css").toExternalForm());
 

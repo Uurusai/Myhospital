@@ -65,22 +65,22 @@
                                     </font>
                                 </Label>
                                 <Line endX="42.66667175292969" layoutX="118.0" layoutY="124.0" startX="-106.50001525878906" stroke="#efeded" />
-                                <Button id="dashboard_btn" fx:id="db_btn" layoutX="25.0" layoutY="149.0" mnemonicParsing="false" onAction="#initialize" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Dashboard">
+                                <Button id="dashboard_btn" fx:id="db_btn" layoutX="25.0" layoutY="149.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Dashboard">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Button>
-                                <Button id="doctor_btn" fx:id="doctor_btn" layoutX="25.0" layoutY="196.0" mnemonicParsing="false" onAction="#initialize" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Doctor">
+                                <Button id="doctor_btn" fx:id="doctor_btn" layoutX="25.0" layoutY="196.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Doctor">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Button>
-                                <Button id="patient_btn" fx:id="patient_btn" layoutX="25.0" layoutY="247.0" mnemonicParsing="false" onAction="#initialize" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Patient">
+                                <Button id="patient_btn" fx:id="patient_btn" layoutX="25.0" layoutY="247.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Patient">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Button>
-                                <Button id="appointment__btn" fx:id="appointment_btn" layoutX="25.0" layoutY="296.0" mnemonicParsing="false" onAction="#initialize" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Appointment">
+                                <Button id="appointment__btn" fx:id="appointment_btn" layoutX="25.0" layoutY="296.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="111.0" styleClass="btn-1" stylesheets="@DashboardStyle.css" text="Appointment">
                                     <font>
                                         <Font size="14.0" />
                                     </font>

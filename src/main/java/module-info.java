@@ -10,6 +10,7 @@ module com.hms.myhospital {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
     opens com.hms.myhospital to javafx.fxml;
     exports com.hms.myhospital;

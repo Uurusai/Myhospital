@@ -71,20 +71,6 @@ public class registerController implements Initializable{
         //TODO: Implement this
     }
 
-    @FXML private void handlePatientRegister() {
-        // Handle patient selection button click
-        System.out.println("Patient registration attempted!");
-
-        if(!validatePatientInfo()) {
-            return;
-        }
-
-        try {
-            SceneSwitcher.switchScene("/fxml/patientProfile.fxml");
-        } catch (IOException e) {
-        }
-    }
-
     private boolean validatePatientInfo() {
         if (isNullOrEmpty(patientFirstName.getText())) {
             patientPerInfoError.setText("First name required!");
@@ -159,6 +145,109 @@ public class registerController implements Initializable{
         return true;
     }
 
+    //added doctor info validation 
+    private boolean validateDoctorInfo() {
+        // Personal Information Validation
+        if (isNullOrEmpty(doctorFirstName.getText())) {
+            doctorPerInfoError.setText("First name required!");
+            return false;
+        }
+        if (!isValidName(doctorFirstName.getText())) {
+            doctorPerInfoError.setText("Invalid first name!");
+            return false;
+        }
+
+        if (isNullOrEmpty(doctorLastName.getText())) {
+            doctorPerInfoError.setText("Last name required!");
+            return false;
+        }
+        if (!isValidName(doctorLastName.getText())) {
+            doctorPerInfoError.setText("Invalid last name!");
+            return false;
+        }
+
+        if (isNullOrEmpty(specialization.getText())) {
+            doctorPerInfoError.setText("Specialization required!");
+            return false;
+        }
+
+        if (isNullOrEmpty(doctorAddress.getText())) {
+            doctorPerInfoError.setText("Address required!");
+            return false;
+        }
+
+        if (isNullOrEmpty(doctorPhoneNumber.getText())) {
+            doctorPerInfoError.setText("Phone number required!");
+            return false;
+        }
+        if (!isValidPhoneNumber(doctorPhoneNumber.getText())) {
+            doctorPerInfoError.setText("Invalid phone number!");
+            return false;
+        }
+
+        // Account Information Validation
+        if (isNullOrEmpty(doctorUserName.getText())) {
+            doctorAccInfoError.setText("User name required!");
+            return false;
+        }
+        if (!isValidUsername(doctorUserName.getText())) {
+            doctorAccInfoError.setText("Invalid user name!");
+            return false;
+        }
+
+        if (isNullOrEmpty(doctorEmail.getText())) {
+            doctorAccInfoError.setText("Email address required!");
+            return false;
+        }
+        if (!isValidEmailAddress(doctorEmail.getText())) {
+            doctorAccInfoError.setText("Invalid email address!");
+            return false;
+        }
+
+        if (isNullOrEmpty(doctorSetPassword.getText())) {
+            doctorAccInfoError.setText("Set your password!");
+            return false;
+        }
+        if (!isValidPassword(doctorSetPassword.getText())) {
+            doctorAccInfoError.setText("Password must be at least 8 characters long (containing 0-9, a-z, A-Z and some special characters)");
+            return false;
+        }
+
+        if (isNullOrEmpty(doctorConfirmPassword.getText())) {
+            doctorAccInfoError.setText("Confirm your password!");
+            return false;
+        }
+        if (!isValidPassword(doctorConfirmPassword.getText())) {
+            doctorAccInfoError.setText("Password must be at least 8 characters long (containing 0-9, a-z, A-Z and some special characters)");
+            return false;
+        }
+
+        if (!doctorSetPassword.getText().equals(doctorConfirmPassword.getText())) {
+            doctorAccInfoError.setText("Passwords do not match!");
+            return false;
+        }
+
+        return true;
+    }
+
+    @FXML private void handlePatientRegister() {
+        // Handle patient selection button click
+        System.out.println("Patient registration attempted!");
+
+        if(!validatePatientInfo()) {
+            return;
+        }
+
+        //TODO: (for ADIBA) Implement the taking the data input into database
+        
+        try {
+            SceneSwitcher.switchScene("/fxml/patientProfile.fxml");
+        } catch (IOException e) {
+        }
+    }
+
+    
+    
     @FXML private void handlePatientRegisterCancel(){
         // Handle patient selection button click
         System.out.println("Patient register cancelled!");
@@ -173,42 +262,12 @@ public class registerController implements Initializable{
 
         System.out.println("Doctor registration attempted!");
 
-        String firstName = doctorFirstName.getText();
-        String lastName = doctorLastName.getText();
-        String dateOfBirth = doctorDateOfBirth.toString();
-        String spec = specialization.getText();
-        String phoneNumber = doctorPhoneNumber.getText();
-
-        String email = doctorEmail.getText();
-        String username = doctorUserName.getText();
-        String setPassword = doctorSetPassword.getText();
-        String confirmPassword = doctorConfirmPassword.getText();
-
-        if(firstName == null || lastName == null || dateOfBirth == null || phoneNumber == null || spec == null) {
-            doctorPerInfoError.setText("All fields are required!");
+        if(!validateDoctorInfo()) {
             return;
-        } //personal info missing
+        }
 
-        if(email == null || username == null || setPassword == null || confirmPassword == null) {
-            doctorAccInfoError.setText("All fields are required!");
-            return;
-        } //account info missing
-
-        if(!isValidName(firstName) || !isValidName(lastName) || !isValidDateOfBirth(dateOfBirth) || !isValidPhoneNumber(phoneNumber)) {
-            doctorPerInfoError.setText("One or more fields have invalid input. Please retry.");
-            return;
-        } //invalid personal info
-
-        if(!isValidEmailAddress(email) || !isValidPassword(setPassword) || !isValidPassword(confirmPassword) || !isValidUsername(username)) {
-            doctorAccInfoError.setText("One or more fields have invalid input. Please retry.");
-            return;
-        } //invalid account info
-
-        if(!setPassword.equals(confirmPassword)) {
-            doctorAccInfoError.setText("Set password correctly!");
-            return;
-        } //password not confirmed correctly
-
+        //TODO: (for ADIBA) Implement the taking the data input into database
+        
         try {
             SceneSwitcher.switchScene("/fxml/doctorProfile.fxml");
         } catch (IOException e) {
@@ -224,6 +283,5 @@ public class registerController implements Initializable{
         } catch (IOException e) {
         }
     }
-
 
 }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.welcomeController">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="1100.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../welcome.png" />
+         </image>
+      </ImageView>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label layoutX="304.0" layoutY="345.0" mouseTransparent="true" text="Welcome to the Duckland Hospital">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Label>
+            <Label layoutX="266.0" layoutY="392.0" text="official app. Sign in to get the absolutely">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Label>
+            <Label layoutX="373.0" layoutY="439.0" text="best health-care services.">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Label>
+            <StackPane fx:id="welcomeLoginBtn" layoutX="870.0" layoutY="30.0" onMouseClicked="#handleWelcomeLogin" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#97d8c4" height="100.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="3.0" width="200.0" />
+                  <Label mouseTransparent="true" text="LOGIN" textFill="#398c72">
+                     <font>
+                        <Font name="System Bold" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane fx:id="welcomeRegisterBtn" layoutX="870.0" layoutY="155.0" onMouseClicked="#handleWelcomeRegister" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#ff9f3f" height="100.0" stroke="#df4949" strokeType="INSIDE" strokeWidth="3.0" width="200.0" />
+                  <Label mouseTransparent="true" text="REGISTER" textFill="#df4949">
+                     <font>
+                        <Font name="System Bold" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+            <Label layoutX="451.0" layoutY="180.0" text="DUCKLAND" textFill="#ed1c24">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="463.0" layoutY="220.0" text="HOSPITAL" textFill="#ed1c24">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+            <StackPane fx:id="chooseDoctorBtn" layoutX="895.0" layoutY="255.0" onMouseClicked="#handleChooseDoctor" prefHeight="75.0" prefWidth="150.0">
+               <children>
+                  <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#97d8c4" height="75.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="3.0" width="150.0" />
+                  <Label text="Doctor" textFill="#398c72">
+                     <font>
+                        <Font name="System Bold" size="28.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane fx:id="choosePatientBtn" layoutX="895.0" layoutY="331.0" onMouseClicked="#handleChoosePatient" prefHeight="75.0" prefWidth="150.0">
+               <children>
+                  <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#ff9f3f" height="75.0" stroke="#df4949" strokeType="INSIDE" strokeWidth="3.0" width="150.0" />
+                  <Label text="Patient" textFill="#df4949">
+                     <font>
+                        <Font name="System Bold" size="28.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

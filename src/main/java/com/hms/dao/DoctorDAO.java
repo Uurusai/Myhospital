@@ -14,19 +14,23 @@ public class DoctorDAO {
 
     // Add a new doctor to the database
     public boolean addDoctor(Doctor doctor) {
-        String sql = "INSERT INTO doctors (name, doctor_id, gender, e-mail, speciality, contact no, addrress) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO doctors (name, gender, e-mail, speciality, contact no, addrress,password) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING doctor_id";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, doctor.getName());
-            stmt.setInt(2, doctor.getId());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                doctor.setId(rs.getInt("doctor_id"));
+            }
             stmt.setString(3, doctor.getGender());
             stmt.setString(4, doctor.getEmail());
             stmt.setString(5, doctor.getSpeciality());
             stmt.setInt(7, doctor.getContactNo());
             stmt.setString(6, doctor.getAddress());
+            stmt.setString(8,doctor.getPassword());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -153,7 +157,8 @@ public class DoctorDAO {
                         rs.getInt("age"),
                         rs.getString("date_of_birth"),
                         rs.getInt("contact-no"),
-                        rs.getString("addrress")
+                        rs.getString("addrress"),
+                        rs.getString("blood_type")
                 );
                 patients.add(patient);
 

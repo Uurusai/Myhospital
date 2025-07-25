@@ -5,6 +5,7 @@ import com.hms.model.Doctor;
 import com.hms.model.Patient;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +15,16 @@ public class PatientDAO {
 
     //adding new Patient to db
     public boolean addPatient(Patient p){
-        String sql = "INSERT INTO patients(patient_id,name,gender,age,date_of_birth,address,contact-no,payment_status,visitor_status,created_at)"+
+        String sql = "INSERT INTO patients(name,gender,age,date_of_birth,address,contact-no,payment_status,visitor_status,created_at,blood_type)"+
                 "VALUES(?,?,?,?,?,?,?)";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setInt(1,p.getId());
+            //stmt.setInt(1,p.getId());
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                p.setId(rs.getInt("patient_id"));
+            }
             stmt.setString(2,p.getName());
             stmt.setString(3,p.getGender());
             stmt.setString(6,p.getAddress());
@@ -28,7 +33,8 @@ public class PatientDAO {
             stmt.setInt(4,p.getAge());
             stmt.setString(8,p.getPs());
             stmt.setString(9,p.getVt());
-            //stmt.setString(10,);
+            stmt.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setString(11,p.getBlood_type());
 
             return stmt.executeUpdate()>0 ;
         }catch(SQLException e){
@@ -54,7 +60,8 @@ public class PatientDAO {
                         rs.getInt("age"),
                         rs.getString("date_of_birth"),
                         rs.getInt("contact-no"),
-                        rs.getString("address")
+                        rs.getString("address"),
+                        rs.getString("blood_type")
                 );
                 patients.add(patient);
             }
@@ -80,7 +87,8 @@ public class PatientDAO {
                             rs.getInt("age"),
                             rs.getString("date_of_birth"),
                             rs.getInt("contact_no"),
-                            rs.getString("address")
+                            rs.getString("address"),
+                            rs.getString("blood_type")
                     );
 
                     return patient;

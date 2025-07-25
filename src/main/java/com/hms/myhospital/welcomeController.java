@@ -1,4 +1,4 @@
-package controllers;
+package com.hms.myhospital;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -9,7 +9,7 @@ import javafx.scene.image.*;
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import utils.SceneSwitcher;
+import com.hms.utils.SceneSwitcher;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

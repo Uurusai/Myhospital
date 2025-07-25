@@ -1,13 +1,13 @@
-package controllers;
+package com.hms.myhospital;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
-import utils.SceneSwitcher;
+import com.hms.utils.SceneSwitcher;
 
-import static utils.Validator.*;
+import static com.hms.utils.Validator.*;
 
 
 public class loginController {

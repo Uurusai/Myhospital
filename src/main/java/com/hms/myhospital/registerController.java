@@ -1,4 +1,4 @@
-package controllers;
+package com.hms.myhospital;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -6,12 +6,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
-import utils.SceneSwitcher;
+import com.hms.utils.SceneSwitcher;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static utils.Validator.*;
+import static com.hms.utils.Validator.*;
 
 
 public class registerController implements Initializable{

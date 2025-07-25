@@ -1,4 +1,6 @@
 module com.hms.myhospital {
+    requires jbcrypt;
+    opens com.hms.utils to javafx.fxml;
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;

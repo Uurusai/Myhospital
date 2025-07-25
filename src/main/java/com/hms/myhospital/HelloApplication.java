@@ -8,6 +8,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) {
         try {
+           // System.out.println("more testing!");
             AdminDash root = new AdminDash();
             Scene scene = new Scene(root);
 

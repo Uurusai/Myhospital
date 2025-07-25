@@ -1,5 +1,7 @@
 package com.hms.model;
 
+import com.hms.utils.PasswordUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ public class Doctor {
     String address;
     List<Patient> patients = new ArrayList<Patient>();
     List<Appointment> appointments = new ArrayList<Appointment>();
+    String password ;
 
 
     //constructor
@@ -25,9 +28,18 @@ public class Doctor {
         this.contactNo = contactNo;
         this.address = address;
     }
+    public Doctor(String name, String gender, String email, String speciality, int contactNo, String address) {
+        this.name = name;
+        this.gender = gender;
+        this.email = email;
+        this.speciality = speciality;
+        this.contactNo = contactNo;
+        this.address = address;
+    }
 
 
     //setter
+    public void setPassword(){ this.password = password ;}
     public void setName(String name) {
         this.name = name;
     }
@@ -84,4 +96,5 @@ public class Doctor {
     public List<Patient> getPatients() {
         return patients;
     }
+    public String getPassword(){ return PasswordUtil.hashPassword(password); }
 }

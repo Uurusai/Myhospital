@@ -14,8 +14,8 @@ public class DoctorDAO {
 
     // Add a new doctor to the database
     public boolean addDoctor(Doctor doctor) {
-        String sql = "INSERT INTO doctors (name, gender, e-mail, speciality, contact no, addrress,password) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING doctor_id";
+        String sql = "INSERT INTO doctors (name, gender, e-mail, speciality, contact no, addrress,password,account_status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?,?) RETURNING doctor_id";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -31,6 +31,7 @@ public class DoctorDAO {
             stmt.setInt(7, doctor.getContactNo());
             stmt.setString(6, doctor.getAddress());
             stmt.setString(8,doctor.getPassword());
+            stmt.setString(9,"pending");
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -197,15 +198,14 @@ public class DoctorDAO {
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 Patient patient = new Patient(
-                        rs.getString("patient_name"),
+                        rs.getString("name"),
                         rs.getInt("patient_id"),
-                        rs.getString("patient_gender"),
-                        rs.getInt("patient_age"),
-                        rs.getString("patient_date_of_birth"),
-                        rs.getInt("patient_contact"),
-                        rs.getString("patient_address"),
-                        rs.getString("patient_payment_status"),
-                        rs.getString("patient_visitor_type")
+                        rs.getString("gender"),
+                        rs.getInt("age"),
+                        rs.getString("date_of_birth"),
+                        rs.getInt("contact_no"),
+                        rs.getString("address"),
+                        rs.getString("blood_type")
                 );
                 Doctor doctor = new  Doctor(
                         rs.getString("doctor_name"),

@@ -16,6 +16,7 @@ public class Doctor {
     List<Patient> patients = new ArrayList<Patient>();
     List<Appointment> appointments = new ArrayList<Appointment>();
     String password ;
+    String account_status ;
 
 
     //constructor
@@ -39,6 +40,7 @@ public class Doctor {
 
 
     //setter
+    public void setAccount_status(String account_status){  this.account_status = account_status;}
     public void setPassword(){ this.password = password ;}
     public void setName(String name) {
         this.name = name;
@@ -69,6 +71,7 @@ public class Doctor {
     }
 
     //getters
+    public String getAccount_status(){ return account_status;   }
     public String getName() {
         return name;
     }

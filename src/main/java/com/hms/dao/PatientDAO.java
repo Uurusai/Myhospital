@@ -13,10 +13,24 @@ import static com.hms.dao.DatabaseConnection.getConnection;
 
 public class PatientDAO {
 
+    private Patient extractPatientFromResultSet(ResultSet rs) throws SQLException {
+        return new Patient(
+                rs.getString("name"),
+                rs.getInt("patient_id"),
+                rs.getString("gender"),
+                rs.getInt("age"),
+                rs.getString("date_of_birth"),
+                rs.getInt("contact_no"),
+                rs.getString("address"),
+                rs.getString("blood_type")
+        );
+    }
+
+
     //adding new Patient to db
     public boolean addPatient(Patient p){
-        String sql = "INSERT INTO patients(name,gender,age,date_of_birth,address,contact-no,payment_status,visitor_status,created_at,blood_type)"+
-                "VALUES(?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO patients(name,gender,age,date_of_birth,address,contact-no,created_at,blood_type,account_status)"+
+                "VALUES(?,?,?,?,?,?,?,?)";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
 
@@ -31,10 +45,9 @@ public class PatientDAO {
             stmt.setString(5,p.getDate_of_birth());
             stmt.setInt(7,p.getContactNo());
             stmt.setInt(4,p.getAge());
-            stmt.setString(8,p.getPs());
-            stmt.setString(9,p.getVt());
-            stmt.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
-            stmt.setString(11,p.getBlood_type());
+            stmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setString(9,p.getBlood_type());
+            stmt.setString(10,"pending");
 
             return stmt.executeUpdate()>0 ;
         }catch(SQLException e){
@@ -71,27 +84,44 @@ public class PatientDAO {
 
         return patients ;
     }
+    //get all pending patients
+    public List<Patient> getAllPendingPatients(){
+        List<Patient> patients = new ArrayList<>();
+        String sql = "SELECT * FROM patients WHERE status = 'pending'";
+
+        try(Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs  = stmt.executeQuery(sql)){
+
+            while(rs.next()){
+                Patient patient = new Patient(
+                        rs.getString("name"),
+                        rs.getInt("patient_id"),
+                        rs.getString("gender"),
+                        rs.getInt("age"),
+                        rs.getString("date_of_birth"),
+                        rs.getInt("contact-no"),
+                        rs.getString("address"),
+                        rs.getString("blood_type")
+                );
+                patients.add(patient);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return patients ;
+    }
 
     //Get a patient by id
     public Patient getPatientbyId(int id){
-        String sql = "SELECT * FROM patients WHERE patient_id = ?";
+        String sql = "SELECT * FROM patients WHERE patient_id = ? AND status = 'approved'";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql) ){
             stmt.setInt(1,id);
             try(ResultSet rs = stmt.executeQuery()){
                 if(rs.next()){
-                    Patient patient = new Patient(
-                            rs.getString("name"),
-                            rs.getInt("patient_id"),
-                            rs.getString("gender"),
-                            rs.getInt("age"),
-                            rs.getString("date_of_birth"),
-                            rs.getInt("contact_no"),
-                            rs.getString("address"),
-                            rs.getString("blood_type")
-                    );
-
-                    return patient;
+                    return extractPatientFromResultSet(rs);
                 }
             }
         }catch(SQLException e){
@@ -99,11 +129,32 @@ public class PatientDAO {
         }
         return null ;
     }
+    //get patient by name
+    public Patient getPatientByName(String name) {
+        String sql = "SELECT * FROM patients WHERE LOWER(name) = LOWER(?)";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, name);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Patient p = extractPatientFromResultSet(rs);
+                    p.setPassword(rs.getString("password"));
+                    return p ;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     //update patient info
     public Boolean updatePatients(Patient patient){
 
-        String sql = "UPDATE patients SET name = ?, gender = ? , contact_no = ?, date_of_birth = ? , address = ? , age = ?,payment_status = ?,visitor_type =? WHERE patient_id = ?";
+        String sql = "UPDATE patients SET name = ?, gender = ? , contact_no = ?, date_of_birth = ? , address = ? , age = ?,blood_type = ?,account_status = ? WHERE patient_id = ?";
 
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -114,8 +165,8 @@ public class PatientDAO {
             stmt.setString(5,patient.getDate_of_birth());
             stmt.setInt(7,patient.getContactNo());
             stmt.setInt(4,patient.getAge());
-            stmt.setString(8,patient.getPs());
-            stmt.setString(9,patient.getVt());
+            stmt.setString(9,patient.getBlood_type());
+            stmt.setString(10,patient.getAccount_status());
 
             return stmt.executeUpdate()>0 ;
         }catch(SQLException e){
@@ -123,6 +174,7 @@ public class PatientDAO {
         }
         return false;
     }
+
 
     //Delete a patient by id
     public boolean deletePatient(int id){
@@ -150,7 +202,7 @@ public class PatientDAO {
                 -- patient fields
                 p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
                 p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact
-                p.payment_status AS patient_payment_status, p.visitor_type AS patient_visitor_type
+                p.blood_type 
             
                 --doctor fields
                 d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.e-mail,
@@ -167,16 +219,15 @@ public class PatientDAO {
             stmt.setInt(1,patientId);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
-                Patient patient = new Patient(
+                Patient patient =  new Patient(
                         rs.getString("patient_name"),
                         rs.getInt("patient_id"),
                         rs.getString("patient_gender"),
                         rs.getInt("patient_age"),
                         rs.getString("patient_date_of_birth"),
-                        rs.getInt("patient_contact"),
+                        rs.getInt("patient_contact_no"),
                         rs.getString("patient_address"),
-                        rs.getString("patient_payment_status"),
-                        rs.getString("patient_visitor_type")
+                        rs.getString("blood_type")
                 );
                 Doctor doctor = new  Doctor(
                         rs.getString("doctor_name"),

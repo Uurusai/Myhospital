@@ -120,7 +120,7 @@
                                                                         <Font size="14.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label layoutX="250.0" layoutY="9.0" text="0" textFill="#f2eded">
+                                                                <Label fx:id="activeDoctorsLabel" layoutX="250.0" layoutY="9.0" text="0" textFill="#f2eded">
                                                                     <font>
                                                                         <Font size="18.0" />
                                                                     </font>
@@ -136,7 +136,7 @@
                                                                                           <Font size="14.0" />
                                                                                       </font>
                                                                                   </Label>
-                                                                                  <Label layoutX="245.0" layoutY="7.0" text="0" textFill="#f2eded">
+                                                                                  <Label fx:id="totalPatientsLabel" layoutX="245.0" layoutY="7.0" text="0" textFill="#f2eded">
                                                                                       <font>
                                                                                           <Font size="18.0" />
                                                                                       </font>
@@ -152,7 +152,7 @@
                                                                                           <Font size="14.0" />
                                                                                       </font>
                                                                                   </Label>
-                                                                                  <Label layoutX="245.0" layoutY="9.0" text="0" textFill="#f2eded">
+                                                                                  <Label fx:id="activePatientsLabel" layoutX="245.0" layoutY="9.0" text="0" textFill="#f2eded">
                                                                                       <font>
                                                                                           <Font size="18.0" />
                                                                                       </font>
@@ -194,7 +194,7 @@
                                                 </AnchorPane>
                                                 <AnchorPane layoutX="552.0" layoutY="14.0" prefHeight="161.0" prefWidth="341.0" styleClass="white-bg" stylesheets="@DashboardStyle.css">
                                                     <children>
-                                                        <AreaChart fx:id="db_doc_chart" layoutX="-173.0" layoutY="-146.0" prefHeight="254.0" prefWidth="341.3333333333333" title="Doctor Data" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <AreaChart fx:id="weeklyDoctorsChart" layoutX="-173.0" layoutY="-146.0" prefHeight="254.0" prefWidth="341.3333333333333" title="Doctor Data" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <xAxis>
                                                                 <CategoryAxis side="BOTTOM" />
                                                             </xAxis>
@@ -205,7 +205,7 @@
                                                     </children></AnchorPane>
                                                 <AnchorPane layoutX="550.0" layoutY="188.0" prefHeight="163.0" prefWidth="343.0" styleClass="white-bg" stylesheets="@DashboardStyle.css">
                                                     <children>
-                                                        <AreaChart fx:id="db_patient_chart" layoutX="25.0" layoutY="-33.0" prefHeight="221.33333333333334" prefWidth="366.6666666666667" title="Patient Data" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <AreaChart fx:id="weeklyPatientsChart" layoutX="25.0" layoutY="-33.0" prefHeight="221.33333333333334" prefWidth="366.6666666666667" title="Patient Data" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <xAxis>
                                                                 <CategoryAxis side="BOTTOM" />
                                                             </xAxis>
@@ -225,17 +225,15 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TableView layoutX="14.0" layoutY="53.0" prefHeight="490.0" prefWidth="901.0">
+                              <TableView fx:id="doctorsTable" layoutX="14.0" layoutY="53.0" prefHeight="490.0" prefWidth="901.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="Doctor ID" />
-                                  <TableColumn prefWidth="120.00003814697266" text="Name" />
-                                    <TableColumn prefWidth="65.99992370605469" text="Gender" />
-                                    <TableColumn prefWidth="110.00003051757812" text="Contact No" />
-                                    <TableColumn prefWidth="132.66671752929688" text="Email Address" />
-                                    <TableColumn prefWidth="130.66668701171875" text="Specialization" />
-                                    <TableColumn prefWidth="104.666748046875" text="Address" />
-                                    <TableColumn prefWidth="83.33331298828125" text="Status" />
-                                    <TableColumn prefWidth="83.33331298828125" text="Action" />
+                                  <TableColumn fx:id="doctorIdColumn" prefWidth="75.0" text="Doctor ID" />
+                                  <TableColumn fx:id="doctorNameColumn" prefWidth="120.00003814697266" text="Name" />
+                                    <TableColumn fx:id="doctorContactColumn" prefWidth="110.00003051757812" text="Contact No" />
+                                    <TableColumn fx:id="doctorEmailColumn" prefWidth="132.66671752929688" text="Email Address" />
+                                    <TableColumn fx:id="doctorSpecializationColumn" prefWidth="130.66668701171875" text="Specialization" />
+                                    <TableColumn fx:id="doctorAdressColumn" prefWidth="104.666748046875" text="Address" />
+                                    <TableColumn prefWidth="223.33327229817712" text="Action" />
                                 </columns>
                               </TableView>
                            </children>
@@ -247,16 +245,15 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TableView layoutX="14.0" layoutY="41.0" prefHeight="499.0" prefWidth="898.0">
+                              <TableView fx:id="patientsTable" layoutX="14.0" layoutY="41.0" prefHeight="499.0" prefWidth="898.0">
                                 <columns>
-                                  <TableColumn prefWidth="73.33332538604736" text="ID" />
-                                  <TableColumn prefWidth="146.00000762939453" text="Name" />
-                                    <TableColumn minWidth="0.0" prefWidth="71.33329772949219" text="Gender" />
-                                    <TableColumn prefWidth="118.66665649414062" text="Contact No" />
-                                    <TableColumn prefWidth="163.99996948242188" text="Doctors" />
-                                    <TableColumn prefWidth="155.33331298828125" text="Diagnosis" />
-                                    <TableColumn prefWidth="78.66668701171875" text="Status" />
-                                    <TableColumn prefWidth="95.333251953125" text="Action" />
+                                  <TableColumn fx:id="patientIdColumn" prefWidth="73.33332538604736" text="ID" />
+                                  <TableColumn fx:id="patientNameColumn" prefWidth="146.00000762939453" text="Name" />
+                                    <TableColumn fx:id="patientGenderColumn" minWidth="0.0" prefWidth="71.33329772949219" text="Gender" />
+                                    <TableColumn fx:id="patientContactColumn" prefWidth="118.66665649414062" text="Contact No" />
+                                    <TableColumn fx:id="patientAddressColumn" prefWidth="163.99996948242188" text="Address" />
+                                    <TableColumn fx:id="patientDoctorColumn" prefWidth="173.3333740234375" text="Doctors" />
+                                    <TableColumn fx:id="patientStatusColumn" prefWidth="145.99993896484375" text="Status" />
                                 </columns>
                               </TableView>
                            </children>
@@ -271,13 +268,11 @@
                               <TableView layoutX="14.0" layoutY="53.0" prefHeight="482.0" prefWidth="897.0">
                                 <columns>
                                   <TableColumn prefWidth="75.0" text="ID" />
-                                  <TableColumn prefWidth="75.0" text="Name" />
-                                    <TableColumn prefWidth="75.0" text="Gender" />
-                                    <TableColumn prefWidth="122.66667175292969" text="Contact Number" />
-                                    <TableColumn prefWidth="122.66667175292969" text="Doctor" />
-                                    <TableColumn prefWidth="122.66667175292969" text="Date Scheduled" />
-                                    <TableColumn prefWidth="132.6666259765625" text="Date of Appointment" />
-                                    <TableColumn prefWidth="165.333251953125" text="Status" />
+                                  <TableColumn prefWidth="147.33332061767578" text="Patient Name" />
+                                    <TableColumn prefWidth="178.66673278808594" text=" Doctor Name" />
+                                    <TableColumn prefWidth="155.99996948242188" text="Date Made " />
+                                    <TableColumn minWidth="0.0" prefWidth="170.0" text="Date of Appointment" />
+                                    <TableColumn minWidth="0.0" prefWidth="162.66668701171875" text="Status" />
                                 </columns>
                               </TableView>
                            </children>

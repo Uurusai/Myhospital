@@ -29,7 +29,7 @@ public class PatientDAO {
 
     //adding new Patient to db
     public boolean addPatient(Patient p){
-        String sql = "INSERT INTO patients(name,gender,age,date_of_birth,address,contact-no,created_at,blood_type,account_status)"+
+        String sql = "INSERT INTO Patients(name,gender,age,date_of_birth,address,contact-no,created_at,blood_type,account_status)"+
                 "VALUES(?,?,?,?,?,?,?,?)";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -59,11 +59,11 @@ public class PatientDAO {
     //Get all patients from database
     public List<Patient> getAllPatients(){
         List<Patient> patients = new ArrayList<>();
-        String sql = "SELECT * FROM patients";
+        String sql = "SELECT * FROM Patients";
 
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
-        ResultSet rs  = stmt.executeQuery(sql)){
+        ResultSet rs  = stmt.executeQuery()){
 
             while(rs.next()){
                 Patient patient = new Patient(
@@ -88,11 +88,11 @@ public class PatientDAO {
     //unneeded ???
     public List<Patient> getAllPendingPatients(){
         List<Patient> patients = new ArrayList<>();
-        String sql = "SELECT * FROM patients WHERE status = 'pending'";
+        String sql = "SELECT * FROM Patients WHERE status = 'pending'";
 
         try(Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs  = stmt.executeQuery(sql)){
+            ResultSet rs  = stmt.executeQuery()){
 
             while(rs.next()){
                 Patient patient = new Patient(
@@ -116,7 +116,7 @@ public class PatientDAO {
 
     //Get a patient by id
     public Patient getPatientbyId(int id){
-        String sql = "SELECT * FROM patients WHERE patient_id = ? AND status = 'approved'";
+        String sql = "SELECT * FROM Patients WHERE patient_id = ? AND status = 'approved'";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql) ){
             stmt.setInt(1,id);
@@ -132,7 +132,7 @@ public class PatientDAO {
     }
     //get patient by name
     public Patient getPatientByName(String name) {
-        String sql = "SELECT * FROM patients WHERE LOWER(name) = LOWER(?)";
+        String sql = "SELECT * FROM Patients WHERE LOWER(name) = LOWER(?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -155,7 +155,7 @@ public class PatientDAO {
     //update patient info
     public Boolean updatePatients(Patient patient){
 
-        String sql = "UPDATE patients SET name = ?, gender = ? , contact_no = ?, date_of_birth = ? , address = ? , age = ?,blood_type = ?,account_status = ? WHERE patient_id = ?";
+        String sql = "UPDATE Patients SET name = ?, gender = ? , contact_no = ?, date_of_birth = ? , address = ? , age = ?,blood_type = ?,account_status = ? WHERE patient_id = ?";
 
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -180,7 +180,7 @@ public class PatientDAO {
     //Delete a patient by id
     public boolean deletePatient(int id){
 
-        String sql = "DELETE FROM patients WHERE patient_id = ?";
+        String sql = "DELETE FROM Patients WHERE patient_id = ?";
 
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -210,8 +210,8 @@ public class PatientDAO {
                 d.speciality,d.contact no AS doctor_contact d.addrress AS doctor_address
             
             FROM appointments a
-            JOIN patients p ON a.patient_id = p.patient_id
-            JOIN doctors d ON a.doctor_id = d.doctor_id
+            JOIN Patients p ON a.patient_id = p.patient_id
+            JOIN Doctors d ON a.doctor_id = d.doctor_id
             WHERE a.patient_id = ?
                        
 """;
@@ -288,7 +288,7 @@ public class PatientDAO {
     //get doctors for patient
     public List<Doctor> getDoctorsForPatient(int patientId) {
         List<Doctor> doctors = new ArrayList<>();
-        String sql = "SELECT DISTINCT d.* FROM doctor d JOIN appointments a ON d.doctor_id = a.doctor_id WHERE a.patient_id = ?";
+        String sql = "SELECT DISTINCT d.* FROM Doctors d JOIN appointments a ON d.doctor_id = a.doctor_id WHERE a.patient_id = ?";
 
         try(Connection conn= getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){

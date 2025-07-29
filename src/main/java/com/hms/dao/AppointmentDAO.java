@@ -265,8 +265,8 @@ public class AppointmentDAO {
                 d.speciality,d.contact no AS doctor_contact d.addrress AS doctor_address
             
             FROM appointments a
-            JOIN patients p ON a.patient_id = p.patient_id
-            JOIN doctors d ON a.doctor_id = d.doctor_id
+            JOIN Patients p ON a.patient_id = p.patient_id
+            JOIN Doctors d ON a.doctor_id = d.doctor_id
             WHERE a.appointment_id = ?
                        
 """;

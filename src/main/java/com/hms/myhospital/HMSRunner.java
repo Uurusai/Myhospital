@@ -1,5 +1,6 @@
 package com.hms.myhospital;
 
+import com.hms.client.HMSClient;
 import com.hms.server.HMSServer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,7 +11,8 @@ public class HMSRunner extends Application {
     public void start(Stage stage) {
         try {
            // System.out.println("more testing!");
-            AdminDash root = new AdminDash();
+            HMSClient client = new HMSClient("localhost", 12345);
+            AdminDash root = new AdminDash(client);
             Scene scene = new Scene(root);
 
             scene.getStylesheets().add(
@@ -26,7 +28,7 @@ public class HMSRunner extends Application {
     }
 
     public static void main(String[] args) {
-        //new HMSServer().start();
+
         new Thread(()->new HMSServer().start()).start() ;
         launch(args);
     }

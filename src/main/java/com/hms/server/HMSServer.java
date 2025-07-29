@@ -12,7 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class HMSServer {
-    private static final int PORT = 12345;
+    private static final int PORT = 12345; //should i use 5432 ??
     private final DAOProvider daoProvider = new DAOProviderImpl();
 
     public void start() {
@@ -51,7 +51,4 @@ public class HMSServer {
         }
     }
 
-    public static void main(String[] args) {
-        new HMSServer().start();
-    }
 }

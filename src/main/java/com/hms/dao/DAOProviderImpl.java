@@ -20,4 +20,10 @@ public class DAOProviderImpl implements DAOProvider {
     public AppointmentDAO getAppointmentDAO() {
         return new AppointmentDAO();
     }
+
+    @Override
+    public AdminDAO getAdminDAO() {
+        return new AdminDAO();
+    }
+
 }

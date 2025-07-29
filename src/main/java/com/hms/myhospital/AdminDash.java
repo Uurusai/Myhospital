@@ -3,7 +3,6 @@ package com.hms.myhospital;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
@@ -22,12 +21,6 @@ public class AdminDash extends StackPane {  // Must match fx:root type
     @FXML private AnchorPane db_top;
     @FXML private AnchorPane db_btm;
 
-    // Other UI elements
-//    @FXML private Label top_username;
-//    @FXML private Label date_time;
-//    @FXML private Label current_form;
-//    @FXML private Label admin_id;
-//    @FXML private Label username;
 
     public AdminDash() {
         FXMLLoader loader = new FXMLLoader(
@@ -50,12 +43,10 @@ public class AdminDash extends StackPane {  // Must match fx:root type
         if (doctor_btn == null || patientsView == null) {
             throw new RuntimeException("FXML injection failed - check your fx:id values");
         }
-
         // Set initial view
         setAllInvisible();
         db_top.setVisible(true);
         db_btm.setVisible(true);
-
         // Set up button actions
         doctor_btn.setOnAction(e -> switchToView(doctorsView));
         patient_btn.setOnAction(e -> switchToView(patientsView));

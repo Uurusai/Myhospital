@@ -1,10 +1,11 @@
 package com.hms.myhospital;
 
+import com.hms.server.HMSServer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class HelloApplication extends Application {
+public class HMSRunner extends Application {
     @Override
     public void start(Stage stage) {
         try {
@@ -25,6 +26,8 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
+        //new HMSServer().start();
+        new Thread(()->new HMSServer().start()).start() ;
         launch(args);
     }
 }

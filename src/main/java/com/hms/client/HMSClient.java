@@ -18,6 +18,28 @@ public class HMSClient {
         this.serverAddress = serverAddress;
         this.port = port;
     }
+    //admin commands
+    public boolean addAdmin(Admin admin){
+        return executeCommand(new GenericDAOCommand<>(
+                "admin", "addAdmin",
+                new Object[]{admin},
+                Boolean.class
+        ));
+    }
+    public Admin getAdminByName(String name) {
+        return executeCommand(new GenericDAOCommand<>(
+                "admin", "getAdminByName",
+                new Object[]{name},
+                Admin.class
+        ));
+    }
+    public List<Admin> searchAdminsByName(String name){
+        return executeCommand(new GenericDAOCommand<>(
+                "admin","searchAdminsByName",
+                new Object[]{name},
+                List.class
+        ));
+    }
 
     //doctor commands
     public boolean addDoctor(Doctor doctor) {

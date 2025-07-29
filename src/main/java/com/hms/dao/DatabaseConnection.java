@@ -12,12 +12,12 @@ public class DatabaseConnection {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL,USER,PASSWORD);
     }
-    public static void testConnection() {
-        try (Connection conn = getConnection()) {
-            System.out.println("Database connection successful!");
-        } catch (SQLException e) {
-            System.err.println("Database connection failed!");
-            e.printStackTrace();
-        }
-    }
+//    public static void testConnection() {
+//        try (Connection conn = getConnection()) {
+//            System.out.println("Database connection successful!");
+//        } catch (SQLException e) {
+//            System.err.println("Database connection failed!");
+//            e.printStackTrace();
+//        }
+//    }
 }

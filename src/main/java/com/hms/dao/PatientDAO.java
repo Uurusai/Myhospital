@@ -39,15 +39,15 @@ public class PatientDAO {
             if(rs.next()){
                 p.setId(rs.getInt("patient_id"));
             }
-            stmt.setString(2,p.getName());
-            stmt.setString(3,p.getGender());
-            stmt.setString(6,p.getAddress());
-            stmt.setString(5,p.getDate_of_birth());
-            stmt.setInt(7,p.getContactNo());
-            stmt.setInt(4,p.getAge());
-            stmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
-            stmt.setString(9,p.getBlood_type());
-            stmt.setString(10,"pending");
+            stmt.setString(1,p.getName());
+            stmt.setString(2,p.getGender());
+            stmt.setString(5,p.getAddress());
+            stmt.setString(4,p.getDate_of_birth());
+            stmt.setInt(6,p.getContactNo());
+            stmt.setInt(3,p.getAge());
+            stmt.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setString(8,p.getBlood_type());
+            stmt.setString(9,"pending");
 
             return stmt.executeUpdate()>0 ;
         }catch(SQLException e){
@@ -85,6 +85,7 @@ public class PatientDAO {
         return patients ;
     }
     //get all pending patients
+    //unneeded ???
     public List<Patient> getAllPendingPatients(){
         List<Patient> patients = new ArrayList<>();
         String sql = "SELECT * FROM patients WHERE status = 'pending'";
@@ -256,6 +257,34 @@ public class PatientDAO {
         return appointments;
     }
 
+    //get pending appointments for patient
+    public List<Appointment> getPendingAppointmentsForPatient(int patientId) {
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = "SELECT " +
+                "a.appointment_id,a.doctor_id,a.date_scheduled,a.status,a.symptoms" +
+                "FROM" +
+                "appointments WHERE patient_id = ? AND complete_status = pending";
+        DoctorDAO dd = new DoctorDAO();
+        try(PreparedStatement stmt = getConnection().prepareStatement(sql)){
+            stmt.setInt(1,patientId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                Appointment app = new Appointment();
+                app.setId(rs.getInt("appointment_id"));
+                app.setDoctor(dd.getDoctorById(rs.getInt("doctor_id")));
+                app.setDate_scheduled(rs.getTimestamp("date_scheduled").toLocalDateTime());
+                app.setStatus(rs.getString("status"));
+                app.setSymptoms(rs.getString("symptoms"));
+                appointments.add(app);
+            }
+            return appointments;
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null ;
+    }
+
+
     //get doctors for patient
     public List<Doctor> getDoctorsForPatient(int patientId) {
         List<Doctor> doctors = new ArrayList<>();
@@ -281,9 +310,6 @@ public class PatientDAO {
         }catch(SQLException e){
             e.printStackTrace() ;
         }
-
         return doctors;
     }
-
-
 }

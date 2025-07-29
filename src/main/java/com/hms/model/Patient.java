@@ -2,10 +2,11 @@ package com.hms.model;
 
 import com.hms.utils.PasswordUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Patient {
+public class Patient implements Serializable {
 
     String name;
     int id;

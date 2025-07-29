@@ -1,9 +1,10 @@
 package com.hms.model;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.util.HashMap;
 
-public class DoctorSchedule {
+public class DoctorSchedule implements Serializable {
     private HashMap<Integer, TimeRange> workdays = new HashMap<>();
     private int doctor_id ;
     private boolean doctorOnBreak ;

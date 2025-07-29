@@ -1,0 +1,297 @@
+package com.hms.client;
+
+import com.hms.model.*;
+import com.hms.server.commands.GenericDAOCommand;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
+public class HMSClient {
+    private final String serverAddress;
+    private final int port;
+
+    public HMSClient(String serverAddress, int port) {
+        this.serverAddress = serverAddress;
+        this.port = port;
+    }
+
+    //doctor commands
+    public boolean addDoctor(Doctor doctor) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "addDoctor",
+                new Object[]{doctor},
+                Boolean.class
+        ));
+    }
+
+    public Doctor getDoctorById(int id) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "getDoctorById",
+                new Object[]{id},
+                Doctor.class
+        ));
+    }
+    public List<Doctor> getAllDoctors() {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "getAllDoctors",
+                new Object[]{},
+                List.class
+        ));
+    }
+
+    public boolean updateDoctor(Doctor doctor) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "updateDoctor",
+                new Object[]{doctor},
+                Boolean.class
+        ));
+    }
+
+    public boolean deleteDoctor(int id) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "deleteDoctor",
+                new Object[]{id},
+                Boolean.class
+        ));
+    }
+
+    public List<Patient> getPatientsForDoctor(int doctorId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "getPatientsForDoctor",
+                new Object[]{doctorId},
+                List.class
+        ));
+    }
+
+    public List<Appointment> getAppointmentsForDoctor(int doctorId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "getAppointmentsForDoctor",
+                new Object[]{doctorId},
+                List.class
+        ));
+    }
+
+    public List<Doctor> searchDoctors(String query) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "searchDoctors",
+                new Object[]{query},
+                List.class
+        ));
+    }
+
+    //doctor-schedule commands
+    public void setWorkingDays(DoctorSchedule ds, List<Integer> offdays, LocalTime starting_hour, LocalTime ending_hour) {
+        executeCommand(new GenericDAOCommand<>(
+                "doctor", "setWorkingDays",
+                new Object[]{ds, offdays, starting_hour, ending_hour},
+                Void.class
+        ));
+    }
+    public DoctorSchedule getDoctorSchedule(Doctor doctor) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "getDoctorSchedule",
+                new Object[]{doctor},
+                DoctorSchedule.class
+        ));
+    }
+    public boolean isDoctorAvailable(DoctorSchedule ds, int day, LocalTime time) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "isDoctorAvailable",
+                new Object[]{ds, day, time},
+                Boolean.class
+        ));
+    }
+
+    public void goOnBreak(int doc_id, String breakDuration) {
+        executeCommand(new GenericDAOCommand<>(
+                "doctor", "goOnBreak",
+                new Object[]{doc_id, breakDuration},
+                Void.class
+        ));
+    }
+    public void sendMessageToAll(int doc_id, TimeDateRange break_time, String breakDuration) {
+        executeCommand(new GenericDAOCommand<>(
+                "doctor", "sendMessageToAll",
+                new Object[]{doc_id, break_time, breakDuration},
+                Void.class
+        ));
+    }
+    public void postPoneAppointments(int doc_id, TimeDateRange break_time, String breakDuration) {
+        executeCommand(new GenericDAOCommand<>(
+                "doctor", "postPoneAppointments",
+                new Object[]{doc_id, break_time, breakDuration},
+                Void.class
+        ));
+    }
+
+    //patient commands
+    public boolean addPatient(Patient p) {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "addPatient",
+                new Object[]{p},
+                Boolean.class
+        ));
+    }
+    public List<Patient> getAllPatients() {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "getAllPatients",
+                new Object[]{},
+                List.class
+        ));
+    }
+    public Patient getPatientById(int id) {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "getPatientById",
+                new Object[]{id},
+                Patient.class
+        ));
+    }
+    public Patient getPatientByName(String name) {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "getPatientByName",
+                new Object[]{name},
+                Patient.class
+        ));
+    }
+    public boolean updatePatient(Patient patient) {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "updatePatient",
+                new Object[]{patient},
+                Boolean.class
+        ));
+    }
+    public boolean deletePatient(int id) {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "deletePatient",
+                new Object[]{id},
+                Boolean.class
+        ));
+    }
+    public List<Appointment> getAppointmentsForPatient(int patientId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "getAppointmentsForPatient",
+                new Object[]{patientId},
+                List.class
+        ));
+    }
+    public List<Appointment> getPendingAppointmentsForPatient(int patientId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "getPendingAppointmentsForPatient",
+                new Object[]{patientId},
+                List.class
+        ));
+    }
+    public List<Doctor> getDoctorsForPatient(int patientId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "patient", "getDoctorsForPatient",
+                new Object[]{patientId},
+                List.class
+        ));
+    }
+
+    //appointment commands
+    public boolean addAppointment(Appointment app) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "addAppointment",
+                new Object[]{app},
+                Boolean.class
+        ));
+    }
+
+    public boolean updateAppointment(Appointment app) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "updateAppointment",
+                new Object[]{app},
+                Boolean.class
+        ));
+    }
+
+    public boolean markCompleted(Appointment app) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "markCompleted",
+                new Object[]{app},
+                Boolean.class
+        ));
+    }
+
+    public boolean confirmAppointment(int appointmentId, LocalDateTime newScheduledDate) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "confirmAppointment",
+                new Object[]{appointmentId, newScheduledDate},
+                Boolean.class
+        ));
+    }
+
+    public boolean rejectAppointment(int appointmentId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "rejectAppointment",
+                new Object[]{appointmentId},
+                Boolean.class
+        ));
+    }
+
+    public boolean rescheduleAppointment(int appointmentId, LocalDateTime newScheduledDate) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "rescheduleAppointment",
+                new Object[]{appointmentId, newScheduledDate},
+                Boolean.class
+        ));
+    }
+
+    public boolean autoscheduleAppointment(int patientId, int doctorId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "autoscheduleAppointment",
+                new Object[]{patientId, doctorId},
+                Boolean.class
+        ));
+    }
+
+    public boolean isAppointmentAvailable(LocalDateTime appointmentTime) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "isAppointmentAvailable",
+                new Object[]{appointmentTime},
+                Boolean.class
+        ));
+    }
+
+    public void sendAppointmentConfirmation(int appointmentId, LocalDateTime scheduledDate) {
+        executeCommand(new GenericDAOCommand<>(
+                "appointment", "sendAppointmentConfirmation",
+                new Object[]{appointmentId, scheduledDate},
+                Void.class
+        ));
+    }
+
+    public void sendPrescription(int appointmentId, String prescriptionFilePath) {
+        executeCommand(new GenericDAOCommand<>(
+                "appointment", "sendPrescription",
+                new Object[]{appointmentId, prescriptionFilePath},
+                Void.class
+        ));
+    }
+
+    public Appointment getAppointmentById(int appointmentId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "getAppointmentById",
+                new Object[]{appointmentId},
+                Appointment.class
+        ));
+    }
+
+
+    private <T> T executeCommand(GenericDAOCommand<T> command) {
+        try (Socket socket = new Socket(serverAddress, port);
+             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+
+            oos.writeObject(command);
+            return (T) ois.readObject();
+        } catch (Exception e) {
+            throw new RuntimeException("Remote operation failed", e);
+        }
+    }
+}

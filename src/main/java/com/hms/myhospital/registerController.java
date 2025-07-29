@@ -171,10 +171,10 @@ public class registerController implements Initializable{
             return false;
         }
 
-        if (isNullOrEmpty(doctorAddress.getText())) {
-            doctorPerInfoError.setText("Address required!");
-            return false;
-        }
+//        if (isNullOrEmpty(doctorAddress.getText())) {
+//            doctorPerInfoError.setText("Address required!");
+//            return false;
+//        }
 
         if (isNullOrEmpty(doctorPhoneNumber.getText())) {
             doctorPerInfoError.setText("Phone number required!");

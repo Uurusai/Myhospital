@@ -1,9 +1,10 @@
 package com.hms.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Appointment {
+public class Appointment implements Serializable {
 //    enum Status{
 //        PENDING,APPROVED,REJECTED,NOSHOW,COMPLETED
 //    }
@@ -11,10 +12,12 @@ public class Appointment {
     private LocalDateTime date_made ;
     private LocalDateTime  date_requested ;
     private LocalDateTime  date_scheduled;
-    private String description ;
+    private String diagnosis ;
     Patient p ;
     Doctor d ;
     String status ;
+    boolean isComplete ;
+    String symptoms ;
 
     //constructor
     public Appointment(int id, LocalDateTime date_made, LocalDateTime date_requested, LocalDateTime date_scheduled, Patient  p, Doctor d, String status){
@@ -28,8 +31,13 @@ public class Appointment {
 
     }
 
-    //setters
+    public Appointment() {
 
+    }
+    //setters
+    public void setDiagnosis(String diagnosis){     this.diagnosis = diagnosis ; }
+    public void setComplete(boolean complete) { isComplete = complete;  }
+    public void setSymptoms(String symptoms) {  this.symptoms = symptoms;   }
     public void setStatus(String status) {  this.status = status;   }
     public void setDate_scheduled(LocalDateTime date_scheduled) {  this.date_scheduled = date_scheduled;   }
     public void setId(int id) {
@@ -48,6 +56,8 @@ public class Appointment {
         this.date_made = date_made;
     }
     //getters
+    public String getDiagnosis(){   return diagnosis ;}
+    public boolean isComplete() {   return isComplete;  }
     public LocalDateTime  getDate_scheduled(){  return date_scheduled;   }
     public int getId() {
         return id;
@@ -67,4 +77,5 @@ public class Appointment {
     public String getStatus() {
         return status;
     }
+    public String getSymptoms(){    return symptoms ;}
 }

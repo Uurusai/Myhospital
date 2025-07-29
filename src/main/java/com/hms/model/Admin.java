@@ -1,9 +1,10 @@
 package com.hms.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Admin {
+public class Admin implements Serializable {
     String name;
     int id;
     String gender;

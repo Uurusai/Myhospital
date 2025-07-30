@@ -241,7 +241,7 @@ public class registerController implements Initializable{
         //TODO: (for ADIBA) Implement the taking the data input into database
         
         try {
-            SceneSwitcher.switchScene("/fxml/patientProfile.fxml");
+            SceneSwitcher.switchScene("/fxml/patientDashboard.fxml");
         } catch (IOException e) {
         }
     }
@@ -269,7 +269,7 @@ public class registerController implements Initializable{
         //TODO: (for ADIBA) Implement the taking the data input into database
         
         try {
-            SceneSwitcher.switchScene("/fxml/doctorProfile.fxml");
+            SceneSwitcher.switchScene("/fxml/doctorDashboard.fxml");
         } catch (IOException e) {
         }
     }

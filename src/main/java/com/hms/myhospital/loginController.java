@@ -36,7 +36,7 @@ public class loginController {
         // Add your login logic here
         System.out.println("Login button clicked with username: " + username);
         try {
-            SceneSwitcher.switchScene("/fxml/patientProfile.fxml");
+            SceneSwitcher.switchScene("/fxml/patientDashboard.fxml");
         } catch (Exception e) {
             errorLabel.setText("Login failed: " + e.getMessage());
             System.out.println("Login failed: " + e.getMessage());

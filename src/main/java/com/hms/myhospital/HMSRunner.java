@@ -7,6 +7,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class HMSRunner extends Application {
+
+    private static HMSClient client;
+
+    public static HMSClient getClient() {
+        return client;
+    }
     @Override
     public void start(Stage stage) {
         try {

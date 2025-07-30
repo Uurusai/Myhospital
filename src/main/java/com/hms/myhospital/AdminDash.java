@@ -1,10 +1,7 @@
 package com.hms.myhospital;
 
 import com.hms.client.HMSClient;
-import com.hms.model.Appointment;
-import com.hms.model.Doctor;
-import com.hms.model.Patient;
-import com.hms.model.TimeDateRange;
+import com.hms.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -77,8 +74,13 @@ public class AdminDash extends StackPane {
     @FXML private TableColumn<Appointment,LocalDateTime> appointmentDateMadeColumn ;
     @FXML private TableColumn<Appointment,LocalDateTime> appointmentDateColumn ;
     @FXML private TableColumn<Appointment,String> appointmentStatusColumn ;
-    private final HMSClient client;
 
+    //admin table components
+    @FXML private TableView<Admin> adminTable ;
+    @FXML private TableColumn<Admin,Integer> adminIdColumn ;
+    @FXML private TableColumn<Admin,String> adminNameColumn ;
+
+    private final HMSClient client;
 
     public AdminDash(HMSClient client) {
         this.client = client ;

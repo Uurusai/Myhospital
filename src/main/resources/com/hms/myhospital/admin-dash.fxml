@@ -233,7 +233,7 @@
                                     <TableColumn fx:id="doctorEmailColumn" prefWidth="132.66671752929688" text="Email Address" />
                                     <TableColumn fx:id="doctorSpecializationColumn" prefWidth="130.66668701171875" text="Specialization" />
                                     <TableColumn fx:id="doctorAdressColumn" prefWidth="104.666748046875" text="Address" />
-                                    <TableColumn prefWidth="223.33327229817712" text="Action" />
+                                    <TableColumn minWidth="0.0" prefWidth="223.33327229817712" text="Action" />
                                 </columns>
                               </TableView>
                            </children>

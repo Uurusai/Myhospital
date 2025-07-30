@@ -1,5 +1,7 @@
 package com.hms.model;
 
+import com.hms.utils.PasswordUtil;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ public class Admin implements Serializable {
     String email;
     String contactNo;
     String address;
+    String password ;
 
     public Admin(String name, int id, String email, String contactNo, String address) {
         this.name = name;
@@ -22,7 +25,7 @@ public class Admin implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
+    public String getPassword(){ return PasswordUtil.hashPassword(password); }
     public void setId(int id) {
         this.id = id;
     }
@@ -58,4 +61,6 @@ public class Admin implements Serializable {
     public String getContactNo() {
         return this.contactNo ;
     }
+
+    public void setPassword(String password){  this.password = password; }
 }

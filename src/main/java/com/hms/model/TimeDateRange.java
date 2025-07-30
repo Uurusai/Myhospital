@@ -1,5 +1,6 @@
 package com.hms.model;
 
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 

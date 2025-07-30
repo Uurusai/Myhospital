@@ -26,4 +26,10 @@ public class DAOProviderImpl implements DAOProvider {
         return new AdminDAO();
     }
 
+    @Override
+    public MessageDAO getMessageDAO() {
+        return new MessageDAO();
+    }
+
+
 }

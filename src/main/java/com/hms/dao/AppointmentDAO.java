@@ -190,7 +190,7 @@ public class AppointmentDAO {
     }
 
     //sending confirmation message
-        public void sendAppointmentConfirmation(int appointmentId, LocalDateTime scheduledDate) {
+    public void sendAppointmentConfirmation(int appointmentId, LocalDateTime scheduledDate) {
             try {
                 Appointment app = getAppointmentById(appointmentId);
                 int patientId = app.getPatient().getId();
@@ -206,7 +206,9 @@ public class AppointmentDAO {
                         scheduledDate.toLocalTime()
                 ));
                 confirmation.setTimestamp(LocalDateTime.now());
-
+                confirmation.setRead(false);
+                MessageDAO md = new MessageDAO();
+                md.createMessage(confirmation);
                 NotificationServer.sendNotification(patientId, confirmation);
 
             } catch (Exception e) {
@@ -313,6 +315,25 @@ public class AppointmentDAO {
            // return null;
         }
        return null;
+    }
+    public List<Appointment> getAppointmentInTimeRange(TimeDateRange week){
+        List<Appointment> apps = new ArrayList<>();
+        String sql = "SELECT * FROM appointments WHERE date_scheduled BETWEEN ? AND ?";
+
+        try(PreparedStatement stmt = getConnection().prepareStatement(sql)){
+            stmt.setTimestamp(1, Timestamp.valueOf(week.getStart()));
+            stmt.setTimestamp(2, Timestamp.valueOf(week.getEnd()));
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                Appointment a = new Appointment();
+                a.setId(rs.getInt("appointment_id"));
+                apps.add(a);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return apps;
     }
 
 }

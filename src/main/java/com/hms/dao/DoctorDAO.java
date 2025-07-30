@@ -14,17 +14,13 @@ public class DoctorDAO {
 
     // Add a new doctor to the database
     public boolean addDoctor(Doctor doctor) {
-        String sql = "INSERT INTO Doctors (name, gender, e-mail, speciality, contact no, addrress,password,account_status) " +
+        String sql = "INSERT INTO Doctors (name, gender, email, speciality, contact_no, addrress,password,account_status) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?,?) RETURNING doctor_id";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, doctor.getName());
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                doctor.setId(rs.getInt("doctor_id"));
-            }
             stmt.setString(2, doctor.getGender());
             stmt.setString(3, doctor.getEmail());
             stmt.setString(4, doctor.getSpeciality());
@@ -32,6 +28,11 @@ public class DoctorDAO {
             stmt.setString(6, doctor.getAddress());
             stmt.setString(7,doctor.getPassword());
             stmt.setString(8,"pending");
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                doctor.setId(rs.getInt("doctor_id"));
+            }
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -54,7 +55,7 @@ public class DoctorDAO {
                         rs.getString("name"),
                         rs.getInt("doctor_id"),
                         rs.getString("gender"),
-                        rs.getString("e-mail"),
+                        rs.getString("email"),
                         rs.getString("speciality"),
                         rs.getInt("contact_no"),
                         rs.getString("addrress")
@@ -83,9 +84,9 @@ public class DoctorDAO {
                             rs.getString("name"),
                             rs.getInt("doctor_id"),
                             rs.getString("gender"),
-                            rs.getString("e-mail"),
+                            rs.getString("email"),
                             rs.getString("speciality"),
-                            rs.getInt("contact no"),
+                            rs.getInt("contact_no"),
                             rs.getString("addrress")
                     );
 
@@ -183,8 +184,8 @@ public class DoctorDAO {
                 p.payment_status AS patient_payment_status, p.visitor_type AS patient_visitor_type
             
                 --doctor fields
-                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.e-mail,
-                d.speciality,d.contact no AS doctor_contact d.addrress AS doctor_address
+                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.email,
+                d.speciality,d.contact_no AS doctor_contact d.addrress AS doctor_address
             
             FROM appointments a
             JOIN Patients p ON a.patient_id = p.patient_id
@@ -211,7 +212,7 @@ public class DoctorDAO {
                         rs.getString("doctor_name"),
                         rs.getInt("doctor_id"),
                         rs.getString("doctor_gender"),
-                        rs.getString("e-mail"),
+                        rs.getString("email"),
                         rs.getString("speciality"),
                         rs.getInt("doctor_contact"),
                         rs.getString("doctor_address")

@@ -51,6 +51,7 @@ public class HMSRunner extends Application {
             primaryStage.setScene(new Scene(root, 1100, 600));
             primaryStage.setResizable(false);
             primaryStage.show();
+//
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);

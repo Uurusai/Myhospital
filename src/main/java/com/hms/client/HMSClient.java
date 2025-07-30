@@ -313,6 +313,14 @@ public class HMSClient {
         ));
     }
 
+    public List<Appointment>getAllAppointments(){
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "getAllAppointments",
+                new Object[]{ },
+                List.class
+        ));
+    }
+
     //message commands
     public List<Message> getUnreadMessages(int userId) throws SQLException {
         return executeCommand(new GenericDAOCommand<>(

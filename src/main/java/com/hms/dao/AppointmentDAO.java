@@ -37,6 +37,70 @@ public class AppointmentDAO {
             return false;
         }
     }
+    public List<Appointment>getAllAppointments(){
+
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = """
+            SELECT 
+                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.completed_status,a.diagnosis
+                
+                -- patient fields
+                p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
+                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact
+                p.payment_status AS patient_payment_status, p.visitor_type AS patient_visitor_type
+            
+                --doctor fields
+                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.e-mail,
+                d.speciality,d.contact no AS doctor_contact d.addrress AS doctor_address
+            
+            FROM appointments a
+            JOIN Patients p ON a.patient_id = p.patient_id
+            JOIN Doctors d ON a.doctor_id = d.doctor_id
+                       
+""";
+        try(Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                Patient patient = new Patient(
+                        rs.getString("name"),
+                        rs.getInt("patient_id"),
+                        rs.getString("gender"),
+                        rs.getInt("age"),
+                        rs.getString("date_of_birth"),
+                        rs.getInt("contact_no"),
+                        rs.getString("address"),
+                        rs.getString("blood_type")
+                );
+                Doctor doctor = new  Doctor(
+                        rs.getString("doctor_name"),
+                        rs.getInt("doctor_id"),
+                        rs.getString("doctor_gender"),
+                        rs.getString("e-mail"),
+                        rs.getString("speciality"),
+                        rs.getInt("doctor_contact"),
+                        rs.getString("doctor_address")
+                );
+                Appointment appointment = new Appointment(
+                        rs.getInt("appointment_id"),
+                        rs.getTimestamp("date_made").toLocalDateTime(),
+                        rs.getTimestamp("date_requested").toLocalDateTime(),
+                        rs.getTimestamp("date_scheduled").toLocalDateTime(),
+                        patient,doctor,
+                        rs.getString("status")
+                );
+                appointment.setComplete(rs.getBoolean("completed_status"));
+                appointment.setDiagnosis(rs.getString("diagnosis"));
+                appointment.setSymptoms(rs.getString("symptoms"));
+                appointments.add(appointment);
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            // return null;
+        }
+        return appointments;
+    }
     //update appointment info
     public boolean updateAppointment(Appointment app) {
         String sql = "UPDATE appointments SET doctor_id = ?, patient_id = ?, date_requested = ?, " +

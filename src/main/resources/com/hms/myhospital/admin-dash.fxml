@@ -181,13 +181,12 @@
                                             <children>
                                                 <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="332.0" prefWidth="519.0" styleClass="white-bg" stylesheets="@DashboardStyle.css">
                                                     <children>
-                                                        <Label layoutX="14.0" layoutY="14.0" styleClass="header-1" stylesheets="@DashboardStyle.css" text="Doctor Information" />
+                                                        <Label layoutX="14.0" layoutY="14.0" styleClass="header-1" stylesheets="@DashboardStyle.css" text="Admin Information" />
                                                         <TableView fx:id="db_doctor_table" layoutX="16.0" layoutY="42.0" prefHeight="289.0" prefWidth="487.0" stylesheets="@DashboardStyle.css">
                                                             <columns>
-                                                                <TableColumn prefWidth="75.0" text="Doctor ID" />
-                                                                <TableColumn prefWidth="149.33333587646484" text="Name" />
-                                                                <TableColumn prefWidth="157.33334350585938" text="Specialized" />
-                                                                <TableColumn prefWidth="105.33334350585938" text="Status" />
+                                                                <TableColumn prefWidth="75.0" text="Admin ID" />
+                                                                <TableColumn prefWidth="214.0000228881836" text="Name" />
+                                                                <TableColumn prefWidth="196.6666259765625" text="e-mail" />
                                                             </columns>
                                                         </TableView>
                                                     </children>
@@ -265,14 +264,14 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TableView layoutX="14.0" layoutY="53.0" prefHeight="482.0" prefWidth="897.0">
+                              <TableView fx:id="appointmentsTable" layoutX="14.0" layoutY="53.0" prefHeight="482.0" prefWidth="897.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="ID" />
-                                  <TableColumn prefWidth="147.33332061767578" text="Patient Name" />
-                                    <TableColumn prefWidth="178.66673278808594" text=" Doctor Name" />
-                                    <TableColumn prefWidth="155.99996948242188" text="Date Made " />
-                                    <TableColumn minWidth="0.0" prefWidth="170.0" text="Date of Appointment" />
-                                    <TableColumn minWidth="0.0" prefWidth="162.66668701171875" text="Status" />
+                                  <TableColumn fx:id="appointmentIdColumn" prefWidth="75.0" text="ID" />
+                                  <TableColumn fx:id="appointmentPatientNameColumn" prefWidth="147.33332061767578" text="Patient Name" />
+                                    <TableColumn fx:id="appointmentDoctorNameColumn" prefWidth="178.66673278808594" text=" Doctor Name" />
+                                    <TableColumn fx:id="appointmentDateMadeColumn" prefWidth="155.99996948242188" text="Date Made " />
+                                    <TableColumn fx:id="appointmentDateColumn" minWidth="0.0" prefWidth="170.0" text="Date of Appointment" />
+                                    <TableColumn fx:id="appointmentStatusColumn" minWidth="0.0" prefWidth="162.66668701171875" text="Status" />
                                 </columns>
                               </TableView>
                            </children>

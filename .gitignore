@@ -6,6 +6,8 @@ pom.xml.versionsBackup
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
+.idea/vcs.xml
+.idea/dataSources.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/

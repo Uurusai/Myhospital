@@ -30,7 +30,7 @@ import java.util.Map;
 
 import static com.hms.dao.DatabaseConnection.getConnection;
 
-public class AdminDash extends StackPane {  // Must match fx:root type
+public class AdminDash extends StackPane {
     // Navigation Buttons
     @FXML private Button doctor_btn;
     @FXML private Button patient_btn;
@@ -69,6 +69,14 @@ public class AdminDash extends StackPane {  // Must match fx:root type
     @FXML private TableColumn<Patient, String> patientAddressColumn;
     @FXML private TableColumn<Patient, String> patientStatusColumn;
 
+    // Appointment table components
+    @FXML private TableView<Appointment> appointmentsTable ;
+    @FXML private TableColumn<Appointment,Integer> appointmentIdColumn ;
+    @FXML private TableColumn<Appointment,String> appointmentPatientNameColumn ;
+    @FXML private TableColumn<Appointment,String> appointmentDoctorNameColumn ;
+    @FXML private TableColumn<Appointment,LocalDateTime> appointmentDateMadeColumn ;
+    @FXML private TableColumn<Appointment,LocalDateTime> appointmentDateColumn ;
+    @FXML private TableColumn<Appointment,String> appointmentStatusColumn ;
     private final HMSClient client;
 
 
@@ -203,7 +211,6 @@ public class AdminDash extends StackPane {  // Must match fx:root type
         });
         patientStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        // Add action button
         TableColumn<Patient, Void> actionColumn = new TableColumn<>("Action");
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button viewBtn = new Button("View");
@@ -354,6 +361,40 @@ public class AdminDash extends StackPane {  // Must match fx:root type
 
         task.setOnFailed(e -> {
             showAlert("Error", "Failed to load patients", task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+    }
+
+    private void setupAppointmentsTable() {
+        appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        appointmentPatientNameColumn.setCellValueFactory(cellData -> {
+            Patient patient = cellData.getValue().getPatient();
+            return new SimpleStringProperty(patient != null ? patient.getName() : "N/A");
+        });
+        appointmentDoctorNameColumn.setCellValueFactory(cellData -> {
+            Doctor doctor = cellData.getValue().getDoctor();
+            return new SimpleStringProperty(doctor != null ? doctor.getName() : "N/A");
+        });
+        appointmentDateMadeColumn.setCellValueFactory(new PropertyValueFactory<>("dateMade"));
+        appointmentDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        appointmentStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+    }
+
+    private void loadAppointmentsDataAsync() {
+        Task<List<Appointment>> task = new Task<>() {
+            @Override
+            protected List<Appointment> call() throws Exception {
+                return client.getAllAppointments();
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            appointmentsTable.getItems().setAll(task.getValue());
+        });
+
+        task.setOnFailed(e -> {
+            showAlert("Error", "Failed to load appointments", task.getException().getMessage());
         });
 
         new Thread(task).start();

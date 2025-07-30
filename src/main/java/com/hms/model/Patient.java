@@ -19,7 +19,6 @@ public class Patient implements Serializable {
     String password;
     String account_status ;
 
-
     //constructor
     public Patient(String name,int id,String gender,int age,String date_of_birth,int contactNo,String address,String blood_type) {
         this.name = name;
@@ -115,7 +114,6 @@ public class Patient implements Serializable {
     }
     public void setBlood_type(String blood_type) {  this.blood_type = blood_type;   }
     public void setPassword(String password){  this.password = password; }
-
     public void setAccount_status(String account_status) {
         this.account_status = account_status;
     }

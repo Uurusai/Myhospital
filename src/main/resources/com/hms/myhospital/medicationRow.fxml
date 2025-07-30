@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<HBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.medicationRowController">
+   <children>
+      <AnchorPane prefHeight="260.0" prefWidth="550.0">
+         <children>
+            <Rectangle fill="#253b84" height="260.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="550.0" />
+            <Rectangle fill="#4059ad" height="240.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="130.0" />
+            <Rectangle fill="#f4b942" height="240.0" layoutX="140.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="400.0" />
+            <Label layoutX="15.0" layoutY="40.0" text="Medication:" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="70.0" text="Dosage:" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="150.0" text="Duration: " textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="190.0" text="Comment:" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="morningCheck" layoutX="165.0" layoutY="75.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="125.0" text="In the morning">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </CheckBox>
+            <CheckBox fx:id="noonCheck" layoutX="315.0" layoutY="75.0" mnemonicParsing="false" text="At noon">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </CheckBox>
+            <CheckBox fx:id="nightCheck" layoutX="435.0" layoutY="75.0" mnemonicParsing="false" text="At night">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </CheckBox>
+            <Label layoutX="15.0" layoutY="110.0" prefHeight="27.0" prefWidth="150.0" text="Before/after meals:" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="beforeAfterMealsChoice" layoutX="165.0" layoutY="111.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="durationChoice" layoutX="165.0" layoutY="151.0" prefWidth="150.0" />
+            <TextField fx:id="medication" layoutX="165.0" layoutY="41.0" />
+            <TextArea fx:id="comment" layoutX="165.0" layoutY="190.0" prefHeight="50.0" prefWidth="320.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</HBox>

@@ -246,7 +246,6 @@ public class AppointmentDAO {
                 e.printStackTrace();
             }
 
-
         }
 
     public Appointment getAppointmentById(int appointmentId) {

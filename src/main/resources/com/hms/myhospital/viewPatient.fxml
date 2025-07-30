@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Rectangle fill="#4059ad" height="150.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1100.0" />
+      <Rectangle fill="#c1c1c1" height="450.0" layoutY="150.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1100.0" />
+      <ImageView fitHeight="75.0" fitWidth="50.0" layoutX="520.0" layoutY="17.0">
+         <image>
+            <Image url="@../../../../../Logo.png" />
+         </image>
+      </ImageView>
+      <Text fill="#ed1c24" layoutX="355.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DUCKLAND HOSPITAL">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Text>
+      <StackPane fx:id="returnToAppointments" layoutX="960.0" layoutY="55.0" prefHeight="60.0" prefWidth="120.0">
+         <children>
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="120.0" />
+            <Text fill="#398c72" strokeType="OUTSIDE" strokeWidth="0.0" text="Return">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+         </children>
+      </StackPane>
+      <StackPane layoutX="40.0" layoutY="150.0" prefHeight="450.0" prefWidth="500.0">
+         <children>
+            <AnchorPane>
+               <children>
+                  <Rectangle fill="#f4b942" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="500.0" />
+                  <Rectangle fill="#eff2f1" height="380.0" layoutY="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="500.0" />
+                  <Rectangle fill="#bc6565" height="380.0" layoutX="-1.0" layoutY="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="140.0" />
+                  <Label layoutX="20.0" layoutY="100.0" text="First Name: " textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="20.0" layoutY="130.0" text="Last Name:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="20.0" layoutY="260.0" text="Date of Birth: " textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="20.0" layoutY="290.0" text="Gender: " textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="20.0" layoutY="320.0" text="Blood Group: " textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="20.0" layoutY="350.0" text="Medical History: " textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="25.0" layoutY="17.0" text="PATIENT INFO:" textFill="#bc6565">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="20.0" layoutY="170.0" text="Phone Number: " textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="160.0" layoutY="100.0" text="First Name">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="160.0" layoutY="130.0" text="Last Name">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="160.0" layoutY="260.0" text="Date of Birth">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="160.0" layoutY="290.0" text="Gender">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="160.0" layoutY="320.0" text="Blood Group">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="160.0" layoutY="350.0" text="Medical History">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="160.0" layoutY="170.0" text="Phone Number">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
+      <StackPane layoutX="560.0" layoutY="150.0" prefHeight="450.0" prefWidth="500.0">
+         <children>
+            <AnchorPane>
+               <children>
+                  <Rectangle fill="#f4b942" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="500.0" />
+                  <Rectangle fill="#eff2f1" height="380.0" layoutY="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="500.0" />
+                  <Rectangle fill="#bc6565" height="380.0" layoutY="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="140.0" />
+                  <Label layoutX="21.0" layoutY="100.0" text="Date:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="21.0" layoutY="130.0" text="Time:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="26.0" layoutY="17.0" text="APPOINTMENT INFO:" textFill="#bc6565">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="21.0" layoutY="170.0" text="Previous Apmts.:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="161.0" layoutY="100.0" text="Date">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="161.0" layoutY="130.0" text="Time">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="161.0" layoutY="170.0" text="Yes/No">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

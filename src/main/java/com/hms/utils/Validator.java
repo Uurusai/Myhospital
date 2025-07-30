@@ -56,4 +56,8 @@ public class Validator {
         }
     }
 
+    public static boolean isNullOrEmpty(String input) {
+        return input == null || input.trim().isEmpty();
+    }
+
 }

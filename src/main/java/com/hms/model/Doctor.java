@@ -42,7 +42,7 @@ public class Doctor implements Serializable {
 
     //setter
     public void setAccount_status(String account_status){  this.account_status = account_status;}
-    public void setPassword(){ this.password = password ;}
+    public void setPassword(String password){ this.password = password ;}
     public void setName(String name) {
         this.name = name;
     }

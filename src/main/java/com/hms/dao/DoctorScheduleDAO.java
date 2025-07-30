@@ -35,6 +35,7 @@ public class DoctorScheduleDAO {
         }
     }
 
+
     public DoctorSchedule getDoctorSchedule(Doctor doctor) {
 
         String sql = "SELECT day_of_the_week, starting_hour, ending_hour, " +

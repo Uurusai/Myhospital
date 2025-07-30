@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.chooseAccountController">
+   <children>
+      <Rectangle fill="#4059ad" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1100.0" />
+      <Label layoutX="246.0" layoutY="140.0" text="Choose Your Account Type" textFill="#f4b942">
+         <font>
+            <Font name="System Bold" size="48.0" />
+         </font>
+      </Label>
+      <StackPane fx:id="chooseDoctorBtn" layoutX="220.0" layoutY="288.0" onMouseClicked="#handleChooseDoctor" prefHeight="150.0" prefWidth="200.0" stylesheets="@doctorDashboard.css">
+         <children>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#97d8c4" height="150.0" stroke="#97d8c4" strokeType="INSIDE" styleClass="menu-button-selected" width="280.0" />
+            <Label styleClass="menu-button-selected" text="DOCTOR" textFill="#398c72">
+               <font>
+                  <Font name="System Bold Italic" size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+      <StackPane fx:id="chooseDoctorBtn1" layoutX="600.0" layoutY="288.0" onMouseClicked="#handleChoosePatient" prefHeight="150.0" prefWidth="200.0" stylesheets="@doctorDashboard.css">
+         <children>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#97d8c4" height="150.0" stroke="#97d8c4" strokeType="INSIDE" styleClass="menu-button-selected" width="280.0" />
+            <Label styleClass="menu-button-selected" text="PATIENT" textFill="#398c72">
+               <font>
+                  <Font name="System Bold Italic" size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

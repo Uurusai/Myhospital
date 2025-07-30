@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.registerController">
+<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.doctorRegisterController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4059ad" height="600.0" stroke="BLACK" strokeType="INSIDE" width="1100.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#eff2f1" height="390.0" layoutY="120.0" stroke="BLACK" strokeType="INSIDE" width="1100.0" />
@@ -25,39 +27,29 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="165.0" layoutY="164.0" text="First Name: ">
+      <Label layoutX="165.0" layoutY="178.0" text="Name: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="605.0" layoutY="164.0" text="Last Name: ">
+      <Label layoutX="165.0" layoutY="208.0" text="Date of Birth: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="165.0" layoutY="194.0" text="Date of Birth: ">
+      <Label layoutX="165.0" layoutY="238.0" text="Phone Number: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="165.0" layoutY="224.0" text="Phone Number: ">
+      <Label layoutX="590.0" layoutY="178.0" text="Specialization: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="165.0" layoutY="254.0" text="Specialization: ">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="165.0" layoutY="304.0" text="Account Information:">
+      <Label layoutX="165.0" layoutY="305.0" text="Account Information:">
          <font>
             <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="165.0" layoutY="334.0" text="User Name:">
-         <font>
-            <Font size="14.0" />
          </font>
       </Label>
       <Label layoutX="165.0" layoutY="364.0" text="Email Address: ">
@@ -95,29 +87,40 @@
             </Label>
          </children>
       </StackPane>
-      <TextField fx:id="doctorFirstName" layoutX="295.0" layoutY="161.0" prefWidth="200.0" />
-      <TextField fx:id="doctorLastName" layoutX="735.0" layoutY="161.0" prefWidth="200.0" />
-      <TextField fx:id="doctorPhoneNumber" layoutX="295.0" layoutY="221.0" prefWidth="200.0" promptText="+880" />
-      <DatePicker fx:id="doctorDateOfBirth" layoutX="295.0" layoutY="191.0" promptText="DD/MM/YYYY" />
-      <TextField fx:id="doctorUserName" layoutX="295.0" layoutY="331.0" prefWidth="200.0" />
+      <TextField fx:id="doctorName" layoutX="295.0" layoutY="175.0" prefWidth="200.0" />
+      <TextField fx:id="doctorPhoneNumber" layoutX="295.0" layoutY="235.0" prefWidth="200.0" promptText="+880" />
+      <DatePicker fx:id="doctorDateOfBirth" layoutX="295.0" layoutY="205.0" promptText="DD/MM/YYYY" />
       <TextField fx:id="doctorEmail" layoutX="295.0" layoutY="361.0" prefWidth="200.0" />
       <PasswordField fx:id="doctorSetPassword" layoutX="295.0" layoutY="391.0" prefWidth="200.0" />
       <PasswordField fx:id="doctorConfirmPassword" layoutX="295.0" layoutY="421.0" prefWidth="200.0" />
-      <TextField fx:id="specialization" layoutX="295.0" layoutY="251.0" prefWidth="200.0" />
+      <TextField fx:id="specialization" layoutX="720.0" layoutY="175.0" prefWidth="200.0" />
+      <Label fx:id="doctorPerInfoError" layoutX="321.0" layoutY="134.0" text="errorLabel" textFill="#ed1c24">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="doctorAccInfoError" layoutX="321.0" layoutY="305.0" text="errorLabel" textFill="#ed1c24">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
       <ImageView fitHeight="75.0" fitWidth="50.0" layoutX="525.0" layoutY="5.0">
          <image>
-            <Image url="@../../../../../Logo.png" />
+            <Image url="@Logo.png" />
          </image>
       </ImageView>
-      <Label fx:id="doctorPerInfoError" layoutX="321.0" layoutY="134.0" text="errorLabel">
+      <Label layoutX="590.0" layoutY="238.0" text="Address: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="doctorAccInfoError" layoutX="321.0" layoutY="304.0" text="errorLabel">
+      <Label layoutX="590.0" layoutY="208.0" text="Gender:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
+      <TextArea fx:id="doctorAddress" layoutX="720.0" layoutY="238.0" prefHeight="50.0" prefWidth="200.0" />
+      <CheckBox fx:id="doctorIsMale" layoutX="720.0" layoutY="209.0" mnemonicParsing="false" onAction="#handleGenderSelection" text="Male" />
+      <CheckBox fx:id="doctorIsFemale" layoutX="847.0" layoutY="209.0" mnemonicParsing="false" onAction="#handleGenderSelection" text="Female" />
    </children>
 </AnchorPane>

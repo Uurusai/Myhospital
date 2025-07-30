@@ -34,45 +34,12 @@ public class welcomeController {
         // Handle register button click
         System.out.println("Register button clicked");
 
-        boolean showButtons = !chooseDoctorBtn.isVisible();
-
-        chooseDoctorBtn.setVisible(showButtons);
-        chooseDoctorBtn.setManaged(showButtons);
-        choosePatientBtn.setVisible(showButtons);
-        choosePatientBtn.setManaged(showButtons);
+        try {
+            SceneSwitcher.switchScene("/fxml/chooseAccount.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     } //done
-
-    @FXML private StackPane chooseDoctorBtn;
-    @FXML private StackPane choosePatientBtn;
-
-    @FXML
-    private void initialize() {
-        // Hide doctor/patient buttons initially
-        chooseDoctorBtn.setVisible(false);
-        chooseDoctorBtn.setManaged(false); // Remove from layout
-        choosePatientBtn.setVisible(false);
-        choosePatientBtn.setManaged(false);
-    }
-
-    @FXML private void handleChooseDoctor() {
-        // Handle doctor selection button click
-        System.out.println("Doctor button clicked");
-        // Add your logic for choosing doctor here
-        try {
-            SceneSwitcher.switchScene("/fxml/registerDoctor.fxml");
-        } catch (IOException e) {
-        }
-    }
-
-    @FXML private void handleChoosePatient() {
-        // Handle patient selection button click
-        System.out.println("Patient button clicked");
-        // Add your logic for choosing patient here
-        try {
-            SceneSwitcher.switchScene("/fxml/registerPatient.fxml");
-        } catch (IOException e) {
-        }
-    }
 
 }

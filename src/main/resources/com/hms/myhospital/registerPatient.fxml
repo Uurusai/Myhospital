@@ -14,12 +14,12 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.registerController">
+<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.patientRegisterController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4059ad" height="600.0" stroke="BLACK" strokeType="INSIDE" width="1100.0" />
       <ImageView fitHeight="75.0" fitWidth="50.0" layoutX="525.0" layoutY="3.0">
          <image>
-            <Image url="@../../../../../Logo.png" />
+            <Image url="@Logo.png" />
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#eff2f1" height="390.0" layoutY="126.0" stroke="BLACK" strokeType="INSIDE" width="1100.0" />
@@ -28,89 +28,71 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="134.0" text="Personal Information:">
+      <Label layoutX="165.0" layoutY="140.0" text="Personal Information:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="164.0" text="First Name: ">
+      <Label layoutX="170.0" layoutY="195.0" text="Name: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="194.0" text="Gender: ">
+      <Label layoutX="170.0" layoutY="225.0" text="Gender: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="224.0" text="Blood Group: ">
+      <Label layoutX="170.0" layoutY="255.0" text="Blood Group: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="254.0" text="Medical History: (if any)">
+      <Label layoutX="605.0" layoutY="195.0" text="Date of Birth: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="607.0" layoutY="164.0" text="Last Name: ">
+      <Label layoutX="605.0" layoutY="225.0" text="Phone Number: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="607.0" layoutY="194.0" text="Date of Birth: ">
+      <Label fx:id="patientPerInfoError" layoutX="330.0" layoutY="140.0" text="errorLabel" textFill="#ed1c24">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="607.0" layoutY="224.0" text="Phone Number: ">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label fx:id="patientPerInfoError" layoutX="330.0" layoutY="134.0" text="errorLabel" textFill="#ed1c24">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="168.0" layoutY="346.0" text="Account Information:">
+      <Label layoutX="165.0" layoutY="340.0" text="Account Information:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="386.0" text="User Name:">
+      <Label layoutX="170.0" layoutY="395.0" text="Email Address: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="416.0" text="Email Address: ">
+      <Label layoutX="170.0" layoutY="425.0" text="Set Password: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="446.0" text="Set Password: ">
+      <Label layoutX="170.0" layoutY="455.0" text="Confirm Password: ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="476.0" text="Confirm Password: ">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="patientFirstName" layoutX="297.0" layoutY="161.0" prefWidth="200.0" />
-      <TextField fx:id="patientLastName" layoutX="737.0" layoutY="161.0" prefWidth="200.0" />
-      <CheckBox fx:id="patientIsMale" layoutX="297.0" layoutY="196.0" mnemonicParsing="false" onMouseClicked="#handleGenderSelection" text="Male" />
-      <CheckBox fx:id="patientIsFemale" layoutX="386.0" layoutY="196.0" mnemonicParsing="false" onMouseClicked="#handleGenderSelection" text="Female" />
-      <DatePicker fx:id="patientDateOfBirth" layoutX="737.0" layoutY="191.0" promptText="DD/MM/YYYY" />
-      <ChoiceBox fx:id="patientBloodGroup" layoutX="297.0" layoutY="221.0" prefWidth="60.0" />
-      <TextField fx:id="patientPhoneNumber" layoutX="737.0" layoutY="221.0" prefWidth="200.0" promptText="+880" />
-      <TextArea fx:id="medicalHistory" layoutX="164.0" layoutY="280.0" prefHeight="50.0" prefWidth="300.0" />
-      <TextField fx:id="patientUserName" layoutX="297.0" layoutY="383.0" prefWidth="200.0" />
-      <TextField fx:id="patientEmail" layoutX="297.0" layoutY="413.0" prefWidth="200.0" />
-      <PasswordField fx:id="patientSetPassword" layoutX="297.0" layoutY="443.0" prefWidth="200.0" />
-      <PasswordField fx:id="patientConfirmPassword" layoutX="297.0" layoutY="473.0" prefWidth="200.0" />
-      <Label fx:id="patientAccInfoError" layoutX="330.0" layoutY="346.0" text="errorLabel" textFill="#ed1c24">
+      <TextField fx:id="patientName" layoutX="295.0" layoutY="192.0" prefWidth="200.0" promptText="Enter your name" />
+      <CheckBox fx:id="patientIsMale" layoutX="295.0" layoutY="226.0" mnemonicParsing="false" onMouseClicked="#handleGenderSelection" text="Male" />
+      <CheckBox fx:id="patientIsFemale" layoutX="384.0" layoutY="226.0" mnemonicParsing="false" onMouseClicked="#handleGenderSelection" text="Female" />
+      <DatePicker fx:id="patientDateOfBirth" layoutX="735.0" layoutY="192.0" promptText="DD/MM/YYYY" />
+      <ChoiceBox fx:id="patientBloodGroup" layoutX="295.0" layoutY="252.0" prefWidth="60.0" />
+      <TextField fx:id="patientPhoneNumber" layoutX="735.0" layoutY="222.0" prefWidth="200.0" promptText="+880" />
+      <TextField fx:id="patientEmail" layoutX="295.0" layoutY="392.0" prefWidth="200.0" />
+      <PasswordField fx:id="patientSetPassword" layoutX="295.0" layoutY="422.0" prefWidth="200.0" />
+      <PasswordField fx:id="patientConfirmPassword" layoutX="295.0" layoutY="452.0" prefWidth="200.0" />
+      <Label fx:id="patientAccInfoError" layoutX="330.0" layoutY="340.0" text="errorLabel" textFill="#ed1c24">
          <font>
             <Font size="14.0" />
          </font>
@@ -135,5 +117,11 @@
             </Label>
          </children>
       </StackPane>
+      <Label layoutX="605.0" layoutY="255.0" text="Address:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="patientAddress" layoutX="735.0" layoutY="255.0" prefHeight="50.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

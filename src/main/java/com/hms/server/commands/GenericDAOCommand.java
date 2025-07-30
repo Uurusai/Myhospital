@@ -28,6 +28,7 @@ public class GenericDAOCommand<T> implements DAOCommand {
                 case "schedule" -> provider.getDoctorScheduleDAO();
                 case "appointment" -> provider.getAppointmentDAO();
                 case " admin" -> provider.getAdminDAO() ;
+                case "message" -> provider.getMessageDAO();
                 default -> throw new IllegalArgumentException("Unknown DAO type: " + daoType);
             };
 

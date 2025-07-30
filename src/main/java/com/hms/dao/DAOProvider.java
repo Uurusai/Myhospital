@@ -6,5 +6,6 @@ public interface DAOProvider {
     DoctorScheduleDAO getDoctorScheduleDAO();
     AppointmentDAO getAppointmentDAO();
     AdminDAO getAdminDAO();
+    MessageDAO getMessageDAO() ;
 
 }

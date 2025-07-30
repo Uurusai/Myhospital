@@ -6,6 +6,7 @@ import com.hms.server.commands.GenericDAOCommand;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -303,6 +304,58 @@ public class HMSClient {
                 Appointment.class
         ));
     }
+
+    public List<Appointment> getAppointmentInTimeRange(TimeDateRange week){
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "getAppointmentInTimeRange",
+                new Object[]{week},
+                List.class
+        ));
+    }
+
+    //message commands
+    public List<Message> getUnreadMessages(int userId) throws SQLException {
+        return executeCommand(new GenericDAOCommand<>(
+                "message",
+                "getUnreadMessages",
+                new Object[]{userId},
+                List.class
+        ));
+    }
+    public int createMessage(Message message) throws SQLException {
+        return executeCommand(new GenericDAOCommand<>(
+                "message",
+                "createMessage",
+                new Object[]{message},
+                Integer.class
+        ));
+    }
+    public List<Message> getMessagesByRecipient(int recipientId) throws SQLException {
+        return executeCommand(new GenericDAOCommand<>(
+                "message",
+                "getMessagesByRecipient",
+                new Object[]{recipientId},
+                List.class
+        ));
+    }
+    public boolean markAsRead(int messageId) throws SQLException {
+        return executeCommand(new GenericDAOCommand<>(
+                "message",
+                "markAsRead",
+                new Object[]{messageId},
+                Boolean.class
+        ));
+    }
+    public boolean deleteMessage(int messageId) throws SQLException {
+        return executeCommand(new GenericDAOCommand<>(
+                "message",
+                "deleteMessage",
+                new Object[]{messageId},
+                Boolean.class
+        ));
+    }
+
+
 
 
     private <T> T executeCommand(GenericDAOCommand<T> command) {

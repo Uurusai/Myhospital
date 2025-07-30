@@ -4,6 +4,7 @@ import com.hms.client.HMSClient;
 import com.hms.model.Appointment;
 import com.hms.model.Doctor;
 import com.hms.model.Patient;
+import com.hms.model.TimeDateRange;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +139,24 @@ public class AdminDash extends StackPane {  // Must match fx:root type
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button approveBtn = new Button("Approve");
             private final Button deleteBtn = new Button("Delete");
+            private final HBox buttons = new HBox(5, approveBtn, deleteBtn);
+            {
+                approveBtn.setStyle(
+                        "-fx-background-color: #4CAF50; " +  // Green
+                                "-fx-text-fill: white; " +           // White text
+                                "-fx-padding: 5px 10px;"             // Padding
+                );
 
+                deleteBtn.setStyle(
+                        "-fx-background-color: #f44336; " +  // Red
+                                "-fx-text-fill: white; " +           // White text
+                                "-fx-padding: 5px 10px;"             // Padding
+                );
+
+                HBox buttons = new HBox(5, approveBtn, deleteBtn);
+                buttons.setStyle("-fx-padding: 5px;");   // Padding inside cell
+                setGraphic(buttons);
+            }
             {
                 approveBtn.setOnAction(event -> {
                     Doctor doctor = getTableView().getItems().get(getIndex());
@@ -188,7 +207,6 @@ public class AdminDash extends StackPane {  // Must match fx:root type
         TableColumn<Patient, Void> actionColumn = new TableColumn<>("Action");
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button viewBtn = new Button("View");
-
             {
                 viewBtn.setOnAction(event -> {
                     Patient patient = getTableView().getItems().get(getIndex());
@@ -438,6 +456,16 @@ public class AdminDash extends StackPane {  // Must match fx:root type
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private List<Long> getWeeklyPatientRecord(LocalDateTime today ){
+        List<Long> count = new ArrayList<>();
+        for(int i = 0; i< 7 ;i++){
+            LocalDateTime dt = today.minusDays(i);
+            List<Appointment> app = client.getAppointmentInTimeRange(new TimeDateRange(dt,today));
+            count.add(app.stream().count());
+        }
+        return count ;
     }
 
 }

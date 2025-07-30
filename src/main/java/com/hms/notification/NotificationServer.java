@@ -1,5 +1,6 @@
 package com.hms.notification;
 
+import com.hms.dao.MessageDAO;
 import com.hms.model.Message;
 
 import java.io.IOException;
@@ -26,16 +27,32 @@ public class NotificationServer {
                 while (true) {
                     Socket clientSocket = serverSocket.accept();
                     ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
+                    ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
                     int userId = ois.readInt(); // Client identifies itself
 
                     synchronized (clientSockets) {
                         clientSockets.computeIfAbsent(userId, k -> new ArrayList<>()).add(clientSocket);
+                        sendUnreadMessages(userId, oos);
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    private static void sendUnreadMessages(int userId, ObjectOutputStream oos) {
+        try {
+            List<Message> unreadMessages = MessageDAO.getUnreadMessages(userId) ;
+            for (Message message : unreadMessages) {
+                oos.writeObject(message);
+                oos.flush();
+                // Mark as read after sending
+                MessageDAO.markAsRead(message.getId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void sendNotification(int userId, Message message) {

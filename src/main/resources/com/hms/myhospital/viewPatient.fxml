@@ -15,7 +15,7 @@
       <Rectangle fill="#c1c1c1" height="450.0" layoutY="150.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1100.0" />
       <ImageView fitHeight="75.0" fitWidth="50.0" layoutX="520.0" layoutY="17.0">
          <image>
-            <Image url="@../../../../../Logo.png" />
+            <Image url="@Logo.png" />
          </image>
       </ImageView>
       <Text fill="#ed1c24" layoutX="355.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DUCKLAND HOSPITAL">

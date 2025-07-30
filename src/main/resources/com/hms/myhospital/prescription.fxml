@@ -12,14 +12,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.prescriptionController">
+<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.prescriptionController">
    <children>
       <Rectangle fill="#4059ad" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-      <ImageView fitHeight="100.0" fitWidth="66.5" layoutX="117.0" layoutY="14.0">
-         <image>
-            <Image url="@../../../../../Logo.png" />
-         </image>
-      </ImageView>
       <Label layoutX="100.0" layoutY="114.0" text="DUCKLAND" textFill="#ed1c24">
          <font>
             <Font name="System Bold" size="18.0" />
@@ -78,5 +73,10 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
+      <ImageView fitHeight="100.0" fitWidth="66.5" layoutX="117.0" layoutY="15.0">
+         <image>
+            <Image url="@Logo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

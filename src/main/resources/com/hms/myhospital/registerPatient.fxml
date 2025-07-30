@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.registerController">
+<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.patientRegisterController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4059ad" height="600.0" stroke="BLACK" strokeType="INSIDE" width="1100.0" />
       <ImageView fitHeight="75.0" fitWidth="50.0" layoutX="525.0" layoutY="3.0">
@@ -83,7 +83,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="patientName" layoutX="295.0" layoutY="192.0" prefWidth="200.0" />
+      <TextField fx:id="patientName" layoutX="295.0" layoutY="192.0" prefWidth="200.0" promptText="Enter your name" />
       <CheckBox fx:id="patientIsMale" layoutX="295.0" layoutY="226.0" mnemonicParsing="false" onMouseClicked="#handleGenderSelection" text="Male" />
       <CheckBox fx:id="patientIsFemale" layoutX="384.0" layoutY="226.0" mnemonicParsing="false" onMouseClicked="#handleGenderSelection" text="Female" />
       <DatePicker fx:id="patientDateOfBirth" layoutX="735.0" layoutY="192.0" promptText="DD/MM/YYYY" />
@@ -122,6 +122,6 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextArea layoutX="735.0" layoutY="255.0" prefHeight="50.0" prefWidth="200.0" />
+      <TextArea fx:id="patientAddress" layoutX="735.0" layoutY="255.0" prefHeight="50.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

@@ -1,0 +1,39 @@
+
+.menu-stack-button {
+    -fx-cursor: hand;
+}
+
+
+/*
+#97D8C4 Tiffany Blue
+#5b9e89 Tiffany Blue gradient end point
+#398c72 Tiffany Blue complement
+#256b55 Tiffany Blue complement's gradient end point
+*/
+
+.menu-stack-button.menu-button-unselected Rectangle {
+    -fx-fill: linear-gradient(to bottom, #97D8C4, #5b9e89);
+    -fx-stroke: #398c72;
+}
+
+.menu-stack-button.menu-button-selected Rectangle {
+    -fx-fill: linear-gradient(to bottom, #398c72, #256b55);
+    -fx-stroke: #97D8C4;
+}
+
+.menu-stack-button.menu-button-unselected Label {
+    -fx-text-fill: #398c72;
+}
+
+.menu-stack-button.menu-button-selected Label {
+    -fx-text-fill: #97D8C4;
+}
+
+/* Hover effect */
+.menu-stack-button.menu-button-unselected:hover Rectangle {
+    -fx-fill: linear-gradient(to bottom, #5b9e89, #97D8C4);
+}
+
+/*.menu-stack-button.menu-button-selected:hover Rectangle {
+   -fx-fill: linear-gradient(to bottom, #256b55, #398c72);
+}*/

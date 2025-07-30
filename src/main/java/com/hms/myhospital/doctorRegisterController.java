@@ -1,5 +1,7 @@
 package com.hms.myhospital;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -10,7 +12,7 @@ import java.io.IOException;
 import static com.hms.utils.Validator.*;
 import com.hms.dao.DoctorDAO;
 import com.hms.model.Doctor;
-  
+
 
 public class doctorRegisterController {
 
@@ -19,6 +21,16 @@ public class doctorRegisterController {
     @FXML private TextField specialization;
     @FXML private TextField doctorPhoneNumber;
     @FXML private TextArea doctorAddress;
+    @FXML private CheckBox doctorIsMale;
+    @FXML private CheckBox doctorIsFemale;
+
+    @FXML private void handleGenderSelection() {
+        if (doctorIsMale.isSelected()) {
+            doctorIsFemale.setSelected(false);
+        } else if (doctorIsFemale.isSelected()) {
+            doctorIsMale.setSelected(false);
+        }
+    }
 
     @FXML private TextField doctorEmail;
     @FXML private PasswordField doctorSetPassword;
@@ -59,6 +71,10 @@ public class doctorRegisterController {
         if (isNullOrEmpty(doctorAddress.getText())) {
             doctorPerInfoError.setText("Address required!");
             return false;
+        }
+
+        if(!doctorIsMale.isSelected() && !doctorIsFemale.isSelected()) {
+            doctorPerInfoError.setText("Gender selection is required.");
         }
 
         if (isNullOrEmpty(doctorPhoneNumber.getText())) {
@@ -129,15 +145,14 @@ public class doctorRegisterController {
         }
 
         String hashedPassword = com.hms.utils.PasswordUtil.hashPassword(doctorSetPassword.getText());
-        String username = name;
-        String gender = "";
+        String gender = doctorIsMale.isSelected()? "Male" : "Female";
         String email = doctorEmail.getText().trim();
         String speciality = specialization.getText().trim();
         int contactNo = Integer.parseInt(doctorPhoneNumber.getText().trim());
         String address = doctorAddress.getText().trim();
 
         com.hms.model.Doctor newDoctor = new com.hms.model.Doctor(
-                username, // or combine first and last name if needed
+                name, // or combine first and last name if needed
                 0, // id will be set by DB
                 gender,
                 email,
@@ -145,6 +160,7 @@ public class doctorRegisterController {
                 contactNo,
                 address
         );
+
         newDoctor.setPassword(hashedPassword);
         newDoctor.setAccount_status("pending");
 

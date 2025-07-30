@@ -28,7 +28,7 @@ public class loginController {
 
         // Try Admin
         Admin admin = adminDAO.getAdminByName(username);
-        if (admin != null && PasswordUtil.checkPassword(password, admin.getPassword())) { //TODO: Implement this
+        if (admin != null && PasswordUtil.checkPassword(password, admin.getPassword())) {
             // Successful admin login
             return true;
         }

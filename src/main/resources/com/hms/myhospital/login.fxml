@@ -62,7 +62,7 @@
                </children>
             </GridPane>
             <Label layoutX="870.0" layoutY="513.0" text="Don't have a Duckland account?" textFill="#4059ad" />
-            <Hyperlink fx:id="registerLink" layoutX="870.0" layoutY="531.0" text="Register Now!" textFill="#ed1c24">
+            <Hyperlink fx:id="registerLink" layoutX="870.0" layoutY="531.0" onAction="#handleRegisterLink" text="Register Now!" textFill="#ed1c24">
                <font>
                   <Font name="System Italic" size="12.0" />
                </font>

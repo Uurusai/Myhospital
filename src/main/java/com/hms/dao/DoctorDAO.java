@@ -21,10 +21,6 @@ public class DoctorDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, doctor.getName());
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                doctor.setId(rs.getInt("doctor_id"));
-            }
             stmt.setString(2, doctor.getGender());
             stmt.setString(3, doctor.getEmail());
             stmt.setString(4, doctor.getSpeciality());
@@ -33,7 +29,12 @@ public class DoctorDAO {
             stmt.setString(7,doctor.getPassword());
             stmt.setString(8,"pending");
 
-            return stmt.executeUpdate() > 0;
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                doctor.setId(rs.getInt("doctor_id"));
+            }
+
+            return stmt.executeUpdate() > 0; //return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

@@ -148,7 +148,14 @@ public class patientRegisterController {
         String dob = patientDateOfBirth.getValue().toString();
         int age = calculateAgeFromDOB(dob);
         String bloodType = patientBloodGroup.getValue();
-        int contactNo = Integer.parseInt(patientPhoneNumber.getText().trim());
+        int contactNo;
+        try {
+            contactNo = Integer.parseInt(patientPhoneNumber.getText().trim());
+        } catch (NumberFormatException e) {
+            patientPerInfoError.setText("Invalid phone number!");
+            return;
+        }
+
         String address = patientAddress.getText(); // Add address field if present in FXML
         String password = patientSetPassword.getText();
         String hashedPassword = PasswordUtil.hashPassword(password);
@@ -169,7 +176,7 @@ public class patientRegisterController {
         boolean success = patientDAO.addPatient(newPatient);
         if (success) {
             try {
-                SceneSwitcher.switchScene("/fxml/patientDashboard.fxml");
+                SceneSwitcher.switchScene("/com/hms/myhospital/patientDashboard.fxml");
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error switching scene to patient profile.");
@@ -184,7 +191,7 @@ public class patientRegisterController {
         System.out.println("Patient register cancelled!");
 
         try {
-            SceneSwitcher.switchScene("/fxml/welcome.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/welcome.fxml");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error switching scene to welcome screen.");

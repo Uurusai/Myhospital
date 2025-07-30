@@ -24,7 +24,7 @@ public class welcomeController {
         System.out.println("Login button clicked");
         // Add your login logic here
         try {
-            SceneSwitcher.switchScene("/fxml/login.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/login.fxml");
         } catch (IOException e) {
         }
     } //done
@@ -35,7 +35,7 @@ public class welcomeController {
         System.out.println("Register button clicked");
 
         try {
-            SceneSwitcher.switchScene("/fxml/chooseAccount.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/chooseAccount.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }

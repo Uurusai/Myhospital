@@ -57,7 +57,7 @@ public class prescriptionController
         }
 
         try {
-            SceneSwitcher.switchScene("fxml/doctorDashboard.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/doctorDashboard.fxml");
 
         } catch(IOException e) {
             System.out.println("Error saving prescription: " + e.getMessage());
@@ -74,7 +74,7 @@ public class prescriptionController
         System.out.println("Prescription cancelled.");
 
         try {
-            SceneSwitcher.switchScene("fxml/doctorDashboard.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/doctorDashboard.fxml");
         } catch (IOException e) {
             System.out.println("Error cancelling prescription: " + e.getMessage());
             e.printStackTrace();

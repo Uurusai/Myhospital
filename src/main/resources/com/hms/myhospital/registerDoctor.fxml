@@ -109,12 +109,12 @@
             <Image url="@../../../../../Logo.png" />
          </image>
       </ImageView>
-      <Label fx:id="doctorPerInfoError" layoutX="321.0" layoutY="134.0" text="errorLabel">
+      <Label fx:id="doctorPerInfoError" layoutX="321.0" layoutY="134.0" text="errorLabel" textFill="#ed1c24">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="doctorAccInfoError" layoutX="321.0" layoutY="304.0" text="errorLabel">
+      <Label fx:id="doctorAccInfoError" layoutX="321.0" layoutY="304.0" text="errorLabel" textFill="#ed1c24">
          <font>
             <Font size="14.0" />
          </font>

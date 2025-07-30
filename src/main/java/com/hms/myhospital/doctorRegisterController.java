@@ -8,17 +8,18 @@ import com.hms.utils.SceneSwitcher;
 import java.io.IOException;
 
 import static com.hms.utils.Validator.*;
+import com.hms.dao.DoctorDAO;
+import com.hms.model.Doctor;
+  
 
 public class doctorRegisterController {
 
-    @FXML private TextField doctorFirstName;
-    @FXML private TextField doctorLastName;
+    @FXML private TextField doctorName;
     @FXML private DatePicker doctorDateOfBirth;
     @FXML private TextField specialization;
     @FXML private TextField doctorPhoneNumber;
     @FXML private TextArea doctorAddress;
 
-    @FXML private TextField doctorUserName;
     @FXML private TextField doctorEmail;
     @FXML private PasswordField doctorSetPassword;
     @FXML private PasswordField doctorConfirmPassword;
@@ -32,21 +33,12 @@ public class doctorRegisterController {
 
     private boolean validateDoctorInfo() {
         // Personal Information Validation
-        if (isNullOrEmpty(doctorFirstName.getText())) {
+        if (isNullOrEmpty(doctorName.getText())) {
             doctorPerInfoError.setText("First name required!");
             return false;
         }
-        if (!isValidName(doctorFirstName.getText())) {
+        if (!isValidName(doctorName.getText())) {
             doctorPerInfoError.setText("Invalid first name!");
-            return false;
-        }
-
-        if (isNullOrEmpty(doctorLastName.getText())) {
-            doctorPerInfoError.setText("Last name required!");
-            return false;
-        }
-        if (!isValidName(doctorLastName.getText())) {
-            doctorPerInfoError.setText("Invalid last name!");
             return false;
         }
 
@@ -58,6 +50,7 @@ public class doctorRegisterController {
             doctorPerInfoError.setText("Invalid date of birth!");
             return false;
         }
+
         if (isNullOrEmpty(specialization.getText())) {
             doctorPerInfoError.setText("Specialization required!");
             return false;
@@ -78,14 +71,6 @@ public class doctorRegisterController {
         }
 
         // Account Information Validation
-        if (isNullOrEmpty(doctorUserName.getText())) {
-            doctorAccInfoError.setText("User name required!");
-            return false;
-        }
-        if (!isValidUsername(doctorUserName.getText())) {
-            doctorAccInfoError.setText("Invalid user name!");
-            return false;
-        }
 
         if (isNullOrEmpty(doctorEmail.getText())) {
             doctorAccInfoError.setText("Email address required!");
@@ -132,11 +117,47 @@ public class doctorRegisterController {
 
         //TODO: Database logic handling
 
-        try {
-            SceneSwitcher.switchScene("/fxml/doctorDashboard.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error switching to doctor dashboard scene!");
+        com.hms.dao.DoctorDAO doctorDAO = new com.hms.dao.DoctorDAO();
+        String name = doctorName.getText().trim();
+
+        // Check if username already exists (case-insensitive)
+        boolean usernameExists = doctorDAO.getAllDoctors().stream()
+                .anyMatch(d -> d.getName().equalsIgnoreCase(name));
+        if (usernameExists) {
+            doctorAccInfoError.setText("Username already exists!");
+            return;
+        }
+
+        String hashedPassword = com.hms.utils.PasswordUtil.hashPassword(doctorSetPassword.getText());
+        String username = name;
+        String gender = "";
+        String email = doctorEmail.getText().trim();
+        String speciality = specialization.getText().trim();
+        int contactNo = Integer.parseInt(doctorPhoneNumber.getText().trim());
+        String address = doctorAddress.getText().trim();
+
+        com.hms.model.Doctor newDoctor = new com.hms.model.Doctor(
+                username, // or combine first and last name if needed
+                0, // id will be set by DB
+                gender,
+                email,
+                speciality,
+                contactNo,
+                address
+        );
+        newDoctor.setPassword(hashedPassword);
+        newDoctor.setAccount_status("pending");
+
+        boolean success = doctorDAO.addDoctor(newDoctor);
+        if (success) {
+            try {
+                SceneSwitcher.switchScene("/fxml/doctorDashboard.fxml");
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error switching to doctor dashboard scene!");
+            }
+        } else {
+            doctorAccInfoError.setText("Registration failed. Try again.");
         }
     }
 

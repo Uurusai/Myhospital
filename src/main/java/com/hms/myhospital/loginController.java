@@ -14,6 +14,8 @@ import com.hms.model.Doctor;
 import com.hms.model.Patient;
 import com.hms.utils.PasswordUtil;
 
+import java.util.List;
+
 import static com.hms.utils.Validator.*;
 
 
@@ -32,8 +34,15 @@ public class loginController {
         }
 
         // Try Doctor
-        Doctor doctor = doctorDAO.getDoctorByName(username); //TODO: Implement this
-        if (doctor != null && PasswordUtil.checkPassword(password, doctor.getPassword())) {
+        List<Doctor> doctors = doctorDAO.searchDoctors(username);
+        Doctor matchedDoctor = null;
+        for (Doctor d : doctors) {
+            if (d.getName().equalsIgnoreCase(username)) {
+                matchedDoctor = d;
+                break;
+            }
+        }
+        if (matchedDoctor != null && PasswordUtil.checkPassword(password, matchedDoctor.getPassword())) {
             // Successful doctor login
             return true;
         }
@@ -46,7 +55,7 @@ public class loginController {
         }
 
         // Username exists but password is wrong
-        if (admin != null || doctor != null || patient != null) {
+        if (admin != null || matchedDoctor != null || patient != null) {
             errorLabel.setText("Incorrect password.");
         } else {
             errorLabel.setText("Username does not exist.");
@@ -77,7 +86,7 @@ public class loginController {
             errorLabel.setText("Invalid password.");
         }
 
-        //TODO: check if the account info matches with anything in doctor, patient or admin database
+        //TODO: (done, testing still left)  check if the account info matches with anything in doctor, patient or admin database
         if (authenticateUser(username, password)) {
             // Proceed to dashboard
             try {

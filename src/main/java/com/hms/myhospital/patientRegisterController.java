@@ -1,5 +1,8 @@
 package com.hms.myhospital;
 
+import com.hms.dao.PatientDAO;
+import com.hms.model.Patient;
+import com.hms.utils.PasswordUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,17 +19,15 @@ import static com.hms.utils.Validator.*;
 
 public class patientRegisterController {
 
-    @FXML private TextField patientFirstName;
-    @FXML private TextField patientLastName;
-    @FXML private TextField patientUserName;
+    @FXML private TextField patientName;
     @FXML private TextField patientEmail;
     @FXML private TextField patientPhoneNumber;
     @FXML private PasswordField patientSetPassword;
     @FXML private PasswordField patientConfirmPassword;
-    @FXML private TextArea medicalHistory;
     @FXML private CheckBox patientIsMale;
     @FXML private CheckBox patientIsFemale;
     @FXML private DatePicker patientDateOfBirth;
+    @FXML private TextArea patientAddress;
 
     @FXML private ChoiceBox<String> patientBloodGroup;
 
@@ -45,11 +46,7 @@ public class patientRegisterController {
     @FXML private StackPane patientRegisterBtn;
     @FXML private StackPane patientRegisterCancelBtn;
 
-    //public boolean isMale = false;
-    //public boolean isFemale = false;
-
     @FXML private void handleGenderSelection() {
-        //TODO: Implement this
         if (patientIsMale.isSelected()) {
             patientIsFemale.setSelected(false);
         } else if (patientIsFemale.isSelected()) {
@@ -59,21 +56,12 @@ public class patientRegisterController {
 
     private boolean validatePatientInfo() {
 
-        if (isNullOrEmpty(patientFirstName.getText())) {
+        if (isNullOrEmpty(patientName.getText())) {
             patientPerInfoError.setText("First name required!");
             return false;
         }
-        if (!isValidName(patientFirstName.getText())) {
+        if (!isValidName(patientName.getText())) {
             patientPerInfoError.setText("Invalid first name!");
-            return false;
-        }
-
-        if (isNullOrEmpty(patientLastName.getText())) {
-            patientPerInfoError.setText("Last name required!");
-            return false;
-        }
-        if (!isValidName(patientLastName.getText())) {
-            patientPerInfoError.setText("Invalid last name!");
             return false;
         }
 
@@ -97,15 +85,6 @@ public class patientRegisterController {
         }
         if (!isValidPhoneNumber(patientPhoneNumber.getText())) {
             patientPerInfoError.setText("Invalid phone number!");
-            return false;
-        }
-
-        if (isNullOrEmpty(patientUserName.getText())) {
-            patientAccInfoError.setText("User name required!");
-            return false;
-        }
-        if(!isValidUsername(patientUserName.getText())) {
-            patientAccInfoError.setText("Invalid user name!");
             return false;
         }
 
@@ -136,7 +115,7 @@ public class patientRegisterController {
             return false;
         }
 
-        if(!patientSetPassword.equals(patientConfirmPassword)) {
+        if(!patientSetPassword.getText().equals(patientConfirmPassword.getText())) {
             patientAccInfoError.setText("Passwords do not match!");
             return false;
         }
@@ -144,21 +123,59 @@ public class patientRegisterController {
         return true;
     }
 
+    private int calculateAgeFromDOB(String dob) {
+        java.time.LocalDate birthDate = java.time.LocalDate.parse(dob); // safe if format is YYYY-MM-DD
+        java.time.LocalDate today = java.time.LocalDate.now();
+        return java.time.Period.between(birthDate, today).getYears();
+    }
+
     @FXML private void handlePatientRegister() {
         // Handle patient selection button click
         System.out.println("Patient registration attempted!");
 
         if(!validatePatientInfo()) {
+            System.out.println("Patient registration failed due to validation errors.");
             return;
         }
 
         //TODO: Database logic handling
 
-        try {
-            SceneSwitcher.switchScene("/fxml/patientDashboard.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error switching scene to patient profile.");
+
+        PatientDAO patientDAO = new PatientDAO();
+
+        String name = patientName.getText().trim();
+        String gender = patientIsMale.isSelected() ? "Male" : "Female";
+        String dob = patientDateOfBirth.getValue().toString();
+        int age = calculateAgeFromDOB(dob);
+        String bloodType = patientBloodGroup.getValue();
+        int contactNo = Integer.parseInt(patientPhoneNumber.getText().trim());
+        String address = patientAddress.getText(); // Add address field if present in FXML
+        String password = patientSetPassword.getText();
+        String hashedPassword = PasswordUtil.hashPassword(password);
+
+        // Check if patient already exists
+        if (patientDAO.getPatientByName(name) != null) {
+            patientAccInfoError.setText("Username already exists!");
+            return;
+        }
+
+        Patient newPatient = new Patient(
+                name, 0, gender, age, dob, contactNo, address, bloodType
+        );
+
+        newPatient.setPassword(hashedPassword);
+        newPatient.setAccount_status("pending");
+
+        boolean success = patientDAO.addPatient(newPatient);
+        if (success) {
+            try {
+                SceneSwitcher.switchScene("/fxml/patientDashboard.fxml");
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error switching scene to patient profile.");
+            }
+        } else {
+            patientAccInfoError.setText("Registration failed. Try again.");
         }
     }
 

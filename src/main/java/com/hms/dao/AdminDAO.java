@@ -26,6 +26,7 @@ public class AdminDAO {
             return false;
         }
     }
+
     public Admin getAdminByName(String name) {
         String sql = "SELECT * FROM admin WHERE admin_name = ?";
 
@@ -42,6 +43,7 @@ public class AdminDAO {
         }
         return null;
     }
+
     public List<Admin> searchAdminsByName(String name) {
         List<Admin> admins = new ArrayList<>();
         String sql = "SELECT * FROM admin WHERE LOWER(admin_name) LIKE LOWER(?)";

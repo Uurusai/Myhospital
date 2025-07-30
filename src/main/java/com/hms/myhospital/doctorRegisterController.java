@@ -165,6 +165,7 @@ public class doctorRegisterController {
         newDoctor.setAccount_status("pending");
 
         boolean success = doctorDAO.addDoctor(newDoctor);
+        System.out.println(success);
         if (success) {
             try {
                 SceneSwitcher.switchScene("/com/hms/myhospital/doctorDashboard.fxml");
@@ -188,5 +189,4 @@ public class doctorRegisterController {
             System.out.println("Error switching to welcome scene!");
         }
     }
-
 }

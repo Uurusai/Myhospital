@@ -9,11 +9,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import utils.SceneSwitcher;
+import com.hms.utils.SceneSwitcher;
 
 import java.io.IOException;
 
-import static utils.Validator.*;
+import static com.hms.utils.Validator.*;
 
 
 public class doctorDashboardController {
@@ -223,8 +223,6 @@ public class doctorDashboardController {
             e.printStackTrace();
         }
     } //done
-
-
 
 }
 

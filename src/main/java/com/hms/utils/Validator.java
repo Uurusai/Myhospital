@@ -1,5 +1,7 @@
 package com.hms.utils;
 
+import com.hms.myhospital.medicationRowController;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -58,6 +60,23 @@ public class Validator {
 
     public static boolean isNullOrEmpty(String input) {
         return input == null || input.trim().isEmpty();
+    }
+
+    public static boolean isValidMedicationData(medicationRowController.MedicationData medicationData) {
+        return medicationData != null &&
+                !isNullOrEmpty(medicationData.name) &&
+                (medicationData.morning || medicationData.noon || medicationData.night) && // At least one time must be selected
+                !isNullOrEmpty(medicationData.beforeAfterMeals) &&
+                !isNullOrEmpty(medicationData.duration);
+    }
+
+    public static boolean isValidBloodGroup(String bloodGroup) {
+        // Basic validation for blood group
+        return !isNullOrEmpty(bloodGroup) &&
+                (bloodGroup.equalsIgnoreCase("A+") || bloodGroup.equalsIgnoreCase("A-") ||
+                        bloodGroup.equalsIgnoreCase("B+") || bloodGroup.equalsIgnoreCase("B-") ||
+                        bloodGroup.equalsIgnoreCase("AB+") || bloodGroup.equalsIgnoreCase("AB-") ||
+                        bloodGroup.equalsIgnoreCase("O+") || bloodGroup.equalsIgnoreCase("O-"));
     }
 
 }

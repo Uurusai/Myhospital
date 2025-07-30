@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
-import utils.SceneSwitcher;
+import com.hms.utils.SceneSwitcher;
 
 import java.io.IOException;
 import java.util.ArrayList;

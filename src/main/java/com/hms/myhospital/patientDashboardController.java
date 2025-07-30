@@ -8,11 +8,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import utils.SceneSwitcher;
+import com.hms.utils.SceneSwitcher;
 
 import java.io.IOException;
 
-import static utils.Validator.*;
+import static com.hms.utils.Validator.*;
 
 public class patientDashboardController {
 

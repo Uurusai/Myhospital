@@ -2,7 +2,7 @@ package com.hms.myhospital;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
-import utils.SceneSwitcher;
+import com.hms.utils.SceneSwitcher;
 
 import java.io.IOException;
 

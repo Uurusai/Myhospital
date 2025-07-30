@@ -1,4 +1,4 @@
-package controllers;
+package com.hms.myhospital;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

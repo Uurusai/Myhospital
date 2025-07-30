@@ -10,6 +10,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class HMSRunner extends Application {
+
+    private static HMSClient client;
+
+    public static HMSClient getClient() {
+        return client;
+    }
     @Override
     public void start(Stage primaryStage) {
 //        try {
@@ -45,6 +51,7 @@ public class HMSRunner extends Application {
             primaryStage.setScene(new Scene(root, 1100, 600));
             primaryStage.setResizable(false);
             primaryStage.show();
+//
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);

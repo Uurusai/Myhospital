@@ -234,7 +234,7 @@ public class PatientDAO {
                         rs.getString("doctor_name"),
                         rs.getInt("doctor_id"),
                         rs.getString("doctor_gender"),
-                        rs.getString("e-mail"),
+                        rs.getString("email"),
                         rs.getString("speciality"),
                         rs.getInt("doctor_contact"),
                         rs.getString("doctor_address")
@@ -299,7 +299,7 @@ public class PatientDAO {
                         rs.getString("name"),
                         rs.getInt("doctor_id"),
                         rs.getString("gender"),
-                        rs.getString("e-mail"),
+                        rs.getString("email"),
                         rs.getString("speciality"),
                         rs.getInt("contact no"),
                         rs.getString("addrress")

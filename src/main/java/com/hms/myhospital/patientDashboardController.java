@@ -1,5 +1,6 @@
 package com.hms.myhospital;
 
+import com.hms.client.HMSClient;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -15,6 +16,23 @@ import java.io.IOException;
 import static com.hms.utils.Validator.*;
 
 public class patientDashboardController {
+
+    public patientDashboardController(HMSClient client) {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/com/hms/myhospital/patientDashboard.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+
+        try {
+            loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load FXML", e);
+        }
+
+        // Optionally store client if needed
+        // this.client = client;
+        initialize();
+    }
 
         @FXML private StackPane patientHomeBtn;
         @FXML private StackPane patientProfileBtn;
@@ -82,7 +100,6 @@ public class patientDashboardController {
             screen.setVisible(true);
             currentlySelected = button;
         }
-
 
         //profile section stuff
 
@@ -199,7 +216,7 @@ public class patientDashboardController {
             try {
                 //TODO: get the prescription file as composed by doctor, except all the fields editable for doctor
                 //is set to un-editable for patient
-                SceneSwitcher.switchScene("/fxml/prescription.fxml");
+                SceneSwitcher.switchScene("/com/hms/myhospital/prescription.fxml");
 
             } catch(IOException e) {
                 e.printStackTrace();

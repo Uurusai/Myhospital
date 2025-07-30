@@ -167,7 +167,7 @@ public class doctorRegisterController {
         boolean success = doctorDAO.addDoctor(newDoctor);
         if (success) {
             try {
-                SceneSwitcher.switchScene("/fxml/doctorDashboard.fxml");
+                SceneSwitcher.switchScene("/com/hms/myhospital/doctorDashboard.fxml");
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error switching to doctor dashboard scene!");
@@ -182,7 +182,7 @@ public class doctorRegisterController {
         System.out.println("Doctor register cancelled!");
 
         try {
-            SceneSwitcher.switchScene("/fxml/welcome.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/welcome.fxml");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error switching to welcome scene!");

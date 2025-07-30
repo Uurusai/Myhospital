@@ -90,7 +90,7 @@ public class loginController {
         if (authenticateUser(username, password)) {
             // Proceed to dashboard
             try {
-                SceneSwitcher.switchScene("/fxml/patientDashboard.fxml");
+                SceneSwitcher.switchScene("/com/hms/myhospital/patientDashboard.fxml");
             } catch (Exception e) {
                 errorLabel.setText("Login failed: " + e.getMessage());
             }
@@ -98,7 +98,7 @@ public class loginController {
 
         System.out.println("Login button clicked with username: " + username);
         try {
-            SceneSwitcher.switchScene("/fxml/patientDashboard.fxml"); //sample login
+            SceneSwitcher.switchScene("/com/hms/myhospital/patientDashboard.fxml"); //sample login
         } catch (Exception e) {
             System.out.println("Login failed: " + e.getMessage());
         }
@@ -110,7 +110,7 @@ public class loginController {
         System.out.println("Cancel button clicked");
         // Add your cancel logic here, e.g., clear fields or go back to the previous scene
         try {
-            SceneSwitcher.switchScene("/fxml/welcome.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/welcome.fxml");
         } catch (Exception e) {
             System.out.println("Failed to switch scene: " + e.getMessage());
         }
@@ -122,7 +122,7 @@ public class loginController {
         System.out.println("Register link clicked");
 
         try {
-            SceneSwitcher.switchScene("/fxml/chooseAccount.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/chooseAccount.fxml");
         } catch (Exception e) {
             System.out.println("Failed to switch to registration: " + e.getMessage());
         }

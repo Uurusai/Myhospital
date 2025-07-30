@@ -1,5 +1,6 @@
 package com.hms.myhospital;
 
+import com.hms.client.HMSClient;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -17,6 +18,23 @@ import static com.hms.utils.Validator.*;
 
 
 public class doctorDashboardController {
+
+    public doctorDashboardController(HMSClient client) {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/com/hms/myhospital/doctorDashboard.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+
+        try {
+            loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load FXML", e);
+        }
+
+        // Optionally store client if needed
+        // this.client = client;
+        initialize();
+    }
 
     @FXML private StackPane doctorHomeBtn;
     @FXML private StackPane doctorProfileBtn;
@@ -217,7 +235,7 @@ public class doctorDashboardController {
         System.out.println("Composing prescription...");
 
         try {
-            SceneSwitcher.switchScene("fxml/prescription.fxml");
+            SceneSwitcher.switchScene("/com/hms/myhospital/prescription.fxml");
         } catch (Exception e) {
             System.out.println("Error switching to prescription scene.");
             e.printStackTrace();

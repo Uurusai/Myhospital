@@ -85,6 +85,8 @@ public class patientDashboardController {
             }
             savePatientProfileBtn.setVisible(false);
 
+            //initialize the specialization choice box
+            specializationChoiceBox.getItems().addAll("Cardiology", "Neurology", "Pediatrics", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
         }
 
         private AnchorPane getCorrespondingScreen(StackPane button) {

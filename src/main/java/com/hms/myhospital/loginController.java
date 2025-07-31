@@ -31,7 +31,7 @@ public class loginController {
 
         // Try Admin
 //        Admin admin = client.getAdminByName(username);
-//        if (admin != null && PasswordUtil.checkPassword(password, admin.getPassword())) {
+//        if (admin != null /*&& PasswordUtil.checkPassword(password, admin.getPassword())*/) {
 //            // Successful admin login
 //            HMSRunner.setCurrentUser(admin.getId(), "admin");
 //            return true;
@@ -96,7 +96,7 @@ public class loginController {
             switch (userType) {
                 case "doctor" -> dashboardFxml = "/com/hms/myhospital/doctorDashboard.fxml";
                 case "patient" -> dashboardFxml = "/com/hms/myhospital/patientDashboard.fxml";
-                //case "admin" -> dashboardFxml = "/com/hms/myhospital/adminDashboard.fxml";
+                case "admin" -> dashboardFxml = "/com/hms/myhospital/admin-dash.fxml";
                 default -> throw new IllegalStateException("Unknown user type: " + userType);
             }
             try {

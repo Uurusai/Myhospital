@@ -1,6 +1,7 @@
 package com.hms.myhospital;
 
 import com.hms.client.HMSClient;
+import com.hms.notification.NotificationServer;
 import com.hms.utils.Validator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -98,7 +99,8 @@ public class prescriptionController
         message.setRead(false);
 
         try {
-            client.createMessage(message);
+           // client.createMessage(message);
+            NotificationServer.sendNotification(message.getRecipientId(),message);
             System.out.println("Prescription sent as message.");
             SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/doctorDashboard.fxml", client);
         } catch (Exception e) {

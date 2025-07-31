@@ -15,6 +15,10 @@ module com.hms.myhospital {
     requires java.sql;
     requires java.desktop;
 
-    opens com.hms.myhospital to javafx.fxml;
+    opens com.hms.model to javafx.base;
+
     exports com.hms.myhospital;
+    exports com.hms.model;
+
+    opens com.hms.myhospital to javafx.fxml;
 }

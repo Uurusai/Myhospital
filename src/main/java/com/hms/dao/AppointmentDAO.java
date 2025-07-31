@@ -39,7 +39,6 @@ public class AppointmentDAO {
         }
     }
     public List<Appointment>getAllAppointments(){
-
         List<Appointment> appointments = new ArrayList<>();
         String sql = """
             SELECT 
@@ -61,7 +60,7 @@ public class AppointmentDAO {
         try(Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
             ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 Patient patient = new Patient(
                         rs.getString("patient_name"),
                         rs.getInt("patient_id"),

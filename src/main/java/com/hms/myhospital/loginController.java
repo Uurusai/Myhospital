@@ -96,17 +96,16 @@ public class loginController {
         if (authenticateUser(username, password)) {
             // Proceed to dashboard
             try {
-                SceneSwitcher.switchScene("/com/hms/myhospital/patientDashboard.fxml");
+                if( HMSRunner.getCurrentUserType().equals("admin")) {
+                    SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/adminDashboard.fxml", client);
+                } else if (HMSRunner.getCurrentUserType().equals("doctor")) {
+                    SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/doctorDashboard.fxml", client);
+                } else if (HMSRunner.getCurrentUserType().equals("patient")) {
+                    SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/patientDashboard.fxml", client);
+                }
             } catch (Exception e) {
                 errorLabel.setText("Login failed: " + e.getMessage());
             }
-        }
-
-        System.out.println("Login button clicked with username: " + username);
-        try {
-            SceneSwitcher.switchScene("/com/hms/myhospital/patientDashboard.fxml"); //sample login
-        } catch (Exception e) {
-            System.out.println("Login failed: " + e.getMessage());
         }
     }
 

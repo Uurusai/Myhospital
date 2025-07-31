@@ -28,6 +28,10 @@ public class HMSRunner extends Application {
         return client;
     }
 
+    public static String getCurrentUserType() {
+        return currentUserType;
+    }
+
     @Override
     public void start(Stage primaryStage) {
 

@@ -28,7 +28,6 @@ public class Appointment implements Serializable {
         this.p = p;
         this.d = d;
         this.status = status ;
-
     }
 
     public Appointment() {

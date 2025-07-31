@@ -1,10 +1,12 @@
 package com.hms.myhospital;
 
 import com.hms.client.HMSClient;
+import com.hms.utils.Validator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import com.hms.utils.SceneSwitcher;
@@ -21,11 +23,21 @@ public class prescriptionController
         this.client = client;
     }
 
+    private void initialize() {
+        // Load all patients into the ChoiceBox
+        List<String> patientNames = client.getAllPatients().stream()
+                .map(patient -> patient.getName())
+                .toList();
+        allPatientsChoiceBox.getItems().addAll(patientNames);
+        allPatientsChoiceBox.getSelectionModel().selectFirst();
+    }
+
     @FXML TextArea diagnosis;
     @FXML Button addMore;
     @FXML Button savePrescriptionBtn;
     @FXML Button cancelPrescriptionBtn;
     @FXML VBox medicationRowsBox;
+    @FXML ChoiceBox allPatientsChoiceBox;
 
     private final List<medicationRowController> medicationControllers = new ArrayList<>();
 
@@ -44,32 +56,57 @@ public class prescriptionController
 
     @FXML
     private void savePrescription() {
-
-        System.out.println("Prescription saved.");
         String diagnosisText = diagnosis.getText();
-        List<medicationRowController.MedicationData> meds = new ArrayList<>(); // Collect medication data
+        boolean allValid = true;
+
+        StringBuilder prescriptionText = new StringBuilder();
+        prescriptionText.append("Diagnosis: ").append(diagnosisText).append("\nMedications:\n");
+
         for (medicationRowController ctrl : medicationControllers) {
-            meds.add(ctrl.getMedicationData());
+            medicationRowController.MedicationData medData = ctrl.getMedicationData();
+            if (!Validator.isValidMedicationData(medData)) {
+                allValid = false;
+                System.out.println("Invalid medication data: " + medData.name);
+                break;
+            }
+            prescriptionText.append("- ")
+                    .append(medData.name)
+                    .append(" [")
+                    .append(medData.morning ? "Morning " : "")
+                    .append(medData.noon ? "Noon " : "")
+                    .append(medData.night ? "Night" : "")
+                    .append("] ")
+                    .append(medData.beforeAfterMeals)
+                    .append(", Duration: ").append(medData.duration)
+                    .append(". Comments: ").append(medData.comment)
+                    .append("\n");
         }
 
-        //TODO: Logic to save then send that prescription to the patient
-        //isValidMedicationData() to be used to validate the medication data
 
-        // Log
-        System.out.println("Diagnosis: " + diagnosisText);
-        for (medicationRowController.MedicationData med : meds) {
-            System.out.println("Medication: " + med.name + ", Morning: " + med.morning + ", Noon: " + med.noon + ", Night: " + med.night);
-            System.out.println("Before/After Meals: " + med.beforeAfterMeals + ", Duration: " + med.duration + ", Comment: " + med.comment);
+        if (!allValid) {
+            System.out.println("Please correct invalid medication entries before saving.");
+            return;
         }
+
+        String doctorName = client.getDoctorById(HMSRunner.getCurrentUserId()).getName();
+        String patientName = allPatientsChoiceBox.getValue().toString();
+        com.hms.model.Message message = new com.hms.model.Message();
+        message.setRecipientId(client.getPatientByName(patientName).getId());
+        message.setSenderName(doctorName);
+        message.setContent(prescriptionText.toString());
+        message.setTimestamp(java.time.LocalDateTime.now());
+        message.setRead(false);
 
         try {
-            SceneSwitcher.switchScene("/com/hms/myhospital/doctorDashboard.fxml");
-
-        } catch(IOException e) {
-            System.out.println("Error saving prescription: " + e.getMessage());
+            client.createMessage(message);
+            System.out.println("Prescription sent as message.");
+            SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/doctorDashboard.fxml", client);
+        } catch (Exception e) {
+            System.out.println("Failed to send prescription: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void cancelPrescription() {

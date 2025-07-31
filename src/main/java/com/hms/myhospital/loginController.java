@@ -29,11 +29,11 @@ public class loginController {
 
     private boolean authenticateUser(String username, String password) {
 
-
         // Try Admin
         Admin admin = client.getAdminByName(username);
         if (admin != null && PasswordUtil.checkPassword(password, admin.getPassword())) {
             // Successful admin login
+            HMSRunner.setCurrentUser(admin.getId(), "admin");
             return true;
         }
 
@@ -48,6 +48,7 @@ public class loginController {
         }
         if (matchedDoctor != null && PasswordUtil.checkPassword(password, matchedDoctor.getPassword())) {
             // Successful doctor login
+            HMSRunner.setCurrentUser(matchedDoctor.getId(), "doctor");
             return true;
         }
 
@@ -55,6 +56,7 @@ public class loginController {
         Patient patient = client.getPatientByName(username);
         if (patient != null && PasswordUtil.checkPassword(password, patient.getPassword())) {
             // Successful patient login
+            HMSRunner.setCurrentUser(patient.getId(), "patient");
             return true;
         }
 

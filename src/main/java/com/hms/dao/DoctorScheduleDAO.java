@@ -181,7 +181,4 @@ public class DoctorScheduleDAO {
         return original;
     }
 
-
-
-
 }

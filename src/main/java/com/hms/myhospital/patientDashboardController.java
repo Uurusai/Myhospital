@@ -1,17 +1,21 @@
 package com.hms.myhospital;
 
 import com.hms.client.HMSClient;
+import com.hms.model.Doctor;
+import com.hms.model.Message;
+import com.hms.model.Patient;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import com.hms.utils.SceneSwitcher;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 
 import static com.hms.utils.Validator.*;
 
@@ -19,29 +23,17 @@ public class patientDashboardController {
 
     private final HMSClient client;
     public patientDashboardController(HMSClient client) {
-//        FXMLLoader loader = new FXMLLoader(
-//                getClass().getResource("/com/hms/myhospital/patientDashboard.fxml"));
-//        loader.setRoot(this);
-//        loader.setController(this);
-//
-//        try {
-//            loader.load();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Failed to load FXML", e);
-//        }
-//
-//        // Optionally store client if needed
         this.client = client;
-//        initialize();
+
     }
 
-        @FXML private StackPane patientHomeBtn;
+
         @FXML private StackPane patientProfileBtn;
         @FXML private StackPane patientAppointmentsBtn;
         @FXML private StackPane patientInboxBtn;
         @FXML private StackPane patientPrescriptionsBtn;
 
-        @FXML private AnchorPane patientHome;
+
         @FXML private AnchorPane patientAppointments;
         @FXML private AnchorPane patientProfile;
         @FXML private AnchorPane patientInbox;
@@ -55,26 +47,49 @@ public class patientDashboardController {
         public void initialize() {
             // Initialize arrays for easy iteration
             menuButtons = new StackPane[]{
-                    patientHomeBtn, patientProfileBtn, patientAppointmentsBtn,
+                    patientProfileBtn, patientAppointmentsBtn,
                     patientInboxBtn, patientPrescriptionsBtn
             };
 
             screens = new AnchorPane[]{
-                    patientHome, patientProfile, patientAppointments, patientInbox, patientPrescriptions
+                    patientProfile, patientAppointments, patientInbox, patientPrescriptions
             };
 
             // Set initial state
-            selectMenuButton(patientHomeBtn);
+            selectMenuButton(patientProfileBtn);
 
             for (StackPane button : menuButtons) {
                 button.setOnMouseClicked(e -> selectMenuButton(button));
             }
 
             savePatientProfileBtn.setVisible(false);
+
+            int currentPatientId = HMSRunner.getCurrentUserId();
+            Patient patient = client.getPatientById(currentPatientId);
+            if (patient != null) {
+                patientName.setText(patient.getName());
+                patientPhoneNumber.setText(String.valueOf(patient.getContactNo()));
+                patientDateOfBirth.setValue(LocalDate.parse(patient.getDate_of_birth()));
+                bloodGroup.setText(patient.getBlood_type());
+                patientGenderLabel.setText(patient.getGender());
+
+                // Set email and password if available
+                patientPassword.setText(patient.getPassword());
+
+                // Save originals for edit/cancel
+                originalName = patient.getName();
+                originalPhoneNumber = String.valueOf(patient.getContactNo());
+                originalDateOfBirth = patient.getDate_of_birth();
+                originalBloodGroup = patient.getBlood_type();
+                originalPassword = patient.getPassword();
+            }
+            savePatientProfileBtn.setVisible(false);
+
+            //initialize the specialization choice box
+            specializationChoiceBox.getItems().addAll("Cardiology", "Neurology", "Pediatrics", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
         }
 
         private AnchorPane getCorrespondingScreen(StackPane button) {
-            if (button == patientHomeBtn) return patientHome;
             if (button == patientProfileBtn) return patientProfile;
             if (button == patientAppointmentsBtn) return patientAppointments;
             if (button == patientInboxBtn) return patientInbox;
@@ -104,8 +119,7 @@ public class patientDashboardController {
 
         //profile section stuff
 
-        private String originalFirstName;
-        private String originalLastName;
+        private String originalName;
         private String originalPhoneNumber;
         private String originalPassword;
         private String originalDateOfBirth;
@@ -113,22 +127,20 @@ public class patientDashboardController {
 
         @FXML private Button savePatientProfileBtn;
         @FXML private Button editPatientProfileBtn;
-        @FXML private TextField patientFirstName;
-        @FXML private TextField patientLastName;
+        @FXML private TextField patientName;
         @FXML private TextField patientPhoneNumber;
         @FXML private DatePicker patientDateOfBirth;
         @FXML private TextField patientPassword;
         @FXML private TextField bloodGroup;
-        @FXML private TextField medicalHistory;
+        @FXML private Label patientGenderLabel;
+        @FXML private Label patientEmailLabel;
 
-        //TODO: initialize these fields with the current patient's data from the database
 
         @FXML
         private void editPatientProfile() {
             if (savePatientProfileBtn.isVisible()) {
                 // Cancel edit: restore original values and make fields uneditable
-                patientFirstName.setText(originalFirstName);
-                patientLastName.setText(originalLastName);
+                patientName.setText(originalName);
                 patientPhoneNumber.setText(originalPhoneNumber);
                 patientPassword.setText(originalPassword);
                 patientDateOfBirth.setValue(originalDateOfBirth == null ? null : java.time.LocalDate.parse(originalDateOfBirth));
@@ -140,20 +152,17 @@ public class patientDashboardController {
 
             } else {
                 // Enter edit mode: store originals, clear fields, make editable
-                originalFirstName = patientFirstName.getText();
-                originalLastName = patientLastName.getText();
+                originalName = patientName.getText();
                 originalPhoneNumber = patientPhoneNumber.getText();
                 originalPassword = patientPassword.getText();
                 originalDateOfBirth = patientDateOfBirth.getValue() == null ? null : patientDateOfBirth.getValue().toString();
                 originalBloodGroup = bloodGroup.getText();
 
-                patientFirstName.clear();
-                patientLastName.clear();
+                patientName.clear();
                 patientPhoneNumber.clear();
                 patientPassword.clear();
                 patientDateOfBirth.setValue(null);
                 bloodGroup.clear();
-                medicalHistory.clear();
 
                 setPatientProfileFieldsEditable(true);
                 savePatientProfileBtn.setVisible(true);
@@ -177,19 +186,16 @@ public class patientDashboardController {
         }
 
         private void setPatientProfileFieldsEditable(boolean editable) {
-            patientFirstName.setEditable(editable);
-            patientLastName.setEditable(editable);
+            patientName.setEditable(editable);
             patientPhoneNumber.setEditable(editable);
             patientPassword.setEditable(editable);
             patientDateOfBirth.setDisable(!editable);
             bloodGroup.setEditable(editable);
-            medicalHistory.setEditable(editable);
         }
 
         private boolean validatePatientProfileFields() {
             // Use your own validation logic or reuse from Validator
-            return isValidName(patientFirstName.getText()) &&
-                   isValidName(patientLastName.getText()) &&
+            return isValidName(patientName.getText()) &&
                    isValidPhoneNumber(patientPhoneNumber.getText()) &&
                    isValidDateOfBirth(patientDateOfBirth.getValue().toString()) &&
                    isValidPassword(patientPassword.getText()) &&
@@ -201,27 +207,72 @@ public class patientDashboardController {
 
         private void requestAppointment() {
             // TODO: request an appointment to a specified doctor
+
         }
 
-        private void saveResults() {
-            //TODO: save the results/prescriptions uploaded by the doctor
+        //inbox section stuff
+        @FXML private VBox inboxMessagesVBox;
+        @FXML private TextField sentTo;
+        @FXML private TextField sentText;
+        @FXML private Button sendMessageBtn;
+
+        private void loadMessages() throws SQLException {
+            inboxMessagesVBox.getChildren().clear();
+            List<Message> messages = client.getMessagesByRecipient(client.getPatientByName(patientName.getText()).getId()); // or similar
+            for (Message msg : messages) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/text.fxml"));
+                    HBox messageRow = loader.load();
+                    Label sender = (Label) loader.getNamespace().get("senderLabel");
+                    Label recipient = (Label) loader.getNamespace().get("recipientLabel");
+                    Label content = (Label) loader.getNamespace().get("messageLabel");
+                    sender.setText(msg.getSenderName());
+                    recipient.setText(String.valueOf(msg.getRecipientId()));
+                    content.setText(msg.getContent());
+                    inboxMessagesVBox.getChildren().add(messageRow);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        private void sendMessage() {
-            //TODO: send messages to the doctor
+        @FXML
+        private void sendMessage() throws SQLException {
+            String doctorName = sentTo.getText();
+            String text = sentText.getText();
+            if (doctorName.isEmpty() || text.isEmpty()) return;
+            List<Doctor> doctors = client.searchDoctors(doctorName);
+
+            if (doctors.isEmpty()) {
+                System.out.println("No doctor found with that name.");
+                return;
+            }
+            int doctorId = doctors.get(0).getId();
+
+            Message msg = new Message();
+            msg.setRecipientId(doctorId);
+            msg.setSenderName(client.getPatientByName(patientName.getText()).getName());
+            msg.setContent(text);
+            msg.setTimestamp(java.time.LocalDateTime.now());
+            msg.setRead(false);
+            client.createMessage(msg);
+            sentText.clear();
+            loadMessages();
         }
 
         //prescriptions section stuff
 
-        @FXML private void viewPrescription() {
-            try {
-                //TODO: get the prescription file as composed by doctor, except all the fields editable for doctor
-                //is set to un-editable for patient
-                SceneSwitcher.switchScene("/com/hms/myhospital/prescription.fxml");
 
-            } catch(IOException e) {
-                e.printStackTrace();
-                System.out.println("Error loading prescription view.");
-            }
-        }
+//        @FXML private void viewPrescription() {
+//            try {
+//                //TODO: get the prescription file as composed by doctor, except all the fields editable for doctor
+//                //is set to un-editable for patient
+//                SceneSwitcher.switchScene("/com/hms/myhospital/prescription.fxml");
+//
+//            } catch(IOException e) {
+//                e.printStackTrace();
+//                System.out.println("Error loading prescription view.");
+//            }
+//        }
+
 }

@@ -8,12 +8,12 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
@@ -43,19 +43,9 @@
             </Text>
          </children>
       </StackPane>
-      <StackPane fx:id="patientHomeBtn" layoutY="150.0" styleClass="menu-stack-button">
+      <StackPane fx:id="patientProfileBtn" layoutY="150.0" styleClass="menu-stack-button">
          <children>
-            <Rectangle fill="#bc6565" height="60.0" stroke="#f4b942" strokeType="INSIDE" strokeWidth="2.0" width="220.0" />
-            <Label text="HOME" textFill="#f4b942">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </StackPane>
-      <StackPane fx:id="patientProfileBtn" layoutX="220.0" layoutY="150.0" styleClass="menu-stack-button">
-         <children>
-            <Rectangle fill="#f4b942" height="60.0" stroke="#bc6565" strokeType="INSIDE" strokeWidth="2.0" width="220.0" />
+            <Rectangle fill="#f4b942" height="60.0" stroke="#bc6565" strokeType="INSIDE" strokeWidth="2.0" width="275.0" />
             <Label text="PROFILE" textFill="#bc6565">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -63,9 +53,9 @@
             </Label>
          </children>
       </StackPane>
-      <StackPane fx:id="patientAppointmentsBtn" layoutX="440.0" layoutY="150.0" styleClass="menu-stack-button">
+      <StackPane fx:id="patientAppointmentsBtn" layoutX="275.0" layoutY="150.0" styleClass="menu-stack-button">
          <children>
-            <Rectangle fill="#f4b942" height="60.0" stroke="#bc6565" strokeType="INSIDE" strokeWidth="2.0" styleClass="menu-button-unselected" width="220.0" />
+            <Rectangle fill="#f4b942" height="60.0" stroke="#bc6565" strokeType="INSIDE" strokeWidth="2.0" styleClass="menu-button-unselected" width="275.0" />
             <Label text="APPOINTMENTS" textFill="#bc6565">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -73,9 +63,9 @@
             </Label>
          </children>
       </StackPane>
-      <StackPane fx:id="patientInboxBtn" layoutX="660.0" layoutY="150.0" styleClass="menu-stack-button">
+      <StackPane fx:id="patientInboxBtn" layoutX="550.0" layoutY="150.0" styleClass="menu-stack-button">
          <children>
-            <Rectangle fill="#f4b942" height="60.0" stroke="#bc6565" strokeType="INSIDE" strokeWidth="2.0" width="220.0" />
+            <Rectangle fill="#f4b942" height="60.0" stroke="#bc6565" strokeType="INSIDE" strokeWidth="2.0" width="275.0" />
             <Label text="INBOX" textFill="#bc6565">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -83,9 +73,9 @@
             </Label>
          </children>
       </StackPane>
-      <StackPane fx:id="patientPrescriptionsBtn" layoutX="880.0" layoutY="150.0" styleClass="menu-stack-button">
+      <StackPane fx:id="patientPrescriptionsBtn" layoutX="825.0" layoutY="150.0" styleClass="menu-stack-button">
          <children>
-            <Rectangle fill="#f4b942" height="60.0" stroke="#bc6565" strokeType="INSIDE" strokeWidth="2.0" width="220.0" />
+            <Rectangle fill="#f4b942" height="60.0" stroke="#bc6565" strokeType="INSIDE" strokeWidth="2.0" width="275.0" />
             <Label text="PRESCRIPTIONS" textFill="#bc6565">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -93,21 +83,6 @@
             </Label>
          </children>
       </StackPane>
-      <AnchorPane fx:id="patientHome" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
-         <children>
-            <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
-            <Label layoutX="15.0" layoutY="20.0" text="Home:" textFill="#4059ad">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            <ScrollPane hbarPolicy="NEVER" layoutY="75.0" prefHeight="315.0" prefWidth="700.0">
-               <content>
-                  <VBox prefHeight="315.0" prefWidth="700.0" />
-               </content>
-            </ScrollPane>
-         </children>
-      </AnchorPane>
       <AnchorPane fx:id="patientProfile" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
@@ -120,28 +95,25 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label layoutX="15.0" layoutY="55.0" text="First Name: " />
-                        <Label layoutX="350.0" layoutY="55.0" text="Last Name:" />
+                        <Label layoutX="15.0" layoutY="55.0" text="Name:" />
                         <Label layoutX="15.0" layoutY="85.0" text="Date of Birth: " />
                         <Label layoutX="15.0" layoutY="115.0" text="Gender: " />
                         <Label layoutX="15.0" layoutY="145.0" text="Phone Number: " />
                         <Label layoutX="350.0" layoutY="115.0" text="Blood Group: " />
-                        <Label layoutX="15.0" layoutY="175.0" text="Medical History: " />
-                        <Label layoutX="15.0" layoutY="215.0" text="ACCOUNT INFO:">
+                        <Label layoutX="15.0" layoutY="193.0" text="ACCOUNT INFO:">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label layoutX="15.0" layoutY="255.0" text="User Name: " />
-                        <Label layoutX="15.0" layoutY="285.0" text="Email Address: " />
-                        <Label layoutX="350.0" layoutY="255.0" text="Password:" />
-                        <TextField layoutX="115.0" layoutY="51.0" />
-                        <DatePicker layoutX="115.0" layoutY="81.0" />
-                        <TextField layoutX="426.0" layoutY="51.0" />
-                        <TextField layoutX="115.0" layoutY="141.0" />
-                        <TextArea layoutX="115.0" layoutY="173.0" prefHeight="40.0" prefWidth="462.5" />
-                        <TextField layoutX="426.0" layoutY="251.0" />
-                        <TextField layoutX="426.0" layoutY="111.0" />
+                        <Label layoutX="15.0" layoutY="233.0" text="Email Address: " />
+                        <Label layoutX="350.0" layoutY="233.0" text="Password:" />
+                        <TextField fx:id="patientName" layoutX="115.0" layoutY="51.0" />
+                        <DatePicker fx:id="patientDateOfBirth" layoutX="115.0" layoutY="81.0" />
+                        <TextField fx:id="patientPhoneNumber" layoutX="115.0" layoutY="141.0" />
+                        <TextField fx:id="patientPassword" layoutX="426.0" layoutY="229.0" />
+                        <TextField fx:id="bloodGroup" layoutX="426.0" layoutY="111.0" />
+                        <Label fx:id="patientGenderLabel" layoutX="115.0" layoutY="115.0" text="patientGenderLabel" />
+                        <Label fx:id="patientEmailLabel" layoutX="115.0" layoutY="233.0" text="patientEmailLabel" />
                      </children>
                   </AnchorPane>
                </content>
@@ -155,7 +127,7 @@
             <Button fx:id="savePatientProfileBtn" layoutX="524.0" layoutY="25.0" minWidth="60.0" mnemonicParsing="false" onAction="#savePatientProfile" text="Save" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="patientAppointments" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
+      <AnchorPane fx:id="patientAppointments" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="15.0" layoutY="20.0" text="Appointments: " textFill="#4059ad">
@@ -198,7 +170,7 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="patientInbox" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
+      <AnchorPane fx:id="patientInbox" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="15.0" layoutY="20.0" text="Messages:" textFill="#4059ad">
@@ -208,7 +180,30 @@
             </Label>
             <ScrollPane hbarPolicy="NEVER" layoutY="75.0" prefHeight="315.0" prefWidth="700.0">
                <content>
-                  <VBox prefHeight="315.0" prefWidth="700.0" />
+                  <VBox spacing="10.0">
+                     <children>
+                        <VBox fx:id="InboxMessagesBox" prefHeight="270.0" prefWidth="700.0" spacing="20.0">
+                           <padding>
+                              <Insets left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                        <HBox>
+                           <children>
+                              <TextField fx:id="sentText" prefWidth="400.0" promptText="Enter text">
+                                 <HBox.margin>
+                                    <Insets left="15.0" right="30.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <TextField fx:id="sentTo" prefWidth="125.0" promptText="Enter recipient name">
+                                 <HBox.margin>
+                                    <Insets right="30.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button fx:id="sendMessageBtn" mnemonicParsing="false" prefWidth="70.0" text="Send" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </content>
             </ScrollPane>
          </children>

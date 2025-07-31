@@ -221,7 +221,7 @@ public class AppointmentDAO {
 
                             Appointment appointment = new Appointment();
                             PatientDAO pd = new PatientDAO() ;
-                            appointment.setPatient(pd.getPatientbyId(patientId));
+                            appointment.setPatient(pd.getPatientById(patientId));
                             appointment.setDoctor(dd.getDoctorById(doctor_id));
                             appointment.setDate_requested(proposed_schedule);
 

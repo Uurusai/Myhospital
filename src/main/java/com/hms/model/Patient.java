@@ -58,7 +58,6 @@ public class Patient implements Serializable {
     public Patient() {
 
     }
-
     //getters
 
     public String getAccount_status() {

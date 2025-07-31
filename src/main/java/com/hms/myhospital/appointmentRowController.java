@@ -27,7 +27,6 @@ public class appointmentRowController {
         viewPatientBtn.setVisible(true);
     }
 
-
     public Button getConfirmAppointmentBtn() {
         return confirmAppointmentBtn;
     }

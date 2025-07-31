@@ -1,5 +1,6 @@
 package com.hms.myhospital;
 
+import com.hms.client.HMSClient;
 import com.hms.dao.PatientDAO;
 import com.hms.model.Patient;
 import com.hms.utils.PasswordUtil;
@@ -18,6 +19,12 @@ import static com.hms.utils.Validator.*;
 
 
 public class patientRegisterController {
+
+    private final HMSClient client;
+
+    public patientRegisterController(HMSClient client) {
+        this.client = client;
+    }
 
     @FXML private TextField patientName;
     @FXML private TextField patientEmail;
@@ -140,9 +147,6 @@ public class patientRegisterController {
 
         //TODO: Database logic handling
 
-
-        PatientDAO patientDAO = new PatientDAO();
-
         String name = patientName.getText().trim();
         String gender = patientIsMale.isSelected() ? "Male" : "Female";
         String dob = patientDateOfBirth.getValue().toString();
@@ -155,13 +159,13 @@ public class patientRegisterController {
             patientPerInfoError.setText("Invalid phone number!");
             return;
         }
-
         String address = patientAddress.getText(); // Add address field if present in FXML
         String password = patientSetPassword.getText();
         String hashedPassword = PasswordUtil.hashPassword(password);
 
+
         // Check if patient already exists
-        if (patientDAO.getPatientByName(name) != null) {
+        if (client.getPatientByName(name) != null) {
             patientAccInfoError.setText("Username already exists!");
             return;
         }
@@ -173,10 +177,10 @@ public class patientRegisterController {
         newPatient.setPassword(hashedPassword);
         newPatient.setAccount_status("pending");
 
-        boolean success = patientDAO.addPatient(newPatient);
+        boolean success = client.addPatient(newPatient);
         if (success) {
             try {
-                SceneSwitcher.switchScene("/com/hms/myhospital/patientDashboard.fxml");
+                SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/patientDashboard.fxml", client);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error switching scene to patient profile.");

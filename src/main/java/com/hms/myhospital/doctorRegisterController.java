@@ -4,10 +4,6 @@ import com.hms.client.HMSClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import com.hms.utils.SceneSwitcher;
@@ -17,10 +13,14 @@ import java.io.IOException;
 import static com.hms.utils.Validator.*;
 import com.hms.dao.DoctorDAO;
 import com.hms.model.Doctor;
-import javafx.stage.Stage;
 
 
 public class doctorRegisterController {
+
+    private final HMSClient client;
+    public doctorRegisterController(HMSClient client) {
+        this.client = client;
+    }
 
     @FXML private TextField doctorName;
     @FXML private DatePicker doctorDateOfBirth;
@@ -29,8 +29,6 @@ public class doctorRegisterController {
     @FXML private TextArea doctorAddress;
     @FXML private CheckBox doctorIsMale;
     @FXML private CheckBox doctorIsFemale;
-
-    private HMSClient client ;
 
     @FXML private void handleGenderSelection() {
         if (doctorIsMale.isSelected()) {
@@ -141,11 +139,10 @@ public class doctorRegisterController {
 
         //TODO: Database logic handling
 
-        com.hms.dao.DoctorDAO doctorDAO = new com.hms.dao.DoctorDAO();
         String name = doctorName.getText().trim();
 
         // Check if username already exists (case-insensitive)
-        boolean usernameExists = doctorDAO.getAllDoctors().stream()
+        boolean usernameExists = client.getAllDoctors().stream()
                 .anyMatch(d -> d.getName().equalsIgnoreCase(name));
         if (usernameExists) {
             doctorAccInfoError.setText("Username already exists!");
@@ -161,6 +158,7 @@ public class doctorRegisterController {
 
         com.hms.model.Doctor newDoctor = new com.hms.model.Doctor(
                 name, // or combine first and last name if needed
+                0, // id will be set by DB
                 gender,
                 email,
                 speciality,
@@ -171,17 +169,11 @@ public class doctorRegisterController {
         newDoctor.setPassword(hashedPassword);
         newDoctor.setAccount_status("pending");
 
-        boolean success = doctorDAO.addDoctor(newDoctor);
-        int doctorId = 1 ;//TODO : retrieve doctor by name and use getID to retrieve id
+        boolean success = client.addDoctor(newDoctor);
         System.out.println(success);
         if (success) {
             try {
-                FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource("/com/hms/myhospital/doctor-schedule.fxml"));
-                loader.setController(new DoctorScheduleController(client, doctorId));
-                Parent root = loader.load();
-                Node source = doctorRegisterBtn;
-                Stage stage = (Stage) source.getScene().getWindow();
-                stage.setScene(new Scene(root));
+                SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/doctorDashboard.fxml", HMSRunner.getClient());
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error switching to doctor dashboard scene!");

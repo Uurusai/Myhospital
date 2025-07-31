@@ -15,8 +15,10 @@ public class chooseAccountController {
         System.out.println("Doctor button clicked");
         // Add your logic for choosing doctor here
         try {
-            SceneSwitcher.switchScene("/com/hms/myhospital/registerDoctor.fxml");
+            SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/registerDoctor.fxml", HMSRunner.getClient());
         } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to switch scene: " + e.getMessage());
         }
     }
 
@@ -25,8 +27,10 @@ public class chooseAccountController {
         System.out.println("Patient button clicked");
         // Add your logic for choosing patient here
         try {
-            SceneSwitcher.switchScene("/com/hms/myhospital/registerPatient.fxml");
+            SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/registerPatient.fxml", HMSRunner.getClient());
         } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to switch scene: " + e.getMessage());
         }
     }
 }

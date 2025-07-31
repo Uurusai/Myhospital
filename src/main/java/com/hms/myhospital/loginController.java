@@ -1,5 +1,6 @@
 package com.hms.myhospital;
 
+import com.hms.client.HMSClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -21,20 +22,23 @@ import static com.hms.utils.Validator.*;
 
 public class loginController {
 
+    private final HMSClient client;
+    public loginController(HMSClient client) {
+        this.client = client;
+    }
+
     private boolean authenticateUser(String username, String password) {
-        AdminDAO adminDAO = new AdminDAO();
-        DoctorDAO doctorDAO = new DoctorDAO();
-        PatientDAO patientDAO = new PatientDAO();
+
 
         // Try Admin
-        Admin admin = adminDAO.getAdminByName(username);
+        Admin admin = client.getAdminByName(username);
         if (admin != null && PasswordUtil.checkPassword(password, admin.getPassword())) {
             // Successful admin login
             return true;
         }
 
         // Try Doctor
-        List<Doctor> doctors = doctorDAO.searchDoctors(username);
+        List<Doctor> doctors = client.searchDoctors(username);
         Doctor matchedDoctor = null;
         for (Doctor d : doctors) {
             if (d.getName().equalsIgnoreCase(username)) {
@@ -48,7 +52,7 @@ public class loginController {
         }
 
         // Try Patient
-        Patient patient = patientDAO.getPatientByName(username);
+        Patient patient = client.getPatientByName(username);
         if (patient != null && PasswordUtil.checkPassword(password, patient.getPassword())) {
             // Successful patient login
             return true;

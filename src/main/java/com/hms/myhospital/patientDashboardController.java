@@ -17,21 +17,22 @@ import static com.hms.utils.Validator.*;
 
 public class patientDashboardController {
 
+    private final HMSClient client;
     public patientDashboardController(HMSClient client) {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/com/hms/myhospital/patientDashboard.fxml"));
-        loader.setRoot(this);
-        loader.setController(this);
-
-        try {
-            loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load FXML", e);
-        }
-
-        // Optionally store client if needed
-        // this.client = client;
-        initialize();
+//        FXMLLoader loader = new FXMLLoader(
+//                getClass().getResource("/com/hms/myhospital/patientDashboard.fxml"));
+//        loader.setRoot(this);
+//        loader.setController(this);
+//
+//        try {
+//            loader.load();
+//        } catch (IOException e) {
+//            throw new RuntimeException("Failed to load FXML", e);
+//        }
+//
+//        // Optionally store client if needed
+        this.client = client;
+//        initialize();
     }
 
         @FXML private StackPane patientHomeBtn;

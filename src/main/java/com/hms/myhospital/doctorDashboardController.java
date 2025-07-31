@@ -19,21 +19,10 @@ import static com.hms.utils.Validator.*;
 
 public class doctorDashboardController {
 
+    private final HMSClient client;
     public doctorDashboardController(HMSClient client) {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/com/hms/myhospital/doctorDashboard.fxml"));
-        loader.setRoot(this);
-        loader.setController(this);
+        this.client = client;
 
-        try {
-            loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load FXML", e);
-        }
-
-        // Optionally store client if needed
-        // this.client = client;
-        initialize();
     }
 
     @FXML private StackPane doctorHomeBtn;

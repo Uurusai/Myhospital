@@ -2,6 +2,7 @@ package com.hms.myhospital;
 
 import com.hms.client.HMSClient;
 import com.hms.model.*;
+import com.hms.utils.SceneSwitcher;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -33,6 +34,7 @@ public class AdminDash extends StackPane {
     @FXML private Button patient_btn;
     @FXML private Button appointment_btn;
     @FXML private Button db_btn;
+    @FXML private Button logOut_btn ;
 
     // Content Panes
     @FXML private AnchorPane patientsView;
@@ -117,8 +119,16 @@ public class AdminDash extends StackPane {
             db_top.setVisible(true);
             db_btm.setVisible(true);
         });
+        logOut_btn.setOnAction(e-> {
+            try {
+                SceneSwitcher.switchScene("/com/hms/myhospital/welcome.fxml");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         setupDoctorsTable();
         setupPatientsTable();
+        setupAppointmentsTable();
         setupCharts();
         loadDashboardDataAsync();
     }

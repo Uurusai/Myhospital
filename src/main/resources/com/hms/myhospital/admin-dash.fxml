@@ -37,6 +37,7 @@
                                 <Circle fill="#5eef4e" layoutX="1070.0" layoutY="19.0" radius="5.0" stroke="#5eef4e" strokeType="INSIDE" AnchorPane.rightAnchor="25.0" />
                                 <Label id="date_time" fx:id="date_time" alignment="CENTER" layoutX="720.0" layoutY="3.0" prefHeight="33.0" prefWidth="86.0" text="MM/DD/YY" AnchorPane.rightAnchor="294.0" />
                                 <Label id="current_form" fx:id="current_form" layoutX="185.0" layoutY="5.0" prefHeight="29.0" prefWidth="119.0" styleClass="header-1" stylesheets="@DashboardStyle.css" text="Dashboard Form" />
+                        <Button fx:id="logOut_btn" layoutX="638.0" layoutY="8.0" mnemonicParsing="false" stylesheets="@DashboardStyle.css" text="Log Out" />
                             </children>
                         </AnchorPane>
                     </top>

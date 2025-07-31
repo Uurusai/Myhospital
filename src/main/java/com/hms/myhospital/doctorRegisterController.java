@@ -1,8 +1,13 @@
 package com.hms.myhospital;
 
+import com.hms.client.HMSClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import com.hms.utils.SceneSwitcher;
@@ -12,6 +17,7 @@ import java.io.IOException;
 import static com.hms.utils.Validator.*;
 import com.hms.dao.DoctorDAO;
 import com.hms.model.Doctor;
+import javafx.stage.Stage;
 
 
 public class doctorRegisterController {
@@ -23,6 +29,8 @@ public class doctorRegisterController {
     @FXML private TextArea doctorAddress;
     @FXML private CheckBox doctorIsMale;
     @FXML private CheckBox doctorIsFemale;
+
+    private HMSClient client ;
 
     @FXML private void handleGenderSelection() {
         if (doctorIsMale.isSelected()) {
@@ -153,7 +161,6 @@ public class doctorRegisterController {
 
         com.hms.model.Doctor newDoctor = new com.hms.model.Doctor(
                 name, // or combine first and last name if needed
-                0, // id will be set by DB
                 gender,
                 email,
                 speciality,
@@ -165,10 +172,16 @@ public class doctorRegisterController {
         newDoctor.setAccount_status("pending");
 
         boolean success = doctorDAO.addDoctor(newDoctor);
+        int doctorId = 1 ;//TODO : retrieve doctor by name and use getID to retrieve id
         System.out.println(success);
         if (success) {
             try {
-                SceneSwitcher.switchScene("/com/hms/myhospital/doctorDashboard.fxml");
+                FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource("/com/hms/myhospital/doctor-schedule.fxml"));
+                loader.setController(new DoctorScheduleController(client, doctorId));
+                Parent root = loader.load();
+                Node source = doctorRegisterBtn;
+                Stage stage = (Stage) source.getScene().getWindow();
+                stage.setScene(new Scene(root));
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error switching to doctor dashboard scene!");

@@ -1,5 +1,6 @@
 package com.hms.myhospital;
 
+import com.hms.client.HMSClient;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,6 +16,11 @@ import java.util.List;
 
 public class prescriptionController
 {
+    private final HMSClient client;
+    public prescriptionController(HMSClient client) {
+        this.client = client;
+    }
+
     @FXML TextArea diagnosis;
     @FXML Button addMore;
     @FXML Button savePrescriptionBtn;

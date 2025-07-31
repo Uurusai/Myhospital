@@ -1,5 +1,6 @@
 package com.hms.myhospital;
 
+import com.hms.client.HMSClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +16,11 @@ import com.hms.model.Doctor;
 
 
 public class doctorRegisterController {
+
+    private final HMSClient client;
+    public doctorRegisterController(HMSClient client) {
+        this.client = client;
+    }
 
     @FXML private TextField doctorName;
     @FXML private DatePicker doctorDateOfBirth;
@@ -133,11 +139,10 @@ public class doctorRegisterController {
 
         //TODO: Database logic handling
 
-        com.hms.dao.DoctorDAO doctorDAO = new com.hms.dao.DoctorDAO();
         String name = doctorName.getText().trim();
 
         // Check if username already exists (case-insensitive)
-        boolean usernameExists = doctorDAO.getAllDoctors().stream()
+        boolean usernameExists = client.getAllDoctors().stream()
                 .anyMatch(d -> d.getName().equalsIgnoreCase(name));
         if (usernameExists) {
             doctorAccInfoError.setText("Username already exists!");
@@ -164,11 +169,11 @@ public class doctorRegisterController {
         newDoctor.setPassword(hashedPassword);
         newDoctor.setAccount_status("pending");
 
-        boolean success = doctorDAO.addDoctor(newDoctor);
+        boolean success = client.addDoctor(newDoctor);
         System.out.println(success);
         if (success) {
             try {
-                SceneSwitcher.switchScene("/com/hms/myhospital/doctorDashboard.fxml");
+                SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/doctorDashboard.fxml", HMSRunner.getClient());
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error switching to doctor dashboard scene!");

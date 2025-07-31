@@ -1,5 +1,6 @@
 package com.hms.utils;
 
+import com.hms.client.HMSClient;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -40,5 +41,56 @@ public class SceneSwitcher {
         return controller;
     }
 
+    // Add this method to SceneSwitcher.java
+    public static void switchSceneWithClient(String fxmlPath, HMSClient client) throws IOException {
+        if (primaryStage == null) {
+            throw new IllegalStateException("Primary stage not set! Call setPrimaryStage() first.");
+        }
+        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
+        setControllerFactory(loader, client);
+        Parent root = loader.load();
+        primaryStage.setScene(new Scene(root));
+    }
+
+    public static void setControllerFactory(FXMLLoader loader, HMSClient client) {
+        loader.setControllerFactory(param -> {
+            if (param == com.hms.myhospital.patientRegisterController.class) {
+                return new com.hms.myhospital.patientRegisterController(client);
+            }
+            if (param == com.hms.myhospital.doctorRegisterController.class) {
+                return new com.hms.myhospital.doctorRegisterController(client);
+            }
+            if (param == com.hms.myhospital.patientDashboardController.class) {
+                return new com.hms.myhospital.patientDashboardController(client);
+            }
+            if (param == com.hms.myhospital.doctorDashboardController.class) {
+                return new com.hms.myhospital.doctorDashboardController(client);
+            }
+            if (param == com.hms.myhospital.prescriptionController.class) {
+                return new com.hms.myhospital.prescriptionController(client);
+            }
+            // Controllers that do not need HMSClient
+            if (param == com.hms.myhospital.welcomeController.class) {
+                try {
+                    return param.getDeclaredConstructor().newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (param == com.hms.myhospital.chooseAccountController.class) {
+                try {
+                    return param.getDeclaredConstructor().newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            // Default fallback
+            try {
+                return param.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 }
 

@@ -57,8 +57,8 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="usernameField" prefHeight="26.0" prefWidth="161.0" GridPane.columnIndex="1" />
-                  <PasswordField fx:id="passwordField" prefHeight="26.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="loginUsername" prefHeight="26.0" prefWidth="161.0" GridPane.columnIndex="1" />
+                  <PasswordField fx:id="loginPassword" prefHeight="26.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <Label layoutX="870.0" layoutY="513.0" text="Don't have a Duckland account?" textFill="#4059ad" />

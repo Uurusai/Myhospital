@@ -6,6 +6,7 @@ import com.hms.threads.BreakEnder;
 
 import java.sql.*;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -25,8 +26,8 @@ public class DoctorScheduleDAO {
 
                     stmt.setInt(1, ds.getDoctor_id());
                     stmt.setInt(2, i);
-                    stmt.setTimestamp(3, Timestamp.valueOf(String.valueOf(starting_hour)));
-                    stmt.setTimestamp(4, Timestamp.valueOf(String.valueOf(ending_hour)));
+                    stmt.setTimestamp(3, Timestamp.valueOf(LocalDate.now().atTime(starting_hour)));
+                    stmt.setTimestamp(4, Timestamp.valueOf(LocalDate.now().atTime(ending_hour)));
                     stmt.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();

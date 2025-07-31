@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.DoctorScheduleController">
    <children>
       <VBox layoutX="19.0" layoutY="81.0" prefHeight="283.0" prefWidth="566.0">
@@ -45,7 +44,7 @@
                   <ListView fx:id="offDaysList" prefHeight="21.0" prefWidth="510.0" />
                </children>
             </VBox>
-            <Button mnemonicParsing="false" text="Submit" />
+            <Button fx:id="submit_btn" mnemonicParsing="false" text="Submit" />
          </children>
       </VBox>
    </children>

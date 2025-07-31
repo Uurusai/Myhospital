@@ -1,9 +1,13 @@
 package com.hms.myhospital;
 
 import com.hms.client.HMSClient;
+import com.hms.model.DoctorSchedule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import com.hms.utils.SceneSwitcher;
@@ -13,6 +17,7 @@ import java.io.IOException;
 import static com.hms.utils.Validator.*;
 import com.hms.dao.DoctorDAO;
 import com.hms.model.Doctor;
+import javafx.stage.Stage;
 
 
 public class doctorRegisterController {
@@ -83,14 +88,14 @@ public class doctorRegisterController {
             doctorPerInfoError.setText("Gender selection is required.");
         }
 
-        if (isNullOrEmpty(doctorPhoneNumber.getText())) {
-            doctorPerInfoError.setText("Phone number required!");
-            return false;
-        }
-        if (!isValidPhoneNumber(doctorPhoneNumber.getText())) {
-            doctorPerInfoError.setText("Invalid phone number!");
-            return false;
-        }
+//        if (isNullOrEmpty(doctorPhoneNumber.getText())) {
+//            doctorPerInfoError.setText("Phone number required!");
+//            return false;
+//        }
+//        if (!isValidPhoneNumber(doctorPhoneNumber.getText())) {
+//            doctorPerInfoError.setText("Invalid phone number!");
+//            return false;
+//        }
 
         // Account Information Validation
 
@@ -133,9 +138,10 @@ public class doctorRegisterController {
 
         System.out.println("Doctor registration attempted!");
 
-        if(!validateDoctorInfo()) {
-            return;
-        }
+//        if(!validateDoctorInfo()) {
+//            System.out.println("Sorry!");
+//            return;
+//        }
 
         //TODO: Database logic handling
 
@@ -173,10 +179,31 @@ public class doctorRegisterController {
         System.out.println(success);
         if (success) {
             try {
-                SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/doctorDashboard.fxml", HMSRunner.getClient());
+                Doctor savedDoctor = client.getDoctorByName(name);
+                // Load the doctor-schedule.fxml file
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/doctor-schedule.fxml"));
+                Parent root = loader.load();
+
+                // Get the controller and pass HMSClient + DoctorSchedule
+                DoctorScheduleController scheduleController;
+                try{
+                     scheduleController = loader.getController();
+                }catch(NullPointerException e){
+                    System.out.println("Error: HMSClient or DoctorScheduleController is null.");
+                    return;
+                }
+
+
+                scheduleController.initialize(client, new DoctorSchedule(savedDoctor.getId()));
+
+                // Switch to the new scene
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) doctorAccInfoError.getScene().getWindow(); // Assuming doctorAccInfoError is in the current scene
+                stage.setScene(scene);
+                stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Error switching to doctor dashboard scene!");
+                System.out.println("Error loading doctor schedule scene!");
             }
         } else {
             doctorAccInfoError.setText("Registration failed. Try again.");

@@ -28,13 +28,18 @@ public class DoctorScheduleController {
     //private int doctorId;
     private DoctorSchedule ds ;
 
-    public DoctorScheduleController(HMSClient client, int doctorId) {
+    public DoctorScheduleController() {}
+
+    // Initialization method (called after FXML loading)
+    public void initialize(HMSClient client, DoctorSchedule ds) {
         this.client = client;
-        this.ds = new DoctorSchedule(doctorId);
+        this.ds = ds;
+        // Additional setup (e.g., load schedule data)
     }
 
     @FXML
     public void initialize() {
+
         // Spinner setup (in 24hr format)
         startTimeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 9));
         endTimeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 17));
@@ -46,7 +51,8 @@ public class DoctorScheduleController {
         //submit action
         submit_btn.setOnAction(e-> {
             try {
-                SceneSwitcher.switchScene("/com/hms/myhospital/doctorDashboard.fxml");
+                handleSubmit();
+                SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/doctorDashboard.fxml",client);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -67,6 +73,7 @@ public class DoctorScheduleController {
         }
         client.setWorkingDays(this.ds,offDays,start,end);
     }
+
 
     private int dayStringToInt(String day) {
         return switch (day.toLowerCase()) {

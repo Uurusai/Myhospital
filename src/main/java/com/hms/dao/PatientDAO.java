@@ -19,7 +19,7 @@ public class PatientDAO {
                 rs.getInt("patient_id"),
                 rs.getString("gender"),
                 rs.getInt("age"),
-                rs.getString("date_of_birth"),
+                rs.getTimestamp("date_of_birth").toString(),
                 rs.getInt("contact_no"),
                 rs.getString("address"),
                 rs.getString("blood_type")
@@ -29,27 +29,29 @@ public class PatientDAO {
 
     //adding new Patient to db
     public boolean addPatient(Patient p){
-        String sql = "INSERT INTO Patients(name,gender,age,date_of_birth,address,contact-no,created_at,blood_type,account_status)"+
-                "VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Patients(name,gender,age,date_of_birth,address,contact_no,created_at,blood_type,account_status,pssword)"+
+                "VALUES(?,?,?,?,?,?,?,?,?,?) RETURNING patient_id";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
 
             //stmt.setInt(1,p.getId());
-            ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                p.setId(rs.getInt("patient_id"));
-            }
             stmt.setString(1,p.getName());
             stmt.setString(2,p.getGender());
             stmt.setString(5,p.getAddress());
-            stmt.setString(4,p.getDate_of_birth());
+            stmt.setTimestamp(4,Timestamp.valueOf(p.getDate_of_birth()));
             stmt.setInt(6,p.getContactNo());
             stmt.setInt(3,p.getAge());
             stmt.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
             stmt.setString(8,p.getBlood_type());
             stmt.setString(9,"pending");
-
-            return stmt.executeUpdate()>0 ;
+            stmt.setString(10,p.getPassword());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                p.setId(rs.getInt("patient_id"));
+                return true;
+            } else {
+                return false;
+            }
         }catch(SQLException e){
             e.printStackTrace();
             return false;
@@ -71,7 +73,7 @@ public class PatientDAO {
                         rs.getInt("patient_id"),
                         rs.getString("gender"),
                         rs.getInt("age"),
-                        rs.getString("date_of_birth"),
+                        rs.getTimestamp("date_of_birth").toString(),
                         rs.getInt("contact-no"),
                         rs.getString("address"),
                         rs.getString("blood_type")
@@ -100,7 +102,7 @@ public class PatientDAO {
                         rs.getInt("patient_id"),
                         rs.getString("gender"),
                         rs.getInt("age"),
-                        rs.getString("date_of_birth"),
+                        rs.getTimestamp("date_of_birth").toString(),
                         rs.getInt("contact-no"),
                         rs.getString("address"),
                         rs.getString("blood_type")
@@ -225,7 +227,7 @@ public class PatientDAO {
                         rs.getInt("patient_id"),
                         rs.getString("patient_gender"),
                         rs.getInt("patient_age"),
-                        rs.getString("patient_date_of_birth"),
+                        rs.getTimestamp("patient_date_of_birth").toString(),
                         rs.getInt("patient_contact_no"),
                         rs.getString("patient_address"),
                         rs.getString("blood_type")

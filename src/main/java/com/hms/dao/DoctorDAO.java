@@ -13,6 +13,33 @@ import static com.hms.dao.DatabaseConnection.getConnection;
 public class DoctorDAO {
 
     // Add a new doctor to the database
+    public Doctor getDoctorByName(String name) {
+        String sql = "SELECT * FROM Doctors WHERE LOWER(name) = LOWER(?)";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Doctor doctor = new Doctor(
+                            rs.getString("name"),
+                            rs.getInt("doctor_id"),
+                            rs.getString("gender"),
+                            rs.getString("email"),
+                            rs.getString("speciality"),
+                            rs.getInt("contact_no"),
+                            rs.getString("addrress")
+                    );
+                    doctor.setPassword(rs.getString("password"));
+                    doctor.setAccount_status(rs.getString("account_status"));
+                    return doctor;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean addDoctor(Doctor doctor) {
         String sql = "INSERT INTO Doctors (name, gender, email, speciality, contact_no, addrress,password,account_status) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?,?) RETURNING doctor_id";

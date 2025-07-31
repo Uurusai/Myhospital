@@ -13,6 +13,8 @@ import javafx.scene.layout.StackPane;
 import com.hms.utils.SceneSwitcher;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import static com.hms.utils.Validator.*;
@@ -140,17 +142,18 @@ public class patientRegisterController {
         // Handle patient selection button click
         System.out.println("Patient registration attempted!");
 
-        if(!validatePatientInfo()) {
-            System.out.println("Patient registration failed due to validation errors.");
-            return;
-        }
+//        if(!validatePatientInfo()) {
+//            System.out.println("Patient registration failed due to validation errors.");
+//            return;
+//        }
 
         //TODO: Database logic handling
 
         String name = patientName.getText().trim();
         String gender = patientIsMale.isSelected() ? "Male" : "Female";
-        String dob = patientDateOfBirth.getValue().toString();
-        int age = calculateAgeFromDOB(dob);
+        LocalDate dob = patientDateOfBirth.getValue();
+        Timestamp dobTimestamp = Timestamp.valueOf(dob.atStartOfDay());
+        int age = calculateAgeFromDOB(dob.toString());
         String bloodType = patientBloodGroup.getValue();
         int contactNo;
         try {
@@ -161,7 +164,7 @@ public class patientRegisterController {
         }
         String address = patientAddress.getText(); // Add address field if present in FXML
         String password = patientSetPassword.getText();
-        String hashedPassword = PasswordUtil.hashPassword(password);
+        //String hashedPassword = PasswordUtil.hashPassword(password);
 
 
         // Check if patient already exists
@@ -171,10 +174,10 @@ public class patientRegisterController {
         }
 
         Patient newPatient = new Patient(
-                name, 0, gender, age, dob, contactNo, address, bloodType
+                name, 0, gender, age, dobTimestamp.toString(), contactNo, address, bloodType
         );
 
-        newPatient.setPassword(hashedPassword);
+        newPatient.setPassword(password);
         newPatient.setAccount_status("pending");
 
         boolean success = client.addPatient(newPatient);

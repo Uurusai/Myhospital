@@ -81,6 +81,13 @@ public class HMSClient {
                 Boolean.class
         ));
     }
+    public Doctor getDoctorByName(String name) {
+        return executeCommand(new GenericDAOCommand<>(
+                "doctor", "getDoctorByName",
+                new Object[]{name},
+                Doctor.class
+        ));
+    }
 
     public List<Patient> getPatientsForDoctor(int doctorId) {
         return executeCommand(new GenericDAOCommand<>(
@@ -109,21 +116,21 @@ public class HMSClient {
     //doctor-schedule commands
     public void setWorkingDays(DoctorSchedule ds, List<Integer> offdays, LocalTime starting_hour, LocalTime ending_hour) {
         executeCommand(new GenericDAOCommand<>(
-                "doctor", "setWorkingDays",
+                "schedule", "setWorkingDays",
                 new Object[]{ds, offdays, starting_hour, ending_hour},
                 Void.class
         ));
     }
     public DoctorSchedule getDoctorSchedule(Doctor doctor) {
         return executeCommand(new GenericDAOCommand<>(
-                "doctor", "getDoctorSchedule",
+                "schedule", "getDoctorSchedule",
                 new Object[]{doctor},
                 DoctorSchedule.class
         ));
     }
     public boolean isDoctorAvailable(DoctorSchedule ds, int day, LocalTime time) {
         return executeCommand(new GenericDAOCommand<>(
-                "doctor", "isDoctorAvailable",
+                "schedule", "isDoctorAvailable",
                 new Object[]{ds, day, time},
                 Boolean.class
         ));
@@ -131,21 +138,21 @@ public class HMSClient {
 
     public void goOnBreak(int doc_id, String breakDuration) {
         executeCommand(new GenericDAOCommand<>(
-                "doctor", "goOnBreak",
+                "schedule", "goOnBreak",
                 new Object[]{doc_id, breakDuration},
                 Void.class
         ));
     }
     public void sendMessageToAll(int doc_id, TimeDateRange break_time, String breakDuration) {
         executeCommand(new GenericDAOCommand<>(
-                "doctor", "sendMessageToAll",
+                "schedule", "sendMessageToAll",
                 new Object[]{doc_id, break_time, breakDuration},
                 Void.class
         ));
     }
     public void postPoneAppointments(int doc_id, TimeDateRange break_time, String breakDuration) {
         executeCommand(new GenericDAOCommand<>(
-                "doctor", "postPoneAppointments",
+                "schedule", "postPoneAppointments",
                 new Object[]{doc_id, break_time, breakDuration},
                 Void.class
         ));

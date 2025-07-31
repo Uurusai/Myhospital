@@ -30,7 +30,7 @@ public class PatientDAO {
     //adding new Patient to db
     public boolean addPatient(Patient p){
         String sql = "INSERT INTO Patients(name,gender,age,date_of_birth,address,contact-no,created_at,blood_type,account_status)"+
-                "VALUES(?,?,?,?,?,?,?,?)";
+                "VALUES(?,?,?,?,?,?,?,?,?)";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
 

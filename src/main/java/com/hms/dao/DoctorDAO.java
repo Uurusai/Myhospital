@@ -32,9 +32,11 @@ public class DoctorDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 doctor.setId(rs.getInt("doctor_id"));
+                return true;
+            } else {
+                return false;
             }
 
-            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

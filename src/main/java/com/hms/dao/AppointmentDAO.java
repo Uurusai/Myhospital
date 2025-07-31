@@ -101,6 +101,7 @@ public class AppointmentDAO {
         return appointments;
     }
     //update appointment info
+
     public boolean updateAppointment(Appointment app) {
         String sql = "UPDATE appointments SET doctor_id = ?, patient_id = ?, date_requested = ?, " +
                 "date_scheduld = ?, date_made = ?, status = ? WHERE appointment_id = ?";

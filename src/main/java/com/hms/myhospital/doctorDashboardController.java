@@ -175,11 +175,13 @@ public class doctorDashboardController {
 
     @FXML
     private void saveDoctorProfile() {
-        // TODO: Update the database with new values
+
         if(validateProfileFields()) {
+            // TODO: Update the database with new values
             setProfileFieldsEditable(false);
             saveDoctorProfileBtn.setVisible(false);
             editDoctorProfileBtn.setText("Edit");
+
         } else {
             // Show error message to user
             System.out.println("Invalid profile data. Please check your input.");
@@ -260,29 +262,64 @@ public class doctorDashboardController {
     @FXML private VBox requestedAppointments;
     @FXML private VBox confirmedAppointments;
 
-    public void addRequestedAppointment(String patientName, String date, String time) {
+    // Helper to add an appointment row to a VBox
+    private void addAppointmentRow(VBox targetVBox, Appointment appointment, boolean isConfirmed) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/appointmentRow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/appointmentRow.fxml"));
             HBox row = loader.load();
             appointmentRowController controller = loader.getController();
-            controller.setAppointmentData(patientName, date, time, false); // false = not confirmed
-            requestedAppointments.getChildren().add(row);
+            controller.setAppointmentData(
+                appointment.getPatient().getName(),
+                appointment.getDate_scheduled().toLocalDate().toString(),
+                appointment.getDate_scheduled().toLocalTime().toString(),
+                isConfirmed
+            );
+            // Set up button actions
+            controller.getConfirmAppointmentBtn().setOnAction(e -> confirmAppointment(appointment, row));
+            controller.getCancelAppointmentBtn().setOnAction(e -> cancelAppointment(appointment, row));
+            targetVBox.getChildren().add(row);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    } //to be used by appointment.java probably
+    }
 
-    public void addConfirmedAppointment(String patientName, String date, String time) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/appointmentRow.fxml"));
-            HBox row = loader.load();
-            appointmentRowController controller = loader.getController();
-            controller.setAppointmentData(patientName, date, time, true); // true = confirmed
-            confirmedAppointments.getChildren().add(row);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void loadDoctorAppointments() {
+        requestedAppointments.getChildren().clear();
+        confirmedAppointments.getChildren().clear();
+
+        List<Appointment> allAppointments = client.getAppointmentsForDoctor(HMSRunner.getCurrentUserId());
+        for (Appointment app : allAppointments) {
+            if ("confirmed".equalsIgnoreCase(app.getStatus())) {
+                addAppointmentRow(confirmedAppointments, app, true);
+            } else if ("pending".equalsIgnoreCase(app.getStatus()) || "requested".equalsIgnoreCase(app.getStatus())) {
+                addAppointmentRow(requestedAppointments, app, false);
+            }
         }
-    } //to be used by appointment.java probably
+    }
+
+    private void confirmAppointment(Appointment appointment, HBox row) {
+        boolean success = client.confirmAppointment(appointment.getId(), appointment.getDate_scheduled());
+        if (success) {
+            requestedAppointments.getChildren().remove(row);
+            addAppointmentRow(confirmedAppointments, appointment, true);
+        }
+    }
+
+    private void cancelAppointment(Appointment appointment, HBox row) {
+        boolean success = client.rejectAppointment(appointment.getId());
+        if (success) {
+            requestedAppointments.getChildren().remove(row);
+        }
+    }
+
+    private void autoscheduleNewAppointment(int patientId) {
+        boolean scheduled = client.autoscheduleAppointment(patientId, HMSRunner.getCurrentUserId());
+        if (scheduled) {
+            loadDoctorAppointments();
+        } else {
+            System.out.println("No available slots for autoscheduling.");
+        }
+    }
 
     //prescriptions section stuff
 

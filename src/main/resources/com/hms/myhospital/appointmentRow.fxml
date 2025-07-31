@@ -14,11 +14,11 @@
             <Rectangle fill="#4059ad" height="50.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
             <Rectangle fill="#f4b942" height="50.0" layoutX="150.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
             <Rectangle fill="#4059ad" height="50.0" layoutX="350.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-            <Label layoutX="39.0" layoutY="16.0" text="Patient Name" textFill="WHITE" />
+            <Label fx:id="patientName" layoutX="39.0" layoutY="16.0" text="Patient Name" textFill="WHITE" />
             <Rectangle fill="#f4b942" height="50.0" layoutX="450.0" stroke="BLACK" strokeType="INSIDE" width="230.0" />
             <Rectangle fill="#4059ad" height="50.0" layoutX="300.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
-            <Label layoutX="362.0" layoutY="16.0" text="Time" textFill="WHITE" />
-            <Label layoutX="212.0" layoutY="16.0" text="Date" />
+            <Label fx:id="appointmentTime" layoutX="362.0" layoutY="16.0" text="Time" textFill="WHITE" />
+            <Label fx:id="appointmentDate" layoutX="212.0" layoutY="16.0" text="Date" />
             <AnchorPane layoutX="450.0" layoutY="12.0">
                <children>
                   <HBox spacing="12.5">

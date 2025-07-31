@@ -42,13 +42,12 @@ public class AppointmentDAO {
         List<Appointment> appointments = new ArrayList<>();
         String sql = """
             SELECT 
-                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.completed_status,a.diagnosis
+                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.completed_status,a.diagnosis,
                 
                 -- patient fields
                 p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
-                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact
-                p.payment_status AS patient_payment_status, p.visitor_type AS patient_visitor_type
-            
+                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact,
+                p.blood_type,
                 --doctor fields
                 d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.e-mail,
                 d.speciality,d.contact no AS doctor_contact d.addrress AS doctor_address
@@ -221,7 +220,7 @@ public class AppointmentDAO {
 
                             Appointment appointment = new Appointment();
                             PatientDAO pd = new PatientDAO() ;
-                            appointment.setPatient(pd.getPatientById(patientId));
+                            appointment.setPatient(pd.getPatientbyId(patientId));
                             appointment.setDoctor(dd.getDoctorById(doctor_id));
                             appointment.setDate_requested(proposed_schedule);
 
@@ -281,19 +280,13 @@ public class AppointmentDAO {
         }
 
         //sending prescription
-        public void sendPrescription(int appointmentID, String prescriptionFilePath) {
+        public void sendPrescription(int patientId,String doctorName, String prescriptionFilePath) {
             try {
-                // Get appointment details
-                Appointment app = getAppointmentById(appointmentID);
-                int patientId = app.getPatient().getId();
-                int doctorId = app.getDoctor().getId();
-                String doctorName = app.getDoctor().getName();
-
                 Message confirmation = new Message();
                 confirmation.setRecipientId(patientId);
                 confirmation.setSenderName(doctorName);
                 confirmation.setContent(String.format(
-                        " your prescription has been sent for appointment no %d", appointmentID
+                        " your prescription has been sent!"
                 ));
                 confirmation.setTimestamp(LocalDateTime.now());
 
@@ -318,12 +311,12 @@ public class AppointmentDAO {
         //List<Appointment> appointments = new ArrayList<>();
         String sql = """
             SELECT 
-                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.completed_status,a.diagnosis
+                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.completed_status,a.diagnosis,
                 
                 -- patient fields
                 p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
-                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact
-                p.payment_status AS patient_payment_status, p.visitor_type AS patient_visitor_type
+                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact,
+                p.blood_type,
             
                 --doctor fields
                 d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.e-mail,

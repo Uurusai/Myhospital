@@ -85,7 +85,7 @@
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <ScrollPane hbarPolicy="NEVER" layoutY="75.0" prefHeight="315.0" prefWidth="700.0">
                <content>
-                  <AnchorPane fx:id="doctorDateOfBirth" prefHeight="330.0" prefWidth="700.0">
+                  <AnchorPane prefHeight="330.0" prefWidth="700.0">
                      <children>
                         <Label layoutX="15.0" layoutY="15.0" text="PERSONAL INFO:">
                            <font>

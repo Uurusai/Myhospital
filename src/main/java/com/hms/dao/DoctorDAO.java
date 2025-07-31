@@ -205,16 +205,16 @@ public class DoctorDAO {
         List<Appointment> appointments = new ArrayList<>();
         String sql = """
             SELECT 
-                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status
+                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,
                 
                 -- patient fields
                 p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
                 p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact
-                p.payment_status AS patient_payment_status, p.visitor_type AS patient_visitor_type
+                p.blood_type,
             
                 --doctor fields
                 d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.email,
-                d.speciality,d.contact_no AS doctor_contact d.addrress AS doctor_address
+                d.speciality,d.contact_no AS doctor_contact d.addrress AS doctor_address,
             
             FROM appointments a
             JOIN Patients p ON a.patient_id = p.patient_id

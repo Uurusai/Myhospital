@@ -180,6 +180,7 @@ public class doctorRegisterController {
         if (success) {
             try {
                 Doctor savedDoctor = client.getDoctorByName(name);
+                HMSRunner.setCurrentUser(savedDoctor.getId(),"doctor");
                 // Load the doctor-schedule.fxml file
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/doctor-schedule.fxml"));
                 Parent root = loader.load();

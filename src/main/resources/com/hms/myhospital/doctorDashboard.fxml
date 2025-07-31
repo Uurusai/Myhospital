@@ -210,7 +210,7 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="doctorPrescriptions" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
+      <AnchorPane fx:id="doctorPrescriptions" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="14.0" layoutY="20.0" text="Prescriptions: " textFill="#4059ad">
@@ -219,7 +219,7 @@
                </font>
             </Label>
             <Rectangle fill="#eff2f1" height="315.0" layoutY="75.0" stroke="DODGERBLUE" strokeType="INSIDE" strokeWidth="0.0" width="700.0" />
-            <StackPane fx:id="composeBtn" layoutX="225.0" layoutY="139.0" onMouseClicked="#composePrescription" prefHeight="150.0" prefWidth="200.0">
+            <StackPane fx:id="composeBtn" layoutX="225.0" layoutY="139.0" onMouseClicked="#composePrescription" prefHeight="100.0" prefWidth="150.0">
                <children>
                   <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f4b942" height="187.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="250.0" />
                   <Label text="+ Compose" textFill="#bc6565">

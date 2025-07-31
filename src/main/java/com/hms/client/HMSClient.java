@@ -182,9 +182,9 @@ public class HMSClient {
                 List.class
         ));
     }
-    public Patient getPatientById(int id) {
+    public Patient getPatientbyId(int id) {
         return executeCommand(new GenericDAOCommand<>(
-                "patient", "getPatientById",
+                "patient", "getPatientbyId",
                 new Object[]{id},
                 Patient.class
         ));
@@ -283,10 +283,18 @@ public class HMSClient {
         ));
     }
 
-    public boolean autoscheduleAppointment(int patientId, int doctorId) {
+    public Appointment getAppointmentById(int patientId, int doctorId) {
+        return executeCommand(new GenericDAOCommand<>(
+                "appointment", "getAppointmentById",
+                new Object[]{patientId, doctorId},
+                Appointment.class
+        ));
+    }
+
+    public boolean autoscheduleAppointment(int patientId, int doctorId,String symptoms) {
         return executeCommand(new GenericDAOCommand<>(
                 "appointment", "autoscheduleAppointment",
-                new Object[]{patientId, doctorId},
+                new Object[]{patientId, doctorId,symptoms},
                 Boolean.class
         ));
     }
@@ -307,17 +315,17 @@ public class HMSClient {
         ));
     }
 
-    public void sendPrescription(int appointmentId, String prescriptionFilePath) {
+    public void sendPrescription(int patientId,String doctorName, String prescriptionFilePath) {
         executeCommand(new GenericDAOCommand<>(
                 "appointment", "sendPrescription",
-                new Object[]{appointmentId, prescriptionFilePath},
+                new Object[]{patientId, doctorName,prescriptionFilePath},
                 Void.class
         ));
     }
 
-    public Appointment getAppointmentById(int appointmentId) {
+    public Appointment getAppointmentByOneId(int appointmentId) {
         return executeCommand(new GenericDAOCommand<>(
-                "appointment", "getAppointmentById",
+                "appointment", "getAppointmentByOneId",
                 new Object[]{appointmentId},
                 Appointment.class
         ));

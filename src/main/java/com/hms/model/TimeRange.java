@@ -1,8 +1,9 @@
 package com.hms.model;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 
-public class TimeRange {
+public class TimeRange  implements Serializable {
     public LocalTime startTime;
     public LocalTime endTime ;
 

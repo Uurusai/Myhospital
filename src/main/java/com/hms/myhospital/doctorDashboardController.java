@@ -313,7 +313,7 @@ public class doctorDashboardController {
     }
 
     private void autoscheduleNewAppointment(int patientId) {
-        boolean scheduled = client.autoscheduleAppointment(patientId, HMSRunner.getCurrentUserId());
+        boolean scheduled = client.autoscheduleAppointment(patientId, HMSRunner.getCurrentUserId(),"symptoms");
         if (scheduled) {
             loadDoctorAppointments();
         } else {

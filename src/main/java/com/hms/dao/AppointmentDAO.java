@@ -19,8 +19,8 @@ public class AppointmentDAO {
 
     //adding appointment
     public boolean addAppointment(Appointment app) {
-        String sql = "INSERT INTO appointments (doctor_id, patient_id,date_requested,symptoms,complete_status,status,diagnosis) " +
-                "VALUES (  ?, ?,?,?,'pending','requested','pending')";
+        String sql = "INSERT INTO appointments (doctor_id, patient_id,date_requested,symptoms,date_created,complete_status,status) " +
+                "VALUES (  ?, ?,?,?,?,'pending','requested')";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -29,6 +29,7 @@ public class AppointmentDAO {
             stmt.setInt(2,app.getPatient().getId());
             stmt.setTimestamp(3, Timestamp.valueOf(app.getDate_requested()));
             stmt.setString(4,app.getSymptoms());
+            stmt.setTimestamp(5,Timestamp.valueOf(LocalDateTime.now()));
 
 
             return stmt.executeUpdate() > 0;
@@ -42,15 +43,15 @@ public class AppointmentDAO {
         List<Appointment> appointments = new ArrayList<>();
         String sql = """
             SELECT 
-                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.completed_status,a.diagnosis,
+                a.appointment_id,a.date_created,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.complete_status,
                 
                 -- patient fields
                 p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
                 p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact,
                 p.blood_type,
                 --doctor fields
-                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.e-mail,
-                d.speciality,d.contact no AS doctor_contact d.addrress AS doctor_address
+                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.email,
+                d.speciality,d.contact_no AS doctor_contact,d.addrress AS doctor_address
             
             FROM appointments a
             JOIN Patients p ON a.patient_id = p.patient_id
@@ -62,13 +63,13 @@ public class AppointmentDAO {
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
                 Patient patient = new Patient(
-                        rs.getString("name"),
+                        rs.getString("patient_name"),
                         rs.getInt("patient_id"),
-                        rs.getString("gender"),
-                        rs.getInt("age"),
-                        rs.getString("date_of_birth"),
-                        rs.getInt("contact_no"),
-                        rs.getString("address"),
+                        rs.getString("patient_gender"),
+                        rs.getInt("patient_age"),
+                        rs.getTimestamp("patient_date_of_birth").toString(),
+                        rs.getInt("patient_contact"),
+                        rs.getString("patient_address"),
                         rs.getString("blood_type")
                 );
                 Doctor doctor = new  Doctor(
@@ -80,16 +81,20 @@ public class AppointmentDAO {
                         rs.getInt("doctor_contact"),
                         rs.getString("doctor_address")
                 );
+                //LocalDateTime dateCreated = rs.getTimestamp("date_created").toLocalDateTime();
+                //LocalDateTime dateRequested = rs.getTimestamp("date_requested").toLocalDateTime();
+                LocalDateTime dateScheduled = rs.getTimestamp("date_scheduled") != null ? rs.getTimestamp("date_scheduled").toLocalDateTime() : null;
+                LocalDateTime dateCreated = rs.getTimestamp("date_created") != null ? rs.getTimestamp("date_created").toLocalDateTime() : null;
                 Appointment appointment = new Appointment(
                         rs.getInt("appointment_id"),
-                        rs.getTimestamp("date_made").toLocalDateTime(),
+                        dateCreated,
                         rs.getTimestamp("date_requested").toLocalDateTime(),
-                        rs.getTimestamp("date_scheduled").toLocalDateTime(),
+                        dateScheduled,
                         patient,doctor,
                         rs.getString("status")
                 );
-                appointment.setComplete(rs.getBoolean("completed_status"));
-                appointment.setDiagnosis(rs.getString("diagnosis"));
+                appointment.setComplete(rs.getString("complete_status"));
+               // appointment.setDate_made(rs.getTimestamp("date_created").toLocalDateTime());
                 appointment.setSymptoms(rs.getString("symptoms"));
                 appointments.add(appointment);
             }
@@ -124,11 +129,82 @@ public class AppointmentDAO {
         }
     }
 
+    public Appointment getAppointmentById(int patientId, int doctorId){
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = """
+            SELECT 
+                a.appointment_id,a.date_created,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.complete_status,
+                
+                -- patient fields
+                p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
+                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact,
+                p.blood_type,
+                --doctor fields
+                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.email,
+                d.speciality,d.contact_no AS doctor_contact,d.addrress AS doctor_address
+            
+            FROM appointments a
+            JOIN Patients p ON a.patient_id = p.patient_id
+            JOIN Doctors d ON a.doctor_id = d.doctor_id
+            WHERE a.doctor_id = ? AND a.patient_id = ?  AND a.complete_status = ?                   
+""";
+        try(Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1,doctorId);
+            stmt.setInt(2,patientId);
+            stmt.setString(3,"pending");
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                Patient patient = new Patient(
+                        rs.getString("patient_name"),
+                        rs.getInt("patient_id"),
+                        rs.getString("patient_gender"),
+                        rs.getInt("patient_age"),
+                        rs.getTimestamp("patient_date_of_birth").toString(),
+                        rs.getInt("patient_contact"),
+                        rs.getString("patient_address"),
+                        rs.getString("blood_type")
+                );
+                Doctor doctor = new  Doctor(
+                        rs.getString("doctor_name"),
+                        rs.getInt("doctor_id"),
+                        rs.getString("doctor_gender"),
+                        rs.getString("email"),
+                        rs.getString("speciality"),
+                        rs.getInt("doctor_contact"),
+                        rs.getString("doctor_address")
+                );
+                LocalDateTime dateScheduled = rs.getTimestamp("date_scheduled") != null ? rs.getTimestamp("date_scheduled").toLocalDateTime() : null;
+                Appointment appointment = new Appointment(
+                        rs.getInt("appointment_id"),
+                        rs.getTimestamp("date_created").toLocalDateTime(),
+                        rs.getTimestamp("date_requested").toLocalDateTime(),
+                        dateScheduled,
+                        patient,doctor,
+                        rs.getString("status")
+                );
+                appointment.setComplete(rs.getString("complete_status"));
+               // appointment.setDate_made(rs.getTimestamp("date_created").toLocalDateTime());
+                appointment.setSymptoms(rs.getString("symptoms"));
+                appointments.add(appointment);
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            // return null;
+        }
+        return appointments.stream().sorted((a1, a2) -> a2.getDate_made().compareTo(a1.getDate_made()))
+                .findFirst()
+                .orElse(null);
+
+    }
+
     public boolean markCompleted(Appointment app){
-        String sql = "UPDATE appointments SET complete_status = 'completed' WHERE appointment_id = ?";
+        String sql = "UPDATE appointments SET complete_status = ? WHERE appointment_id = ?";
 
         try(PreparedStatement stmt = getConnection().prepareStatement(sql)){
-            stmt.setInt(1,app.getId());
+            stmt.setString(1, "completed");
+            stmt.setInt(2,app.getId());
 
             return stmt.executeUpdate() > 0 ;
         } catch (SQLException e) {
@@ -165,7 +241,7 @@ public class AppointmentDAO {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(2, appointmentId);
+            stmt.setInt(1, appointmentId);
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -176,7 +252,7 @@ public class AppointmentDAO {
 
     //reschedule appointment
     public boolean rescheduleAppointment(int appointmentId, LocalDateTime newScheduledDate) {
-        String sql = "UPDATE appointments SET date_scheduld = ?,status = 'rescheduled' WHERE appointment_id = ?";
+        String sql = "UPDATE appointments SET date_scheduled = ?,status = 'rescheduled' WHERE appointment_id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -192,7 +268,7 @@ public class AppointmentDAO {
     }
 
     //autoschedule appointments
-    public boolean autoscheduleAppointment(int patientId, int doctor_id) {
+    public boolean autoscheduleAppointment(int patientId, int doctor_id,String symptoms) {
 
         DoctorDAO dd = new  DoctorDAO();
         DoctorScheduleDAO dsd = new DoctorScheduleDAO() ;
@@ -211,6 +287,13 @@ public class AppointmentDAO {
                 if(working_hour != null){
                     LocalTime start = working_hour.getStartTime();
                     LocalTime end = working_hour.getEndTime();
+                    if (dt.equals(now.toLocalDate())) {
+                        if (now.toLocalTime().isAfter(end)) {
+                            continue;
+                        } else if (now.toLocalTime().isAfter(start)) {
+                            start = now.toLocalTime().withSecond(0).withNano(0);
+                        }
+                    }
                     LocalTime current = start ;
 
                     while(current.isBefore(end)){
@@ -224,6 +307,7 @@ public class AppointmentDAO {
                             appointment.setPatient(pd.getPatientbyId(patientId));
                             appointment.setDoctor(dd.getDoctorById(doctor_id));
                             appointment.setDate_requested(proposed_schedule);
+                            appointment.setSymptoms(symptoms);
 
                             return addAppointment(appointment);
                         }
@@ -242,6 +326,7 @@ public class AppointmentDAO {
         String sql = "SELECT appointment_id FROM appointments where date_scheduled = ? OR date_requested = ?";
         try(PreparedStatement stmt = getConnection().prepareStatement(sql)){
             stmt.setTimestamp(1, Timestamp.valueOf(appointmentTime));
+            stmt.setTimestamp(2, Timestamp.valueOf(appointmentTime));
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
 
@@ -256,7 +341,7 @@ public class AppointmentDAO {
     //sending confirmation message
     public void sendAppointmentConfirmation(int appointmentId, LocalDateTime scheduledDate) {
             try {
-                Appointment app = getAppointmentById(appointmentId);
+                Appointment app = getAppointmentByOneId(appointmentId);
                 int patientId = app.getPatient().getId();
                 int doctorId = app.getDoctor().getId();
                 String doctorName = app.getDoctor().getName();
@@ -308,11 +393,11 @@ public class AppointmentDAO {
 
         }
 
-    public Appointment getAppointmentById(int appointmentId) {
+    public Appointment getAppointmentByOneId(int appointmentId) {
         //List<Appointment> appointments = new ArrayList<>();
         String sql = """
             SELECT 
-                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.completed_status,a.diagnosis,
+                a.appointment_id,a.date_created,a.date_requested, a.date_scheduled,a.status,a.symptoms,a.complete_status,
                 
                 -- patient fields
                 p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
@@ -320,8 +405,8 @@ public class AppointmentDAO {
                 p.blood_type,
             
                 --doctor fields
-                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.e-mail,
-                d.speciality,d.contact no AS doctor_contact d.addrress AS doctor_address
+                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.email,
+                d.speciality,d.contact_no AS doctor_contact ,d.addrress AS doctor_address
             
             FROM appointments a
             JOIN Patients p ON a.patient_id = p.patient_id
@@ -335,13 +420,13 @@ public class AppointmentDAO {
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
                 Patient patient = new Patient(
-                        rs.getString("name"),
+                        rs.getString("patient_name"),
                         rs.getInt("patient_id"),
-                        rs.getString("gender"),
-                        rs.getInt("age"),
-                        rs.getString("date_of_birth"),
-                        rs.getInt("contact_no"),
-                        rs.getString("address"),
+                        rs.getString("patient_gender"),
+                        rs.getInt("patient_age"),
+                        rs.getTimestamp("patient_date_of_birth").toString(),
+                        rs.getInt("patient_contact"),
+                        rs.getString("patient_address"),
                         rs.getString("blood_type")
                 );
                 Doctor doctor = new  Doctor(
@@ -353,16 +438,17 @@ public class AppointmentDAO {
                         rs.getInt("doctor_contact"),
                         rs.getString("doctor_address")
                 );
+                LocalDateTime dateScheduled = rs.getTimestamp("date_scheduled") != null ? rs.getTimestamp("date_scheduled").toLocalDateTime() : null;
                 Appointment appointment = new Appointment(
                         rs.getInt("appointment_id"),
-                        rs.getTimestamp("date_made").toLocalDateTime(),
+                        rs.getTimestamp("date_created").toLocalDateTime(),
                         rs.getTimestamp("date_requested").toLocalDateTime(),
-                        rs.getTimestamp("date_scheduled").toLocalDateTime(),
+                        dateScheduled,
                         patient,doctor,
                         rs.getString("status")
                 );
-                appointment.setComplete(rs.getBoolean("completed_status"));
-                appointment.setDiagnosis(rs.getString("diagnosis"));
+                appointment.setComplete(rs.getString("complete_status"));
+                //appointment.setDiagnosis(rs.getString("diagnosis"));
                 appointment.setSymptoms(rs.getString("symptoms"));
                 return appointment;
             }

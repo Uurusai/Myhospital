@@ -20,7 +20,7 @@ public class NotificationClient {
     private void startListening() {
         new Thread(() -> {
             try {
-                Socket socket = new Socket("localhost", 12346);
+                Socket socket = new Socket("192.168.0.104", 12347);
                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                 oos.writeInt(userId);
                 oos.flush();

@@ -30,38 +30,33 @@ public class loginController {
     private boolean authenticateUser(String username, String password) {
 
         // Try Admin
-        Admin admin = client.getAdminByName(username);
-        if (admin != null && PasswordUtil.checkPassword(password, admin.getPassword())) {
-            // Successful admin login
-            HMSRunner.setCurrentUser(admin.getId(), "admin");
-            return true;
-        }
+//        Admin admin = client.getAdminByName(username);
+//        if (admin != null && PasswordUtil.checkPassword(password, admin.getPassword())) {
+//            // Successful admin login
+//            HMSRunner.setCurrentUser(admin.getId(), "admin");
+//            return true;
+//        }
 
         // Try Doctor
-        List<Doctor> doctors = client.searchDoctors(username);
-        Doctor matchedDoctor = null;
-        for (Doctor d : doctors) {
-            if (d.getName().equalsIgnoreCase(username)) {
-                matchedDoctor = d;
-                break;
-            }
-        }
-        if (matchedDoctor != null && PasswordUtil.checkPassword(password, matchedDoctor.getPassword())) {
+       Doctor matchedDoctor = client.getDoctorByName(username);
+        if (matchedDoctor != null /*&& PasswordUtil.checkPassword(password, matchedDoctor.getPassword())*/) {
             // Successful doctor login
             HMSRunner.setCurrentUser(matchedDoctor.getId(), "doctor");
+            System.out.println("Found doc!");
             return true;
         }
-
+        System.out.println("Didn't find Doctor");
         // Try Patient
         Patient patient = client.getPatientByName(username);
-        if (patient != null && PasswordUtil.checkPassword(password, patient.getPassword())) {
+        if (patient != null /*&& PasswordUtil.checkPassword(password, patient.getPassword())*/) {
             // Successful patient login
+            System.out.println("patient found!");
             HMSRunner.setCurrentUser(patient.getId(), "patient");
             return true;
         }
 
         // Username exists but password is wrong
-        if (admin != null || matchedDoctor != null || patient != null) {
+        if (matchedDoctor != null || patient != null) {
             errorLabel.setText("Incorrect password.");
         } else {
             errorLabel.setText("Username does not exist.");
@@ -94,20 +89,26 @@ public class loginController {
 
         //TODO: (done, testing still left)  check if the account info matches with anything in doctor, patient or admin database
         if (authenticateUser(username, password)) {
-            // Proceed to dashboard
+            // Choose dashboard based on user type
+            String userType = HMSRunner.getCurrentUserType();
+            System.out.println("User type: " + userType);
+            String dashboardFxml;
+            switch (userType) {
+                case "doctor" -> dashboardFxml = "/com/hms/myhospital/doctorDashboard.fxml";
+                case "patient" -> dashboardFxml = "/com/hms/myhospital/patientDashboard.fxml";
+                //case "admin" -> dashboardFxml = "/com/hms/myhospital/adminDashboard.fxml";
+                default -> throw new IllegalStateException("Unknown user type: " + userType);
+            }
             try {
-                SceneSwitcher.switchScene("/com/hms/myhospital/patientDashboard.fxml");
+                System.out.println("Switching scene to: " + dashboardFxml);
+                SceneSwitcher.switchSceneWithClient(dashboardFxml,client);
             } catch (Exception e) {
                 errorLabel.setText("Login failed: " + e.getMessage());
             }
+            return;
         }
 
         System.out.println("Login button clicked with username: " + username);
-        try {
-            SceneSwitcher.switchScene("/com/hms/myhospital/patientDashboard.fxml"); //sample login
-        } catch (Exception e) {
-            System.out.println("Login failed: " + e.getMessage());
-        }
     }
 
     @FXML

@@ -28,10 +28,14 @@ public class HMSRunner extends Application {
         return client;
     }
 
+    public static String getCurrentUserType() {
+        return currentUserType ;
+    }
+
     @Override
     public void start(Stage primaryStage) {
 
-        client = new HMSClient("localhost", 12345);
+        client = new HMSClient("192.168.0.104", 12345);
 
         try {
             SceneSwitcher.setPrimaryStage(primaryStage);

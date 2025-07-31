@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class NotificationServer {
-    private static final int NOTIFICATION_PORT = 12346;
+    private static final int NOTIFICATION_PORT = 12347;
     private static final Map<Integer, List<Socket>> clientSockets = new ConcurrentHashMap<>();
 
     public static void start() {

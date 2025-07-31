@@ -181,8 +181,10 @@ public class patientRegisterController {
         newPatient.setAccount_status("pending");
 
         boolean success = client.addPatient(newPatient);
+        Patient p = client.getPatientByName(name);
         if (success) {
             try {
+                HMSRunner.setCurrentUser(p.getId(),"patient");
                 SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/patientDashboard.fxml", client);
             } catch (IOException e) {
                 e.printStackTrace();

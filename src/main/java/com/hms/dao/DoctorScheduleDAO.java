@@ -3,6 +3,7 @@ package com.hms.dao;
 import com.hms.model.*;
 import com.hms.notification.NotificationServer;
 import com.hms.threads.BreakEnder;
+import com.hms.utils.DurationParser;
 
 import java.sql.*;
 import java.time.Duration;
@@ -40,7 +41,7 @@ public class DoctorScheduleDAO {
     public DoctorSchedule getDoctorSchedule(Doctor doctor) {
 
         String sql = "SELECT day_of_the_week, starting_hour, ending_hour, " +
-                "isDoctorOnBreak, breakStart, breakDuration " +
+                "\"isDoctorOnBreak\", \"breakStart\", \"breakDuration\" " +
                 "FROM doctor_schedule WHERE doctor_id = ?";
 
         HashMap<Integer, TimeRange> workdays = new HashMap<>();
@@ -59,7 +60,13 @@ public class DoctorScheduleDAO {
                     isDoctorOnBreak = rs.getBoolean("isDoctorOnBreak");
                     if (isDoctorOnBreak && !rs.wasNull()) {
                         Timestamp breakStart = rs.getTimestamp("breakStart");
-                        Duration breakDuration = rs.getObject("breakDuration", Duration.class);
+                        // In getDoctorSchedule() method
+                        String breakDurationStr = rs.getString("breakDuration");
+                        Duration breakDuration = null;
+                        if (breakDurationStr != null) {
+                            breakDuration = DurationParser.parseFlexibleDuration(breakDurationStr);
+                        }
+                       // Duration breakDuration = rs.getObject("breakDuration", Duration.class);
 
                         if (breakStart != null && breakDuration != null) {
                             LocalDateTime breakStartTime = breakStart.toLocalDateTime();
@@ -89,15 +96,12 @@ public class DoctorScheduleDAO {
     }
 
     public void goOnBreak(int doc_id, String breakDuration){
-        String sql  = "UPDATE doctor_schedule SET isDoctorOnBreak = 'TRUE', breakDuration = CAST(? AS interval), breakStart = ? WHERE doctor_id = ?";
+        String sql  = "UPDATE doctor_schedule SET  \"isDoctorOnBreak\" = 'TRUE', \"breakDuration\" = ?, \"breakStart\" = ? WHERE doctor_id = ?";
         try(PreparedStatement stmt = getConnection().prepareStatement(sql)){
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                stmt.setInt(1,doc_id);
-                stmt.setString(5,breakDuration);
-                stmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+                stmt.setInt(3,doc_id);
+                stmt.setString(1,breakDuration);
+                stmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
                 stmt.executeUpdate();
-            }
             DoctorDAO ddao = new DoctorDAO();
             DoctorSchedule ds = getDoctorSchedule(ddao.getDoctorById(doc_id));
             sendMessageToAll(ds.getDoctor_id(),ds.getBreakDuration(),breakDuration);
@@ -109,7 +113,10 @@ public class DoctorScheduleDAO {
         }
     }
     public void sendMessageToAll(int doc_id, TimeDateRange break_time,String BreakDuration){
-        String sql = "SELECT id, date_scheduled,patient_id FROM appointments " +
+        System.out.println("Looking for appointments between " +
+                break_time.getStart() + " and " + break_time.getEnd());
+
+        String sql = "SELECT appointment_id, date_scheduled,patient_id FROM appointments " +
                 "WHERE doctor_id = ? AND date_scheduled BETWEEN ? AND ?";
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
             stmt.setInt(1, doc_id);
@@ -118,10 +125,13 @@ public class DoctorScheduleDAO {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
+                System.out.println("Entering message query");
                 Appointment app = new Appointment();
-                app.setId(rs.getInt("id"));
+                app.setId(rs.getInt("appointment_id"));
                 app.setDate_scheduled(rs.getTimestamp("date_scheduled").toLocalDateTime());
-                LocalDateTime newTime = calculateNewDateTime(app.getDate_scheduled(), BreakDuration);
+                System.out.println("Appointment ID: " + app.getId() + ", Scheduled Time: " + app.getDate_scheduled());
+                LocalDateTime newTime = app.getDate_scheduled().plus(DurationParser.parseFlexibleDuration(BreakDuration));
+                System.out.println("New Time: " + newTime);
                 DoctorDAO dd = new DoctorDAO();
                 Message confirmation = new Message();
                 int patientId = rs.getInt("patient_id");
@@ -143,42 +153,47 @@ public class DoctorScheduleDAO {
         }
     }
 
-    public void postPoneAppointments(int doc_id, TimeDateRange break_time, String breakDuration){
+    public void postPoneAppointments(int doc_id, TimeDateRange break_time, String breakDuration) {
+        System.out.println("Looking for appointments between " +
+                break_time.getStart() + " and " + break_time.getEnd());
 
-        String postponeSql = "UPDATE appointments " +
-                "SET date_scheduled = date_scheduled + CAST(? AS INTERVAL) " +
-                "WHERE doctor_id = ? " +
-                "AND date_scheduled BETWEEN ? AND ?";
+        String selectSql = "SELECT appointment_id, date_scheduled FROM appointments " +
+                "WHERE doctor_id = ? AND date_scheduled BETWEEN ? AND ?";
 
-        try (PreparedStatement postponeStmt = getConnection().prepareStatement(postponeSql)) {
-            postponeStmt.setString(1, breakDuration);
-            postponeStmt.setInt(2, doc_id);
-            postponeStmt.setTimestamp(3, Timestamp.valueOf(break_time.getStart()));
-            postponeStmt.setTimestamp(4, Timestamp.valueOf(break_time.getEnd()));
-            postponeStmt.executeUpdate();
+        String updateSql = "UPDATE appointments SET date_scheduled = ? WHERE appointment_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+             PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+
+            // Set parameters for select
+            selectStmt.setInt(1, doc_id);
+            selectStmt.setTimestamp(2, Timestamp.valueOf(break_time.getStart()));
+            selectStmt.setTimestamp(3, Timestamp.valueOf(break_time.getEnd()));
+
+            ResultSet rs = selectStmt.executeQuery();
+
+            // Parse break duration
+            Duration delay = DurationParser.parseFlexibleDuration(breakDuration);
+
+            while (rs.next()) {
+                System.out.println("Entering Query");
+                int appointmentId = rs.getInt("appointment_id");
+                LocalDateTime oldDateTime = rs.getTimestamp("date_scheduled").toLocalDateTime();
+                LocalDateTime newDateTime = oldDateTime.plus(delay);
+                System.out.println("Appointment ID: " + appointmentId + ", Old Time: " + oldDateTime + ", New Time: " + newDateTime);
+
+                // Set new values for update
+                updateStmt.setTimestamp(1, Timestamp.valueOf(newDateTime));
+                updateStmt.setInt(2, appointmentId);
+                updateStmt.addBatch();  // Batch for performance
+            }
+
+            updateStmt.executeBatch(); // Execute all updates
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to postpone appointments", e);
         }
-    }
-
-    private LocalDateTime calculateNewDateTime(LocalDateTime original, String breakDuration) {
-        try {
-            if (breakDuration.matches("\\d+ hour(s)?")) {
-                int hours = Integer.parseInt(breakDuration.replaceAll("[^0-9]", ""));
-                return original.plusHours(hours);
-            }
-            else if (breakDuration.matches("\\d+ day(s)?")) {
-                int days = Integer.parseInt(breakDuration.replaceAll("[^0-9]", ""));
-                return original.plusDays(days);
-            }
-            else if (breakDuration.matches("\\d+ week(s)?")) {
-                int weeks = Integer.parseInt(breakDuration.replaceAll("[^0-9]", ""));
-                return original.plusWeeks(weeks);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return original;
     }
 
 }

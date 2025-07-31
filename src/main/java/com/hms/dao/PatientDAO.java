@@ -74,36 +74,7 @@ public class PatientDAO {
                         rs.getString("gender"),
                         rs.getInt("age"),
                         rs.getTimestamp("date_of_birth").toString(),
-                        rs.getInt("contact-no"),
-                        rs.getString("address"),
-                        rs.getString("blood_type")
-                );
-                patients.add(patient);
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-
-        return patients ;
-    }
-    //get all pending patients
-    //unneeded ???
-    public List<Patient> getAllPendingPatients(){
-        List<Patient> patients = new ArrayList<>();
-        String sql = "SELECT * FROM Patients WHERE status = 'pending'";
-
-        try(Connection conn = getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs  = stmt.executeQuery()){
-
-            while(rs.next()){
-                Patient patient = new Patient(
-                        rs.getString("name"),
-                        rs.getInt("patient_id"),
-                        rs.getString("gender"),
-                        rs.getInt("age"),
-                        rs.getTimestamp("date_of_birth").toString(),
-                        rs.getInt("contact-no"),
+                        rs.getInt("contact_no"),
                         rs.getString("address"),
                         rs.getString("blood_type")
                 );
@@ -118,7 +89,7 @@ public class PatientDAO {
 
     //Get a patient by id
     public Patient getPatientbyId(int id){
-        String sql = "SELECT * FROM Patients WHERE patient_id = ? AND status = 'approved'";
+        String sql = "SELECT * FROM Patients WHERE patient_id = ?";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql) ){
             stmt.setInt(1,id);
@@ -200,16 +171,16 @@ public class PatientDAO {
         List<Appointment> appointments = new ArrayList<>();
         String sql = """
             SELECT 
-                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status
+                a.appointment_id,a.date_creted,a.date_requested, a.date_scheduled,a.status
                 
                 -- patient fields
                 p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
-                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact
-                p.blood_type 
+                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact,
+                p.blood_type ,
             
                 --doctor fields
-                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.e-mail,
-                d.speciality,d.contact no AS doctor_contact d.addrress AS doctor_address
+                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.email,
+                d.speciality,d.contact_no AS doctor_contact, d.addrress AS doctor_address
             
             FROM appointments a
             JOIN Patients p ON a.patient_id = p.patient_id
@@ -241,11 +212,13 @@ public class PatientDAO {
                         rs.getInt("doctor_contact"),
                         rs.getString("doctor_address")
                 );
+                LocalDateTime dateCreated = rs.getTimestamp("date_created") != null ? rs.getTimestamp("date_created").toLocalDateTime(): null;
+                LocalDateTime dateScheduled = rs.getTimestamp("date_scheduled") != null ? rs.getTimestamp("date_scheduled").toLocalDateTime() : null;
                 Appointment appointment = new Appointment(
                         rs.getInt("appointment_id"),
-                        rs.getTimestamp("date_made").toLocalDateTime(),
+                        dateCreated,
                         rs.getTimestamp("date_requested").toLocalDateTime(),
-                        rs.getTimestamp("date_scheduled").toLocalDateTime(),
+                        dateScheduled,
                         patient,doctor,
                         rs.getString("status")
                 );
@@ -262,19 +235,18 @@ public class PatientDAO {
     //get pending appointments for patient
     public List<Appointment> getPendingAppointmentsForPatient(int patientId) {
         List<Appointment> appointments = new ArrayList<>();
-        String sql = "SELECT " +
-                "a.appointment_id,a.doctor_id,a.date_scheduled,a.status,a.symptoms" +
-                "FROM" +
-                "appointments WHERE patient_id = ? AND complete_status = pending";
+        String sql = "SELECT  appointment_id, doctor_id, date_scheduled, status, symptoms FROM appointments WHERE patient_id = ? AND complete_status = ?";
         DoctorDAO dd = new DoctorDAO();
         try(PreparedStatement stmt = getConnection().prepareStatement(sql)){
             stmt.setInt(1,patientId);
+            stmt.setString(2,"pending");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 Appointment app = new Appointment();
                 app.setId(rs.getInt("appointment_id"));
                 app.setDoctor(dd.getDoctorById(rs.getInt("doctor_id")));
-                app.setDate_scheduled(rs.getTimestamp("date_scheduled").toLocalDateTime());
+                LocalDateTime dateScheduled = rs.getTimestamp("date_scheduled") != null ? rs.getTimestamp("date_scheduled").toLocalDateTime() : null;
+                app.setDate_scheduled(dateScheduled);
                 app.setStatus(rs.getString("status"));
                 app.setSymptoms(rs.getString("symptoms"));
                 appointments.add(app);
@@ -303,7 +275,7 @@ public class PatientDAO {
                         rs.getString("gender"),
                         rs.getString("email"),
                         rs.getString("speciality"),
-                        rs.getInt("contact no"),
+                        rs.getInt("contact_no"),
                         rs.getString("addrress")
                 );
                 doctors.add(doctor);

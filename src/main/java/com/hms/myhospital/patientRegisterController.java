@@ -183,7 +183,7 @@ public class patientRegisterController {
                 SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/patientDashboard.fxml", client);
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Error switching scene to patient profile.");
+                System.out.println("Error switching scene to patient dashboard.");
             }
         } else {
             patientAccInfoError.setText("Registration failed. Try again.");

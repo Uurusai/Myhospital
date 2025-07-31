@@ -10,13 +10,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class SceneSwitcher {
-    private static Stage primaryStage; // Reference to your single stage
+    private static Stage primaryStage;
 
-    // Call this once when your app starts (in Main.java)
     public static void setPrimaryStage(Stage stage) {
         primaryStage = stage;
     }
-
 
     public static void switchScene(String fxmlPath) throws IOException  {
         if (primaryStage == null) {
@@ -32,14 +30,14 @@ public class SceneSwitcher {
         primaryStage.setScene(newScene);
     }
 
-    public static <T> T switchSceneWithController(String fxmlPath) throws IOException {
-        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
-        Parent root = loader.load();
-        T controller = loader.getController();
-
-        primaryStage.setScene(new Scene(root));
-        return controller;
-    }
+//    public static <T> T switchSceneWithController(String fxmlPath) throws IOException {
+//        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
+//        Parent root = loader.load();
+//        T controller = loader.getController();
+//
+//        primaryStage.setScene(new Scene(root));
+//        return controller;
+//    }
 
     // Add this method to SceneSwitcher.java
     public static void switchSceneWithClient(String fxmlPath, HMSClient client) throws IOException {
@@ -92,5 +90,6 @@ public class SceneSwitcher {
             }
         });
     }
+
 }
 

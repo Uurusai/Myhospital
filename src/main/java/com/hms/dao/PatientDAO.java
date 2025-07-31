@@ -29,16 +29,16 @@ public class PatientDAO {
 
     //adding new Patient to db
     public boolean addPatient(Patient p){
-        String sql = "INSERT INTO Patients(name,gender,age,date_of_birth,address,contact-no,created_at,blood_type,account_status)"+
-                "VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Patients(name,gender,age,date_of_birth,address,contact_no,created_at,blood_type,account_status)"+
+                "VALUES(?,?,?,?,?,?,?,?, ?)";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
 
             //stmt.setInt(1,p.getId());
-            ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                p.setId(rs.getInt("patient_id"));
-            }
+//            ResultSet rs = stmt.executeQuery();
+//            if(rs.next()){
+//                p.setId(rs.getInt("patient_id"));
+//            }
             stmt.setString(1,p.getName());
             stmt.setString(2,p.getGender());
             stmt.setString(5,p.getAddress());
@@ -49,7 +49,17 @@ public class PatientDAO {
             stmt.setString(8,p.getBlood_type());
             stmt.setString(9,"pending");
 
-            return stmt.executeUpdate()>0 ;
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        p.setId(rs.getInt(1));
+                    }
+                }
+                return true;
+            }
+//            return stmt.executeUpdate()>0 ;
+            return false;
         }catch(SQLException e){
             e.printStackTrace();
             return false;
@@ -72,7 +82,7 @@ public class PatientDAO {
                         rs.getString("gender"),
                         rs.getInt("age"),
                         rs.getString("date_of_birth"),
-                        rs.getInt("contact-no"),
+                        rs.getInt("contact_no"),
                         rs.getString("address"),
                         rs.getString("blood_type")
                 );
@@ -88,7 +98,7 @@ public class PatientDAO {
     //unneeded ???
     public List<Patient> getAllPendingPatients(){
         List<Patient> patients = new ArrayList<>();
-        String sql = "SELECT * FROM Patients WHERE status = 'pending'";
+        String sql = "SELECT * FROM Patients WHERE account_status = 'pending'";
 
         try(Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -115,7 +125,7 @@ public class PatientDAO {
     }
 
     //Get a patient by id
-    public Patient getPatientbyId(int id){
+    public Patient getPatientById(int id){
         String sql = "SELECT * FROM Patients WHERE patient_id = ? AND status = 'approved'";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql) ){

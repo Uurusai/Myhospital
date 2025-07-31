@@ -12,6 +12,17 @@ import javafx.stage.Stage;
 public class HMSRunner extends Application {
 
     private static HMSClient client;
+    private static Integer currentUserId;
+    private static String currentUserType;
+
+    public static void setCurrentUser(Integer id, String type) {
+        currentUserId = id;
+        currentUserType = type;
+    }
+
+    public static Integer getCurrentUserId() {
+        return currentUserId;
+    }
 
     public static HMSClient getClient() {
         return client;

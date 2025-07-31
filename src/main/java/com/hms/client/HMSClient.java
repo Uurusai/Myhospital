@@ -19,6 +19,8 @@ public class HMSClient {
         this.serverAddress = serverAddress;
         this.port = port;
     }
+
+
     //admin commands
     public boolean addAdmin(Admin admin){
         return executeCommand(new GenericDAOCommand<>(
@@ -42,6 +44,8 @@ public class HMSClient {
         ));
     }
 
+
+
     //doctor commands
     public boolean addDoctor(Doctor doctor) {
         return executeCommand(new GenericDAOCommand<>(
@@ -58,6 +62,7 @@ public class HMSClient {
                 Doctor.class
         ));
     }
+
     public List<Doctor> getAllDoctors() {
         return executeCommand(new GenericDAOCommand<>(
                 "doctor", "getAllDoctors",
@@ -106,6 +111,8 @@ public class HMSClient {
         ));
     }
 
+
+
     //doctor-schedule commands
     public void setWorkingDays(DoctorSchedule ds, List<Integer> offdays, LocalTime starting_hour, LocalTime ending_hour) {
         executeCommand(new GenericDAOCommand<>(
@@ -150,6 +157,8 @@ public class HMSClient {
                 Void.class
         ));
     }
+
+
 
     //patient commands
     public boolean addPatient(Patient p) {
@@ -215,6 +224,8 @@ public class HMSClient {
                 List.class
         ));
     }
+
+
 
     //appointment commands
     public boolean addAppointment(Appointment app) {
@@ -320,6 +331,7 @@ public class HMSClient {
                 List.class
         ));
     }
+
 
     //message commands
     public List<Message> getUnreadMessages(int userId) throws SQLException {

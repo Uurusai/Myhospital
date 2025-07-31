@@ -28,6 +28,8 @@
             <Font name="System Bold" size="36.0" />
          </font>
       </Text>
+      <Rectangle fill="#c1c1c1" height="450.0" layoutX="900.0" layoutY="150.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
+      <Rectangle fill="#c1c1c1" height="450.0" layoutY="150.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
       <StackPane layoutX="950.0" layoutY="45.0" prefHeight="60.0" prefWidth="120.0">
          <children>
             <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="120.0" />
@@ -38,19 +40,9 @@
             </Text>
          </children>
       </StackPane>
-      <StackPane fx:id="doctorHomeBtn" layoutY="150.0" styleClass="menu-stack-button">
+      <StackPane fx:id="doctorProfileBtn" layoutY="150.0" styleClass="menu-stack-button">
          <children>
-            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="220.0" />
-            <Label text="HOME" textFill="#398c72">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </StackPane>
-      <StackPane fx:id="doctorProfileBtn" layoutX="220.0" layoutY="150.0" styleClass="menu-stack-button">
-         <children>
-            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="220.0" />
+            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="275.0" />
             <Label text="PROFILE" textFill="#398c72">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -58,9 +50,9 @@
             </Label>
          </children>
       </StackPane>
-      <StackPane fx:id="doctorAppointmentsBtn" layoutX="440.0" layoutY="150.0" styleClass="menu-stack-button">
+      <StackPane fx:id="doctorAppointmentsBtn" layoutX="275.0" layoutY="150.0" styleClass="menu-stack-button">
          <children>
-            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" styleClass="menu-button-unselected" width="220.0" />
+            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" styleClass="menu-button-unselected" width="275.0" />
             <Label text="APPOINTMENTS" textFill="#398c72">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -68,9 +60,9 @@
             </Label>
          </children>
       </StackPane>
-      <StackPane fx:id="doctorInboxBtn" layoutX="660.0" layoutY="150.0" styleClass="menu-stack-button">
+      <StackPane fx:id="doctorInboxBtn" layoutX="550.0" layoutY="150.0" styleClass="menu-stack-button">
          <children>
-            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="220.0" />
+            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="275.0" />
             <Label text="INBOX" textFill="#398c72">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -78,9 +70,9 @@
             </Label>
          </children>
       </StackPane>
-      <StackPane fx:id="doctorPrescriptionsBtn" layoutX="880.0" layoutY="150.0" styleClass="menu-stack-button">
+      <StackPane fx:id="doctorPrescriptionsBtn" layoutX="825.0" layoutY="150.0" styleClass="menu-stack-button">
          <children>
-            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="220.0" />
+            <Rectangle fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="275.0" />
             <Label text="PRESCRIPTIONS" textFill="#398c72">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -108,15 +100,14 @@
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <ScrollPane hbarPolicy="NEVER" layoutY="75.0" prefHeight="315.0" prefWidth="700.0">
                <content>
-                  <AnchorPane prefHeight="330.0" prefWidth="700.0">
+                  <AnchorPane fx:id="doctorDateOfBirth" prefHeight="330.0" prefWidth="700.0">
                      <children>
                         <Label layoutX="15.0" layoutY="15.0" text="PERSONAL INFO:">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label layoutX="15.0" layoutY="255.0" text="Email Address: " />
-                        <Label layoutX="350.0" layoutY="55.0" text="Last Name:" />
+                        <Label layoutX="15.0" layoutY="225.0" text="Email Address: " />
                         <Label layoutX="15.0" layoutY="85.0" text="Date of Birth: " />
                         <Label layoutX="15.0" layoutY="115.0" text="Specialization:" />
                         <Label layoutX="15.0" layoutY="145.0" text="Phone Number: " />
@@ -125,14 +116,16 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label layoutX="15.0" layoutY="225.0" text="User Name: " />
-                        <Label layoutX="15.0" layoutY="55.0" text="First Name: " />
-                        <TextField layoutX="115.0" layoutY="51.0" />
-                        <TextField layoutX="115.0" layoutY="141.0" />
-                        <TextField layoutX="446.0" layoutY="51.0" />
+                        <Label layoutX="15.0" layoutY="55.0" text="Name:" />
+                        <TextField fx:id="doctorName" layoutX="115.0" layoutY="51.0" />
+                        <TextField fx:id="doctorPhoneNumber" layoutX="115.0" layoutY="141.0" />
                         <Label layoutX="347.0" layoutY="225.0" text="Password:" />
-                        <TextField layoutX="446.0" layoutY="221.0" />
+                        <TextField fx:id="doctorPassword" layoutX="446.0" layoutY="221.0" />
                         <DatePicker layoutX="115.0" layoutY="81.0" />
+                        <Label fx:id="specializationLabel" layoutX="115.0" layoutY="115.0" text="NULL" />
+                        <Label fx:id="doctorEmailLabel" layoutX="115.0" layoutY="225.0" text="NULL" />
+                        <Label layoutX="347.0" layoutY="85.0" text="Gender: " />
+                        <Label fx:id="doctorGenderLabel" layoutX="446.0" layoutY="85.0" text="NULL" />
                      </children>
                   </AnchorPane>
                </content>
@@ -238,7 +231,5 @@
             </StackPane>
          </children>
       </AnchorPane>
-      <Rectangle fill="#c1c1c1" height="390.0" layoutY="210.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
-      <Rectangle fill="#c1c1c1" height="390.0" layoutX="900.0" layoutY="210.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
    </children>
 </AnchorPane>

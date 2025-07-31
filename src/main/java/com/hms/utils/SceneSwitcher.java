@@ -67,6 +67,9 @@ public class SceneSwitcher {
             if (param == com.hms.myhospital.prescriptionController.class) {
                 return new com.hms.myhospital.prescriptionController(client);
             }
+            if (param == com.hms.myhospital.loginController.class) {
+                return new com.hms.myhospital.loginController(client);
+            }
             // Controllers that do not need HMSClient
             if (param == com.hms.myhospital.welcomeController.class) {
                 try {

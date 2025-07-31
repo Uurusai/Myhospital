@@ -2,6 +2,7 @@ package com.hms.myhospital;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 
 public class appointmentRowController {
@@ -26,5 +27,17 @@ public class appointmentRowController {
         viewPatientBtn.setVisible(true);
     }
 
+
+    public Button getConfirmAppointmentBtn() {
+        return confirmAppointmentBtn;
+    }
+
+    public Button getCancelAppointmentBtn() {
+        return cancelAppointmentBtn;
+    }
+
+    public Button getViewPatientBtn() {
+        return viewPatientBtn;
+    }
 
 }

@@ -29,7 +29,7 @@ public class PatientDAO {
 
     //adding new Patient to db
     public boolean addPatient(Patient p){
-        String sql = "INSERT INTO Patients(name,gender,age,date_of_birth,address,contact_no,created_at,blood_type,account_status,pssword)"+
+        String sql = "INSERT INTO Patients(name,gender,age,date_of_birth,address,contact_no,created_at,blood_type,account_status,password)"+
                 "VALUES(?,?,?,?,?,?,?,?,?,?) RETURNING patient_id";
         try(Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){

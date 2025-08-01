@@ -1,6 +1,7 @@
 package com.hms.myhospital;
 
 import com.hms.client.HMSClient;
+import com.hms.client.NotificationClient;
 import com.hms.model.Appointment;
 import com.hms.model.Doctor;
 import com.hms.model.Message;
@@ -8,6 +9,7 @@ import com.hms.model.Patient;
 import com.hms.utils.SceneSwitcher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -92,9 +94,6 @@ public class patientDashboardController {
                 originalDateOfBirth = patient.getDate_of_birth();
                 originalBloodGroup = patient.getBlood_type();
                 originalPassword = patient.getPassword();
-            } else {
-                // Handle case where patient is not found
-                System.out.println("Logged in patient not found in database!!!");
             }
 
             savePatientProfileBtn.setVisible(false);
@@ -122,12 +121,14 @@ public class patientDashboardController {
             doctorTableView.setItems(doctorList);
 
             // Populate specializations
-            specializationChoiceBox.getItems().addAll("Cardiology", "Neurologist", "Pediatrics", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
+            specializationChoiceBox.getItems().addAll("Cardiology", "Neurology", "Pediatrics", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
             specializationChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
                     loadDoctorsBySpeciality(newVal);
                 }
             });
+            //initialize inbox section stuff
+            initializeInboxSection();
         }
 
         private AnchorPane getCorrespondingScreen(StackPane button) {
@@ -293,6 +294,7 @@ public class patientDashboardController {
 
         private void requestAppointment(Doctor doctor) {
             int patientId = HMSRunner.getCurrentUserId();
+            // Use autoschedule or request logic from AppointmentDAO via client
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("appointment-scheduler.fxml"));
                 Parent root = loader.load();
@@ -318,10 +320,10 @@ public class patientDashboardController {
             // Use autoschedule or request logic from AppointmentDAO via client
             AppointmentSchedulerController asc = new AppointmentSchedulerController();
         }
-    private Stage getMainStage() {
+        private Stage getMainStage() {
         return (Stage) doctorTableView.getScene().getWindow();
     }
-    private void showAlert(String title, String message) {
+        private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -330,31 +332,97 @@ public class patientDashboardController {
     }
 
         //inbox section stuff
+        @FXML private ListView<Message> messagesListView;
+        @FXML private Button refreshInboxBtn;
+        @FXML private Button deleteMessageBtn;
 
-        @FXML private VBox inboxMessagesVBox;
-        @FXML private TextField sentTo;
-        @FXML private TextField sentText;
-        @FXML private Button sendMessageBtn;
+        private ObservableList<Message> messages = FXCollections.observableArrayList();
+        private NotificationClient notificationClient;
 
-        private void loadMessages() throws SQLException {
-            inboxMessagesVBox.getChildren().clear();
-            List<Message> messages = client.getMessagesByRecipient(client.getPatientByName(patientName.getText()).getId()); // or similar
-            for (Message msg : messages) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/text.fxml"));
-                    HBox messageRow = loader.load();
-                    Label sender = (Label) loader.getNamespace().get("senderLabel");
-                    Label recipient = (Label) loader.getNamespace().get("recipientLabel");
-                    Label content = (Label) loader.getNamespace().get("messageLabel");
-                    sender.setText(msg.getSenderName());
-                    recipient.setText(String.valueOf(msg.getRecipientId()));
-                    content.setText(msg.getContent());
-                    inboxMessagesVBox.getChildren().add(messageRow);
-                } catch (IOException e) {
-                    e.printStackTrace();
+        private void initializeInboxSection() {
+        // Configure ListView with custom cell rendering
+        messagesListView.setCellFactory(param -> new ListCell<Message>() {
+            @Override
+            protected void updateItem(Message message, boolean empty) {
+                super.updateItem(message, empty);
+
+                if (empty || message == null) {
+                    setText(null);
+                    setStyle(""); // Clear styling
+                } else {
+                    // Format: "[Status] Jul 15 14:30 - Dr. Smith: Your test results are ready"
+                    setText(String.format("%s %s - %s: %s",
+                            message.isRead() ? "[Read]" : "[New]",
+                            message.getTimestamp().format(DateTimeFormatter.ofPattern("MMM dd HH:mm")),
+                            message.getSenderName(),
+                            message.getContent()
+                    ));
                 }
             }
+        });
+
+        // Mark message as read when selected
+        messagesListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && !newVal.isRead()) {
+                try {
+                    client.markAsRead(newVal.getId());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        // Load initial messages
+        loadMessages();
+
+        // Setup real-time notifications
+        setupNotificationClient();
+
+        // Button actions
+        refreshInboxBtn.setOnAction(e -> loadMessages());
+        deleteMessageBtn.setOnAction(e -> handleDeleteMessage());
+    }
+
+        private void setupNotificationClient() {
+        notificationClient = new NotificationClient(HMSRunner.getCurrentUserId(), message -> {
+            javafx.application.Platform.runLater(() -> {
+                messages.add(0, message);
+            });
+        });
+    }
+
+        @FXML
+        private void loadMessages() {
+            try {
+                messages.setAll(client.getMessagesByRecipient(HMSRunner.getCurrentUserId()));
+                messagesListView.setItems(messages);
+            } catch (SQLException e) {
+                showAlert("Error", "Failed to load messages: " + e.getMessage());
+            }
         }
+
+        @FXML
+        private void handleDeleteMessage() {
+            Message selected = messagesListView.getSelectionModel().getSelectedItem();
+
+            if (selected == null) {
+                showAlert("No Selection", "Please select a message to delete");
+                return;
+            }
+
+            try {
+                boolean success = client.deleteMessage(selected.getId());
+                if (success) {
+                    messages.remove(selected);
+                } else {
+                    showAlert("Delete Failed", "Message could not be deleted");
+                }
+            } catch (SQLException e) {
+                showAlert("Error", "Failed to delete message: " + e.getMessage());
+            }
+        }
+
+        //prescriptions section stuff
 
     @FXML StackPane logOutBtn;
     @FXML
@@ -369,5 +437,6 @@ public class patientDashboardController {
             System.out.println("Error switching scene to welcome screen.");
         }
     }
+
 
 }

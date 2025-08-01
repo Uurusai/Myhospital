@@ -25,7 +25,6 @@ public class prescriptionController
     }
 
     private void initialize() {
-        // Load all patients into the ChoiceBox
         List<String> patientNames = client.getAllPatients().stream()
                 .map(patient -> patient.getName())
                 .toList();
@@ -109,7 +108,6 @@ public class prescriptionController
         }
     }
 
-
     @FXML
     private void cancelPrescription() {
 
@@ -125,5 +123,6 @@ public class prescriptionController
             e.printStackTrace();
         }
     } //done
+
 
 }

@@ -27,7 +27,7 @@ public class AppointmentSchedulerController {
     private HMSClient client;
     private Stage stage;
 
-    public void initData(int patientId, int doctorId,HMSClient client, Stage stage) {
+    public void initData(int patientId, int doctorId, HMSClient client, Stage stage) {
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.client = client;

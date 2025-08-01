@@ -4,12 +4,12 @@ import com.hms.client.HMSClient;
 import com.hms.model.Appointment;
 import com.hms.model.Doctor;
 import com.hms.model.Message;
+import com.hms.model.Patient;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -18,6 +18,8 @@ import com.hms.utils.SceneSwitcher;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.hms.utils.Validator.*;
@@ -65,27 +67,28 @@ public class doctorDashboardController {
             button.setOnMouseClicked(e -> selectMenuButton(button));
         }
 
+
+        //profile section stuff
         saveDoctorProfileBtn.setVisible(false);
 
         int currentDoctorId = HMSRunner.getCurrentUserId();
         Doctor doctor = client.getDoctorById(currentDoctorId);
+
         if (doctor != null) {
             doctorName.setText(doctor.getName());
             doctorPhoneNumber.setText(String.valueOf(doctor.getContactNo()));
-            doctorDateOfBirth.setValue(null); // If you have date_of_birth, set it here
+            doctorDateOfBirth.setValue(null);
             doctorGenderLabel.setText(doctor.getGender());
             specializationLabel.setText(doctor.getSpeciality());
             doctorPassword.setText(doctor.getPassword());
-            // Save originals for edit/cancel
+
             originalName = doctor.getName();
             originalPhoneNumber = String.valueOf(doctor.getContactNo());
             originalPassword = doctor.getPassword();
-            originalDateOfBirth = null; // Set if you have date_of_birth
-            doctorGender = doctor.getGender();
+            originalDateOfBirth = null;
         } else {
             System.out.println("Logged in doctor ID was not found!!!");
         }
-        //setProfileFieldsEditable(false);
     }
 
     private AnchorPane getCorrespondingScreen(StackPane button) {
@@ -95,7 +98,6 @@ public class doctorDashboardController {
         if (button == doctorPrescriptionsBtn) return doctorPrescriptions;
         return null;
     }
-
     private void selectMenuButton(StackPane button) {
         // Reset all buttons and screens
         for (StackPane btn : menuButtons) {
@@ -119,12 +121,10 @@ public class doctorDashboardController {
 
     // Profile section stuff
 
-    // Add these fields to store original values
     private String originalName;
     private String originalPhoneNumber;
     private String originalPassword;
     private String originalDateOfBirth;
-    private String doctorGender;
 
     @FXML private Label doctorGenderLabel;
     @FXML private Label specializationLabel;
@@ -137,9 +137,8 @@ public class doctorDashboardController {
     @FXML private DatePicker doctorDateOfBirth;
     @FXML private TextField doctorPassword;
 
-    //TODO: Initialize the original values in the initialize method
-
-    @FXML private void editDoctorProfile() {
+    @FXML
+    private void editDoctorProfile() {
 
         System.out.println("Editing profile...");
 
@@ -201,7 +200,6 @@ public class doctorDashboardController {
         doctorPassword.setEditable(editable);
         doctorDateOfBirth.setDisable(!editable);
     }
-
     private boolean validateProfileFields() {
         return isValidName(doctorName.getText()) &&
                isValidPhoneNumber(doctorPhoneNumber.getText()) &&
@@ -210,57 +208,6 @@ public class doctorDashboardController {
     }
 
     // Inbox section stuff
-    @FXML private VBox doctorInboxMessagesVBox;
-    @FXML private TextField sentTo;
-    @FXML private TextField sentText;
-    @FXML private Button sendMessageBtn;
-
-    private void loadDoctorMessages() throws SQLException {
-        doctorInboxMessagesVBox.getChildren().clear();
-        // Get current doctor name or ID from context/session
-        int currentDoctorId = HMSRunner.getCurrentUserId();
-        List<Message> messages = client.getMessagesByRecipient(currentDoctorId);
-        if (messages.isEmpty()) {
-            System.out.println("No messages found for this doctor.");
-            return;
-        }
-
-        for (Message msg : messages) {
-            try {
-                //TODO: Fix this logic to load the message row from FXML
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/text.fxml"));
-                HBox messageRow = loader.load();
-                Label sender = (Label) loader.getNamespace().get("sentFrom");
-                Label dateAndTime = (Label) loader.getNamespace().get("dateAndTimeSent");
-                Label content = (Label) loader.getNamespace().get("messageLabel");
-                sender.setText(msg.getSenderName());
-                dateAndTime.setText(String.valueOf(msg.getRecipientId()));
-                content.setText(msg.getContent());
-                doctorInboxMessagesVBox.getChildren().add(messageRow);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    @FXML
-    private void sendPatientMessage() throws SQLException {
-
-        String patientName = sentTo.getText();
-        String text = sentText.getText();
-        if (patientName.isEmpty() || text.isEmpty()) return;
-
-        Message msg = new Message();
-        msg.setRecipientId(client.getPatientByName(patientName).getId());
-        msg.setSenderName(client.getDoctorById(HMSRunner.getCurrentUserId()).getName());
-        msg.setContent(text);
-        msg.setTimestamp(java.time.LocalDateTime.now());
-        msg.setRead(false);
-        client.createMessage(msg);
-        sentText.clear();
-        loadDoctorMessages();
-    }
 
     //Appointments section stuff
     @FXML private VBox requestedAppointments;
@@ -321,7 +268,6 @@ public class doctorDashboardController {
     }
 
     //Currently Not being used
-
     private void autoscheduleNewAppointment(int patientId) {
         boolean scheduled = client.autoscheduleAppointment(patientId, HMSRunner.getCurrentUserId(),"symptoms");
         if (scheduled) {
@@ -338,13 +284,14 @@ public class doctorDashboardController {
         System.out.println("Composing prescription...");
 
         try {
-            SceneSwitcher.switchScene("/com/hms/myhospital/prescription.fxml");
+            SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/prescription.fxml", client);
         } catch (Exception e) {
             System.out.println("Error switching to prescription scene.");
             e.printStackTrace();
         }
     } //done
 
+    @FXML private StackPane logOutBtn;
     @FXML private void logOut() {
         System.out.println("Logging out...");
         try {

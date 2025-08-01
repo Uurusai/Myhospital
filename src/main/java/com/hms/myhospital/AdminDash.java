@@ -121,7 +121,7 @@ public class AdminDash extends StackPane {
         });
         logOut_btn.setOnAction(e-> {
             try {
-                SceneSwitcher.switchScene("/com/hms/myhospital/welcome.fxml");
+                SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/welcome.fxml",client);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

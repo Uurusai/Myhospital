@@ -142,10 +142,10 @@ public class patientRegisterController {
         // Handle patient selection button click
         System.out.println("Patient registration attempted!");
 
-//        if(!validatePatientInfo()) {
-//            System.out.println("Patient registration failed due to validation errors.");
-//            return;
-//        }
+        if(!validatePatientInfo()) {
+            System.out.println("Patient registration failed due to validation errors.");
+            return;
+        }
 
         //TODO: Database logic handling
 
@@ -206,5 +206,5 @@ public class patientRegisterController {
             System.out.println("Error switching scene to welcome screen.");
         }
     }
-
 }
+

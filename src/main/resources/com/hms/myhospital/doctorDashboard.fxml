@@ -80,7 +80,7 @@
             </Label>
          </children>
       </StackPane>
-      <AnchorPane fx:id="doctorProfile" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
+      <AnchorPane fx:id="doctorProfile" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <ScrollPane hbarPolicy="NEVER" layoutY="75.0" prefHeight="315.0" prefWidth="700.0">

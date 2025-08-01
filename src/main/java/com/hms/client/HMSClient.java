@@ -203,6 +203,7 @@ public class HMSClient {
                 Boolean.class
         ));
     }
+
     public boolean deletePatient(int id) {
         return executeCommand(new GenericDAOCommand<>(
                 "patient", "deletePatient",

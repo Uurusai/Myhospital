@@ -4,9 +4,13 @@ import com.hms.client.HMSClient;
 import com.hms.model.Doctor;
 import com.hms.model.Message;
 import com.hms.model.Patient;
+import com.hms.utils.SceneSwitcher;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -17,6 +21,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hms.utils.Validator.*;
 
@@ -25,15 +30,12 @@ public class patientDashboardController {
     private final HMSClient client;
     public patientDashboardController(HMSClient client) {
         this.client = client;
-
     }
-
 
         @FXML private StackPane patientProfileBtn;
         @FXML private StackPane patientAppointmentsBtn;
         @FXML private StackPane patientInboxBtn;
         @FXML private StackPane patientPrescriptionsBtn;
-
 
         @FXML private AnchorPane patientAppointments;
         @FXML private AnchorPane patientProfile;
@@ -56,7 +58,7 @@ public class patientDashboardController {
                     patientProfile, patientAppointments, patientInbox, patientPrescriptions
             };
 
-            // Set initial state
+            // Set initial state for profile fields
             selectMenuButton(patientProfileBtn);
 
             for (StackPane button : menuButtons) {
@@ -87,10 +89,38 @@ public class patientDashboardController {
                 originalBloodGroup = patient.getBlood_type();
                 originalPassword = patient.getPassword();
             }
+
             savePatientProfileBtn.setVisible(false);
 
-            //initialize the specialization choice box
+            //initialize appoint section stuff
+            nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            phoneColumn.setCellValueFactory(new PropertyValueFactory<>("contactNo"));
+
+            // Add button to each row
+            requestColumn.setCellFactory(col -> new TableCell<Doctor, Void>() {
+                private final Button requestBtn = new Button("Request");
+                {
+                    requestBtn.setOnAction(e -> {
+                        Doctor doctor = getTableView().getItems().get(getIndex());
+                        requestAppointment(doctor);
+                    });
+                }
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setGraphic(empty ? null : requestBtn);
+                }
+            });
+
+            doctorTableView.setItems(doctorList);
+
+            // Populate specializations
             specializationChoiceBox.getItems().addAll("Cardiology", "Neurology", "Pediatrics", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
+            specializationChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null) {
+                    loadDoctorsBySpeciality(newVal);
+                }
+            });
         }
 
         private AnchorPane getCorrespondingScreen(StackPane button) {
@@ -173,22 +203,50 @@ public class patientDashboardController {
                 editPatientProfileBtn.setText("Cancel");
             }
         }
-
         @FXML
         private void savePatientProfile() {
-            // TODO: Update the database with new values
-            if (validatePatientProfileFields()) {
+        if (validatePatientProfileFields()) {
+            try {
+
+                int currentPatientId = HMSRunner.getCurrentUserId();
+
+                // Create updated patient object
+                Patient updatedPatient = new Patient();
+
+                updatedPatient.setId(currentPatientId);
+                updatedPatient.setName(patientName.getText());
+                updatedPatient.setContactNo(Integer.parseInt(patientPhoneNumber.getText()));
+                updatedPatient.setDate_of_birth(patientDateOfBirth.getValue().toString());
+                updatedPatient.setBlood_type(bloodGroup.getText());
+                updatedPatient.setPassword(patientPassword.getText());
+
+
+                // Update patient via client
+                boolean success = client.updatePatient(updatedPatient);
+
+                if (success) {
+                    // Update original values to new values
+                    originalName = updatedPatient.getName();
+                    originalPhoneNumber = String.valueOf(updatedPatient.getContactNo());
+                    originalDateOfBirth = updatedPatient.getDate_of_birth();
+                    originalBloodGroup = updatedPatient.getBlood_type();
+                    originalPassword = updatedPatient.getPassword();
+
+                } else {
+                    // Revert to original values
+                    editPatientProfile(); // This will cancel the edit
+                }
+
                 setPatientProfileFieldsEditable(false);
                 savePatientProfileBtn.setVisible(false);
                 editPatientProfileBtn.setText("Edit");
-            } else {
-                System.out.println("Invalid profile data. Please check your input.");
-                editPatientProfile(); // cancel edit
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                editPatientProfile(); // This will cancel the edit
             }
-            //TODO: show error message if invalid input
-
         }
-
+    }
         private void setPatientProfileFieldsEditable(boolean editable) {
             patientName.setEditable(editable);
             patientPhoneNumber.setEditable(editable);
@@ -196,7 +254,6 @@ public class patientDashboardController {
             patientDateOfBirth.setDisable(!editable);
             bloodGroup.setEditable(editable);
         }
-
         private boolean validatePatientProfileFields() {
             // Use your own validation logic or reuse from Validator
             return isValidName(patientName.getText()) &&
@@ -206,15 +263,41 @@ public class patientDashboardController {
                    isValidBloodGroup(bloodGroup.getText());
         }
 
+
         //appointments section stuff
+
+    //TODO: request an appointment to a specified doctor
+
+        @FXML private TableView<Doctor> doctorTableView;
+        @FXML private TableColumn<Doctor, String> nameColumn;
+        @FXML private TableColumn<Doctor, Integer> phoneColumn;
+        @FXML private TableColumn<Doctor, Void> requestColumn;
         @FXML private ChoiceBox<String> specializationChoiceBox;
 
-        private void requestAppointment() {
-            // TODO: request an appointment to a specified doctor
+        private ObservableList<Doctor> doctorList = FXCollections.observableArrayList();
 
+        private void loadDoctorsBySpeciality(String speciality) {
+            List<Doctor> doctors = client.getAllDoctors().stream()
+                .filter(d -> d.getSpeciality().equalsIgnoreCase(speciality))
+                .collect(Collectors.toList());
+            doctorList.setAll(doctors);
         }
 
+        private void requestAppointment(Doctor doctor) {
+            int patientId = HMSRunner.getCurrentUserId();
+            // Use autoschedule or request logic from AppointmentDAO via client
+            boolean success = client.autoscheduleAppointment(patientId, doctor.getId());
+            if (success) {
+                // Optionally show confirmation to user
+                System.out.println("Appointment requested with Dr. " + doctor.getName());
+            } else {
+                System.out.println("No available slots for this doctor.");
+            }
+        }
+
+
         //inbox section stuff
+
         @FXML private VBox inboxMessagesVBox;
         @FXML private TextField sentTo;
         @FXML private TextField sentText;
@@ -266,7 +349,6 @@ public class patientDashboardController {
 
         //prescriptions section stuff
 
-
 //        @FXML private void viewPrescription() {
 //            try {
 //                //TODO: get the prescription file as composed by doctor, except all the fields editable for doctor
@@ -278,5 +360,19 @@ public class patientDashboardController {
 //                System.out.println("Error loading prescription view.");
 //            }
 //        }
+
+    @FXML StackPane logOutBtn;
+    @FXML
+    private void logOut() {
+        // Handle logout logic
+        System.out.println("Logging out...");
+        HMSRunner.setCurrentUser(null, null); // Clear current user
+        try {
+            SceneSwitcher.switchScene("/com/hms/myhospital/welcome.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error switching scene to welcome screen.");
+        }
+    }
 
 }

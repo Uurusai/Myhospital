@@ -33,4 +33,5 @@ public class chooseAccountController {
             System.out.println("Failed to switch scene: " + e.getMessage());
         }
     }
+
 }

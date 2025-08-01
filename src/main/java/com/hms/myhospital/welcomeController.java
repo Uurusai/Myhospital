@@ -4,11 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.*;
-import javafx.scene.image.*;
-import javafx.event.ActionEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import com.hms.utils.SceneSwitcher;
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +21,7 @@ public class welcomeController {
         try {
             SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/login.fxml", HMSRunner.getClient());
         } catch (IOException e) {
+            e.printStackTrace();
         }
     } //done
 
@@ -39,7 +35,6 @@ public class welcomeController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     } //done
 
 }

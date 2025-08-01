@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,23 +16,71 @@
 
 <StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.loginController">
    <children>
+      <StackPane>
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Rectangle fill="#4059ad" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1100.0" />
+                  <Rectangle fill="#f4b942" height="340.0" layoutY="260.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1100.0" />
+                  <Rectangle fill="#8dc7fa" height="600.0" layoutX="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="40.0" />
+                  <Rectangle fill="#8dc7fa" height="600.0" layoutX="75.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="20.0" />
+                  <Rectangle fill="#8dc7fa" height="20.0" layoutY="250.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1100.0" />
+                  <Label layoutX="283.0" layoutY="300.0" mouseTransparent="true" text="Welcome to the Duckland Hospital" textFill="#bc6565">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="245.0" layoutY="347.0" text="official app. Sign in to get the absolutely" textFill="#bc6565">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="352.0" layoutY="394.0" text="best health-care services." textFill="#bc6565">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                  </Label>
+                  <StackPane layoutX="300.0" layoutY="463.0" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#97d8c4" height="100.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="3.0" width="200.0" />
+                        <Label mouseTransparent="true" text="LOGIN" textFill="#398c72">
+                           <font>
+                              <Font name="System Bold" size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <StackPane layoutX="600.0" layoutY="463.0" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#97d8c4" height="100.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="3.0" width="200.0" />
+                        <Label mouseTransparent="true" text="REGISTER" textFill="#398c72">
+                           <font>
+                              <Font name="System Bold" size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <Label layoutX="451.0" layoutY="150.0" text="DUCKLAND" textFill="#ed1c24">
+                     <font>
+                        <Font name="System Bold" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="463.0" layoutY="190.0" text="HOSPITAL" textFill="#ed1c24">
+                     <font>
+                        <Font name="System Bold" size="36.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="133.0" fitWidth="89.0" layoutX="507.0" layoutY="17.0">
+                     <image>
+                        <Image url="@Logo.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <Label layoutX="304.0" layoutY="345.0" mouseTransparent="true" text="Welcome to the Duckland Hospital">
-               <font>
-                  <Font size="32.0" />
-               </font>
-            </Label>
-            <Label layoutX="266.0" layoutY="392.0" text="official app. Sign in to get the absolutely">
-               <font>
-                  <Font size="32.0" />
-               </font>
-            </Label>
-            <Label layoutX="373.0" layoutY="439.0" text="best health-care services.">
-               <font>
-                  <Font size="32.0" />
-               </font>
-            </Label>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#58abf4" height="600.0" layoutX="851.0" stroke="BLACK" strokeType="INSIDE" width="250.0" />
             <Label layoutX="870.0" layoutY="113.0" text="USER LOGIN" textFill="#4059ad">
                <font>

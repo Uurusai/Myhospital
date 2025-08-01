@@ -80,10 +80,11 @@ public class AppointmentSchedulerController {
         }
         try {
             LocalDate date = datePicker.getValue();
+            int day = date.getDayOfWeek().ordinal(); // Convert to 1-7 range
             LocalTime time = LocalTime.parse(timeComboBox.getValue());
             LocalDateTime appointmentDateTime = LocalDateTime.of(date, time);
             String symptoms = symptomsTextArea.getText();
-            if(client.isAppointmentAvailable(appointmentDateTime)){
+            if(client.isAppointmentAvailable(appointmentDateTime) && client.isDoctorAvailable(client.getDoctorSchedule(client.getDoctorById(doctorId)),day,time)){
                 Appointment a = new Appointment();
                 a.setDoctor(client.getDoctorById(doctorId));
                 a.setPatient(client.getPatientbyId(patientId));

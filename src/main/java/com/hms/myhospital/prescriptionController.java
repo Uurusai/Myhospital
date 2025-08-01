@@ -23,13 +23,14 @@ public class prescriptionController
     public prescriptionController(HMSClient client) {
         this.client = client;
     }
-
+@FXML
     private void initialize() {
         List<String> patientNames = client.getAllPatients().stream()
                 .map(patient -> patient.getName())
                 .toList();
         allPatientsChoiceBox.getItems().addAll(patientNames);
         allPatientsChoiceBox.getSelectionModel().selectFirst();
+    addMedicationRow();
     }
 
     @FXML TextArea diagnosis;
@@ -44,7 +45,7 @@ public class prescriptionController
     @FXML
     private void addMedicationRow() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/medicationRow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("medicationRow.fxml"));
             Node row = loader.load();
             medicationRowController controller = loader.getController();
             medicationControllers.add(controller);
@@ -98,7 +99,7 @@ public class prescriptionController
         message.setRead(false);
 
         try {
-           // client.createMessage(message);
+            client.createMessage(message);
             NotificationServer.sendNotification(message.getRecipientId(),message);
             System.out.println("Prescription sent as message.");
             SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/doctorDashboard.fxml", client);

@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -33,7 +34,7 @@
             <Font name="System Bold" size="36.0" />
          </font>
       </Text>
-      <StackPane fx:id="logOutBtn" layoutX="950.0" layoutY="45.0" prefHeight="60.0" prefWidth="120.0">
+      <StackPane fx:id="logOutBtn" layoutX="950.0" layoutY="45.0" onMouseClicked="#logOut" prefHeight="60.0" prefWidth="120.0">
          <children>
             <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#97d8c4" height="60.0" stroke="#398c72" strokeType="INSIDE" strokeWidth="2.0" width="120.0" />
             <Text fill="#398c72" strokeType="OUTSIDE" strokeWidth="0.0" text="LOG OUT">
@@ -127,7 +128,7 @@
             <Button fx:id="savePatientProfileBtn" layoutX="524.0" layoutY="25.0" minWidth="60.0" mnemonicParsing="false" onAction="#savePatientProfile" text="Save" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="patientAppointments" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
+      <AnchorPane fx:id="patientAppointments" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="15.0" layoutY="20.0" text="Appointments: " textFill="#4059ad">
@@ -169,7 +170,7 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="patientInbox" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
+      <AnchorPane fx:id="patientInbox" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="15.0" layoutY="20.0" text="Messages:" textFill="#4059ad">
@@ -177,34 +178,16 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <ScrollPane hbarPolicy="NEVER" layoutY="75.0" prefHeight="315.0" prefWidth="700.0">
-               <content>
-                  <VBox spacing="10.0">
-                     <children>
-                        <VBox fx:id="InboxMessagesBox" prefHeight="270.0" prefWidth="700.0" spacing="20.0">
-                           <padding>
-                              <Insets left="20.0" right="20.0" top="20.0" />
-                           </padding>
-                        </VBox>
-                        <HBox>
-                           <children>
-                              <TextField fx:id="sentText" prefWidth="400.0" promptText="Enter text">
-                                 <HBox.margin>
-                                    <Insets left="15.0" right="30.0" />
-                                 </HBox.margin>
-                              </TextField>
-                              <TextField fx:id="sentTo" prefWidth="125.0" promptText="Enter recipient name">
-                                 <HBox.margin>
-                                    <Insets right="30.0" />
-                                 </HBox.margin>
-                              </TextField>
-                              <Button fx:id="sendMessageBtn" mnemonicParsing="false" prefWidth="70.0" text="Send" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </content>
-            </ScrollPane>
+            <!-- Message List View (takes most of the space) -->
+            <ListView fx:id="messagesListView" layoutX="11.0" layoutY="87.0" prefHeight="257.0" prefWidth="670.0" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="87.0">
+               <!-- Custom cell factory will be set in controller -->
+            </ListView>
+
+            <!-- Button Controls (bottom aligned) -->
+            <HBox alignment="CENTER_LEFT" layoutX="515.0" layoutY="350.0" spacing="10.0" AnchorPane.bottomAnchor="14.799999999999955" AnchorPane.leftAnchor="515.0">
+               <Button fx:id="refreshInboxBtn" onAction="#loadMessages" prefWidth="80.0" text="Refresh" />
+               <Button fx:id="deleteMessageBtn" onAction="#handleDeleteMessage" prefWidth="80.0" text="Delete" />
+            </HBox>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="patientPrescriptions" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">

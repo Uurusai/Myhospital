@@ -549,7 +549,6 @@ public class AdminDash extends StackPane {
         }
     }
 
-
     private void showAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

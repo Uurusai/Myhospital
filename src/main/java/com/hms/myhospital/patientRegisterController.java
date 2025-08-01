@@ -41,12 +41,11 @@ public class patientRegisterController {
     @FXML private ChoiceBox<String> patientBloodGroup;
 
     public void initialize() {
-        // Initialize patientBloodGroup ChoiceBox with blood types
         ObservableList<String> bloodTypes = FXCollections.observableArrayList(
                 "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown"
         );
         patientBloodGroup.setItems(bloodTypes);
-        patientBloodGroup.setValue("Unknown"); // Set default value
+        patientBloodGroup.setValue("Unknown");
     }
 
     @FXML private Label patientPerInfoError;
@@ -162,10 +161,9 @@ public class patientRegisterController {
             patientPerInfoError.setText("Invalid phone number!");
             return;
         }
-        String address = patientAddress.getText(); // Add address field if present in FXML
+        String address = patientAddress.getText();
         String password = patientSetPassword.getText();
         //String hashedPassword = PasswordUtil.hashPassword(password);
-
 
         // Check if patient already exists
         if (client.getPatientByName(name) != null) {

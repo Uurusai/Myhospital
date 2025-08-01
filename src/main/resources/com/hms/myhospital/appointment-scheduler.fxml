@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -16,36 +17,69 @@
          <children>
             <HBox prefHeight="59.0" prefWidth="519.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
                <children>
-                  <Label text="Appointment Scheduler">
+                  <Label text="Appointment Scheduler" textFill="WHITE">
                      <font>
                         <Font size="24.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets left="5.0" top="10.0" />
+                     </HBox.margin>
                   </Label>
                </children>
             </HBox>
-            <HBox prefHeight="47.0" prefWidth="519.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
+            <HBox prefHeight="47.0" prefWidth="519.0" spacing="10.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
                <children>
-                  <Label text="Symptoms">
+                  <Label text="Symptoms" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets left="5.0" top="10.0" />
+                     </HBox.margin>
                   </Label>
                   <TextArea fx:id="symptomsTextArea" prefHeight="100.0" prefWidth="411.0" />
                </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </HBox>
             <HBox prefHeight="73.0" prefWidth="519.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
                <children>
-                  <Button fx:id="autoScheduleButton" mnemonicParsing="false" text="Auto-Schedule" />
-                  <Button fx:id="manualScheduleButton" mnemonicParsing="false" text="Custom-Schedule" />
+                  <Button fx:id="autoScheduleButton" mnemonicParsing="false" text="Auto-Schedule">
+                     <HBox.margin>
+                        <Insets left="100.0" top="15.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="manualScheduleButton" mnemonicParsing="false" text="Custom-Schedule">
+                     <HBox.margin>
+                        <Insets left="100.0" top="15.0" />
+                     </HBox.margin></Button>
                </children>
             </HBox>
-            <VBox fx:id="manualScheduleContainer" prefHeight="122.0" prefWidth="519.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
+            <VBox fx:id="manualScheduleContainer" prefHeight="122.0" prefWidth="519.0" spacing="10.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
                <children>
-                  <Label text="Pick Date" />
-                  <DatePicker fx:id="datePicker" />
-                  <Label text="Pick Time:" />
-                  <ComboBox fx:id="timeComboBox" prefWidth="150.0" />
-                  <Button fx:id="submitButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="57.0" text="Submit" />
+                  <Label text="Pick Date" textFill="WHITE">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <DatePicker fx:id="datePicker">
+                     <VBox.margin>
+                        <Insets left="7.0" />
+                     </VBox.margin></DatePicker>
+                  <Label text="Pick Time:" textFill="WHITE">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <ComboBox fx:id="timeComboBox" prefWidth="150.0">
+                     <VBox.margin>
+                        <Insets left="7.0" />
+                     </VBox.margin></ComboBox>
+                  <Button fx:id="submitButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="57.0" text="Submit">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="235.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Button>
                </children>
             </VBox>
          </children>

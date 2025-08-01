@@ -127,7 +127,7 @@
             <Button fx:id="savePatientProfileBtn" layoutX="524.0" layoutY="25.0" minWidth="60.0" mnemonicParsing="false" onAction="#savePatientProfile" text="Save" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="patientAppointments" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
+      <AnchorPane fx:id="patientAppointments" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="15.0" layoutY="20.0" text="Appointments: " textFill="#4059ad">
@@ -144,7 +144,7 @@
                               <ChoiceBox fx:id="specializationChoiceBox" layoutX="250.0" prefWidth="150.0" />
                            </children>
                         </AnchorPane>
-                        <TableView prefHeight="315.0" prefWidth="700.0">
+                        <TableView fx:id="doctorTableView" prefHeight="315.0" prefWidth="700.0">
                            <columns>
                               <TableColumn fx:id="nameColumn" editable="false" minWidth="131.99998170137405" prefWidth="175.20002061128616" text="Doctor's Name" />
                               <TableColumn fx:id="phoneColumn" editable="false" minWidth="84.80001831054688" prefWidth="229.60000610351562" text="Phone Number" />
@@ -207,7 +207,7 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="patientPrescriptions" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
+      <AnchorPane fx:id="patientPrescriptions" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="15.0" layoutY="20.0" text="Prescriptions:" textFill="#4059ad">

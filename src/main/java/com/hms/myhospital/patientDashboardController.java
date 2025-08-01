@@ -1,6 +1,7 @@
 package com.hms.myhospital;
 
 import com.hms.client.HMSClient;
+import com.hms.model.Appointment;
 import com.hms.model.Doctor;
 import com.hms.model.Message;
 import com.hms.model.Patient;
@@ -9,12 +10,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -115,7 +119,7 @@ public class patientDashboardController {
             doctorTableView.setItems(doctorList);
 
             // Populate specializations
-            specializationChoiceBox.getItems().addAll("Cardiology", "Neurology", "Pediatrics", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
+            specializationChoiceBox.getItems().addAll("Cardiology", "Neurologist", "Pediatrics", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
             specializationChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
                     loadDoctorsBySpeciality(newVal);
@@ -272,6 +276,7 @@ public class patientDashboardController {
         @FXML private TableColumn<Doctor, String> nameColumn;
         @FXML private TableColumn<Doctor, Integer> phoneColumn;
         @FXML private TableColumn<Doctor, Void> requestColumn;
+        @FXML private TableView<Appointment> appointmentTableView;
         @FXML private ChoiceBox<String> specializationChoiceBox;
 
         private ObservableList<Doctor> doctorList = FXCollections.observableArrayList();
@@ -285,16 +290,41 @@ public class patientDashboardController {
 
         private void requestAppointment(Doctor doctor) {
             int patientId = HMSRunner.getCurrentUserId();
-            // Use autoschedule or request logic from AppointmentDAO via client
-            boolean success = client.autoscheduleAppointment(patientId, doctor.getId());
-            if (success) {
-                // Optionally show confirmation to user
-                System.out.println("Appointment requested with Dr. " + doctor.getName());
-            } else {
-                System.out.println("No available slots for this doctor.");
-            }
-        }
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("appointment-scheduler.fxml"));
+                Parent root = loader.load();
 
+                // Create a new stage for the scheduling window
+                Stage schedulingStage = new Stage();
+
+                // Get the controller and pass data
+                AppointmentSchedulerController controller = loader.getController();
+                controller.initData(patientId, doctor.getId(), client, schedulingStage);
+
+                schedulingStage.setScene(new Scene(root));
+                schedulingStage.setTitle("Schedule Appointment");
+
+                // Set the owner of the new window to the main window
+                schedulingStage.initOwner(getMainStage());
+
+                schedulingStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Error", "Could not load scheduling window");
+            }
+            // Use autoschedule or request logic from AppointmentDAO via client
+            AppointmentSchedulerController asc = new AppointmentSchedulerController();
+        }
+    private Stage getMainStage() {
+        return (Stage) doctorTableView.getScene().getWindow();
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
         //inbox section stuff
 
@@ -322,44 +352,6 @@ public class patientDashboardController {
                 }
             }
         }
-
-        @FXML
-        private void sendMessage() throws SQLException {
-            String doctorName = sentTo.getText();
-            String text = sentText.getText();
-            if (doctorName.isEmpty() || text.isEmpty()) return;
-            List<Doctor> doctors = client.searchDoctors(doctorName);
-
-            if (doctors.isEmpty()) {
-                System.out.println("No doctor found with that name.");
-                return;
-            }
-            int doctorId = doctors.get(0).getId();
-
-            Message msg = new Message();
-            msg.setRecipientId(doctorId);
-            msg.setSenderName(client.getPatientByName(patientName.getText()).getName());
-            msg.setContent(text);
-            msg.setTimestamp(java.time.LocalDateTime.now());
-            msg.setRead(false);
-            client.createMessage(msg);
-            sentText.clear();
-            loadMessages();
-        }
-
-        //prescriptions section stuff
-
-//        @FXML private void viewPrescription() {
-//            try {
-//                //TODO: get the prescription file as composed by doctor, except all the fields editable for doctor
-//                //is set to un-editable for patient
-//                SceneSwitcher.switchScene("/com/hms/myhospital/prescription.fxml");
-//
-//            } catch(IOException e) {
-//                e.printStackTrace();
-//                System.out.println("Error loading prescription view.");
-//            }
-//        }
 
     @FXML StackPane logOutBtn;
     @FXML

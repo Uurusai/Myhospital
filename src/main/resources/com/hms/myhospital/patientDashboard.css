@@ -26,6 +26,15 @@
 .menu-stack-button.menu-button-unselected:hover Rectangle {
     -fx-fill: linear-gradient(to bottom, #ffe484, #f4b942);
 }
+.list-cell:unread {
+    -fx-font-weight: bold;
+    -fx-background-color: red;
+}
+
+.list-cell:read {
+    -fx-font-weight: normal;
+    -fx-background-color: white;
+}
 
 /*.menu-stack-button.menu-button-selected:hover Rectangle {
     -fx-fill: linear-gradient(to bottom, #e57373, #bc6565);

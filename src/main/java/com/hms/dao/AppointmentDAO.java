@@ -272,6 +272,7 @@ public class AppointmentDAO {
         DoctorDAO dd = new  DoctorDAO();
         DoctorScheduleDAO dsd = new DoctorScheduleDAO() ;
         DoctorSchedule ds = dsd.getDoctorSchedule(dd.getDoctorById(doctor_id));
+        //System.out.println("HERE!");
 
         LocalDateTime now = LocalDateTime.now() ;
 
@@ -282,6 +283,7 @@ public class AppointmentDAO {
             int day_of_week = dt.getDayOfWeek().getValue();
 
             if(day_of_week <= ds.getWorkdays().size()){
+               // System.out.println("Checking daysss");
                 TimeRange working_hour = ds.getWorkdays().get(day_of_week - 1);
                 if(working_hour != null){
                     LocalTime start = working_hour.getStartTime();
@@ -307,6 +309,7 @@ public class AppointmentDAO {
                             appointment.setDoctor(dd.getDoctorById(doctor_id));
                             appointment.setDate_requested(proposed_schedule);
                             appointment.setSymptoms(symptoms);
+                            System.out.println("Here!!!!");
 
                             return addAppointment(appointment);
                         }

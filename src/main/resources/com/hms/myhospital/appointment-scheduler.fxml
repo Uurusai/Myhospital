@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hms.myhospital.AppointmentSchedulerController">
+   <children>
+      <VBox layoutX="39.0" layoutY="20.0" prefHeight="302.0" prefWidth="519.0">
+         <children>
+            <HBox prefHeight="59.0" prefWidth="519.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
+               <children>
+                  <Label text="Appointment Scheduler">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="47.0" prefWidth="519.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
+               <children>
+                  <Label text="Symptoms">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="symptomsTextArea" prefHeight="100.0" prefWidth="411.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="73.0" prefWidth="519.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
+               <children>
+                  <Button fx:id="autoScheduleButton" mnemonicParsing="false" text="Auto-Schedule" />
+                  <Button fx:id="manualScheduleButton" mnemonicParsing="false" text="Custom-Schedule" />
+               </children>
+            </HBox>
+            <VBox fx:id="manualScheduleContainer" prefHeight="122.0" prefWidth="519.0" styleClass="bg-color-1" stylesheets="@DashboardStyle.css">
+               <children>
+                  <Label text="Pick Date" />
+                  <DatePicker fx:id="datePicker" />
+                  <Label text="Pick Time:" />
+                  <ComboBox fx:id="timeComboBox" prefWidth="150.0" />
+                  <Button fx:id="submitButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="57.0" text="Submit" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

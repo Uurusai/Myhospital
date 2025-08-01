@@ -119,7 +119,7 @@ public class patientDashboardController {
             doctorTableView.setItems(doctorList);
 
             // Populate specializations
-            specializationChoiceBox.getItems().addAll("Cardiology", "Neurologist", "Pediatrics", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
+            specializationChoiceBox.getItems().addAll("Cardiology", "Neurologist", "Pediatrics","bones", "General Medicine", "Dermatology", "Orthopedics", "Gynaecology");
             specializationChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
                     loadDoctorsBySpeciality(newVal);

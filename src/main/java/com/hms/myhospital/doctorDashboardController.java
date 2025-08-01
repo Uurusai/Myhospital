@@ -6,6 +6,8 @@ import com.hms.model.Doctor;
 import com.hms.model.Message;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -72,19 +74,19 @@ public class doctorDashboardController {
         if (doctor != null) {
             doctorName.setText(doctor.getName());
             doctorPhoneNumber.setText(String.valueOf(doctor.getContactNo()));
-            doctorDateOfBirth.setValue(null); // If you have date_of_birth, set it here
+            doctorDateOfBirth.setValue(null);
             doctorGenderLabel.setText(doctor.getGender());
             specializationLabel.setText(doctor.getSpeciality());
             doctorPassword.setText(doctor.getPassword());
-            // Save originals for edit/cancel
             originalName = doctor.getName();
             originalPhoneNumber = String.valueOf(doctor.getContactNo());
             originalPassword = doctor.getPassword();
-            originalDateOfBirth = null; // Set if you have date_of_birth
+            originalDateOfBirth = null;
             doctorGender = doctor.getGender();
 
         }
         setProfileFieldsEditable(false);
+        //loadDoctorAppointments();
     }
 
     private AnchorPane getCorrespondingScreen(StackPane button) {
@@ -113,7 +115,15 @@ public class doctorDashboardController {
         assert screen != null;
         screen.setVisible(true);
         currentlySelected = button;
-
+        if (button == doctorAppointmentsBtn) {
+            loadDoctorAppointments();
+        } else if (button == doctorInboxBtn) {
+            try {
+                loadDoctorMessages();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Profile section stuff
@@ -263,25 +273,25 @@ public class doctorDashboardController {
     @FXML private VBox confirmedAppointments;
 
     // Helper to add an appointment row to a VBox
-    private void addAppointmentRow(VBox targetVBox, Appointment appointment, boolean isConfirmed) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/appointmentRow.fxml"));
-            HBox row = loader.load();
-            appointmentRowController controller = loader.getController();
-            controller.setAppointmentData(
-                appointment.getPatient().getName(),
-                appointment.getDate_scheduled().toLocalDate().toString(),
-                appointment.getDate_scheduled().toLocalTime().toString(),
-                isConfirmed
-            );
-            // Set up button actions
-            controller.getConfirmAppointmentBtn().setOnAction(e -> confirmAppointment(appointment, row));
-            controller.getCancelAppointmentBtn().setOnAction(e -> cancelAppointment(appointment, row));
-            targetVBox.getChildren().add(row);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void addAppointmentRow(VBox targetVBox, Appointment appointment, boolean isConfirmed) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/appointmentRow.fxml"));
+//            HBox row = loader.load();
+//            appointmentRowController controller = loader.getController();
+//            controller.setAppointmentData(
+//                appointment.getPatient().getName(),
+//                appointment.getDate_scheduled().toLocalDate().toString(),
+//                appointment.getDate_scheduled().toLocalTime().toString(),
+//                isConfirmed
+//            );
+//            // Set up button actions
+//            controller.getConfirmAppointmentBtn().setOnAction(e -> confirmAppointment(appointment, row));
+//            controller.getCancelAppointmentBtn().setOnAction(e -> cancelAppointment(appointment, row));
+//            targetVBox.getChildren().add(row);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void loadDoctorAppointments() {
         requestedAppointments.getChildren().clear();
@@ -289,19 +299,55 @@ public class doctorDashboardController {
 
         List<Appointment> allAppointments = client.getAppointmentsForDoctor(HMSRunner.getCurrentUserId());
         for (Appointment app : allAppointments) {
+            HBox row = createAppointmentRow(app);
             if ("confirmed".equalsIgnoreCase(app.getStatus())) {
-                addAppointmentRow(confirmedAppointments, app, true);
+                confirmedAppointments.getChildren().add(row);
             } else if ("pending".equalsIgnoreCase(app.getStatus()) || "requested".equalsIgnoreCase(app.getStatus())) {
-                addAppointmentRow(requestedAppointments, app, false);
+                requestedAppointments.getChildren().add(row);
             }
         }
     }
+    private HBox createAppointmentRow(Appointment appointment) {
+        HBox row = new HBox(10);  // 10px spacing between elements
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.setPadding(new Insets(10));
+        row.setStyle("-fx-border-color: #ddd; -fx-border-width: 0 0 1 0;");
+
+        // Create labels for each piece of data
+        Label patientLabel = new Label(appointment.getPatient().getName());
+        patientLabel.setMinWidth(150);
+
+        Label dateLabel = new Label(appointment.getDate_requested().toLocalDate().toString());
+        dateLabel.setMinWidth(100);
+
+        Label timeLabel = new Label(appointment.getDate_requested().toLocalTime().toString());
+        timeLabel.setMinWidth(80);
+
+        Label statusLabel = new Label(appointment.getStatus());
+        statusLabel.setMinWidth(80);
+
+        // Add buttons
+        Button confirmBtn = new Button("Confirm");
+        confirmBtn.setOnAction(e -> confirmAppointment(appointment, row));
+
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.setOnAction(e -> cancelAppointment(appointment, row));
+
+        // Only show buttons for pending appointments
+        if (!"confirmed".equalsIgnoreCase(appointment.getStatus())) {
+            row.getChildren().addAll(patientLabel, dateLabel, timeLabel, statusLabel, confirmBtn, cancelBtn);
+        } else {
+            row.getChildren().addAll(patientLabel, dateLabel, timeLabel, statusLabel);
+        }
+
+        return row;
+    }
 
     private void confirmAppointment(Appointment appointment, HBox row) {
-        boolean success = client.confirmAppointment(appointment.getId(), appointment.getDate_scheduled());
+        boolean success = client.confirmAppointment(appointment.getId(), appointment.getDate_requested());
         if (success) {
             requestedAppointments.getChildren().remove(row);
-            addAppointmentRow(confirmedAppointments, appointment, true);
+            confirmedAppointments.getChildren().add(createAppointmentRow(appointment));
         }
     }
 
@@ -312,15 +358,6 @@ public class doctorDashboardController {
         }
     }
 
-    private void autoscheduleNewAppointment(int patientId) {
-        boolean scheduled = client.autoscheduleAppointment(patientId, HMSRunner.getCurrentUserId(),"symptoms");
-        if (scheduled) {
-            loadDoctorAppointments();
-        } else {
-            System.out.println("No available slots for autoscheduling.");
-        }
-    }
-
     //prescriptions section stuff
 
     @FXML
@@ -328,7 +365,7 @@ public class doctorDashboardController {
         System.out.println("Composing prescription...");
 
         try {
-            SceneSwitcher.switchScene("/com/hms/myhospital/prescription.fxml");
+            SceneSwitcher.switchSceneWithClient("/com/hms/myhospital/prescription.fxml",client);
         } catch (Exception e) {
             System.out.println("Error switching to prescription scene.");
             e.printStackTrace();

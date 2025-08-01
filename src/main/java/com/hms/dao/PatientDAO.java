@@ -167,11 +167,11 @@ public class PatientDAO {
     }
 
     //get appointment-history for patient
-    public List<Appointment> getAppointmentsForDoctor(int patientId) {
+    public List<Appointment> getAppointmentsForPatient(int patientId) {
         List<Appointment> appointments = new ArrayList<>();
         String sql = """
             SELECT 
-                a.appointment_id,a.date_creted,a.date_requested, a.date_scheduled,a.status
+                a.appointment_id,a.date_created,a.date_requested, a.date_scheduled,a.status,
                 
                 -- patient fields
                 p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
@@ -199,7 +199,7 @@ public class PatientDAO {
                         rs.getString("patient_gender"),
                         rs.getInt("patient_age"),
                         rs.getTimestamp("patient_date_of_birth").toString(),
-                        rs.getInt("patient_contact_no"),
+                        rs.getInt("patient_contact"),
                         rs.getString("patient_address"),
                         rs.getString("blood_type")
                 );

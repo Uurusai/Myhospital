@@ -5,6 +5,7 @@ import com.hms.model.Doctor;
 import com.hms.model.Patient;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,8 +121,6 @@ public class DoctorDAO {
                     );
 
                     // You might want to load patients and appointments here with separate methods
-                     doctor.setPatients(getPatientsForDoctor(id));
-                     doctor.setAppointments(getAppointmentsForDoctor(id));
 
                     return doctor;
                 }
@@ -183,12 +182,12 @@ public class DoctorDAO {
             while(rs.next()){
                 Patient patient = new Patient(
                         rs.getString("name"),
-                        rs.getInt("doctor_id"),
+                        rs.getInt("patient_id"),
                         rs.getString("gender"),
                         rs.getInt("age"),
                         rs.getString("date_of_birth"),
-                        rs.getInt("contact-no"),
-                        rs.getString("addrress"),
+                        rs.getInt("contact_no"),
+                        rs.getString("address"),
                         rs.getString("blood_type")
                 );
                 patients.add(patient);
@@ -204,40 +203,33 @@ public class DoctorDAO {
     public List<Appointment> getAppointmentsForDoctor(int doctorId) {
         List<Appointment> appointments = new ArrayList<>();
         String sql = """
-            SELECT 
-                a.appointment_id,a.date_made,a.date_requested, a.date_scheduled,a.status,
-                
-                -- patient fields
-                p.patient_id,p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
-                p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact
-                p.blood_type,
-            
-                --doctor fields
-                d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.email,
-                d.speciality,d.contact_no AS doctor_contact d.addrress AS doctor_address,
-            
-            FROM appointments a
-            JOIN Patients p ON a.patient_id = p.patient_id
-            JOIN Doctors d ON a.doctor_id = d.doctor_id
-            WHERE a.doctor_id = ?
-                       
-""";
-        try(Connection conn = getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setInt(1,doctorId);
+        SELECT 
+            a.appointment_id, a.date_created, a.date_requested, a.date_scheduled, a.status,
+            p.patient_id, p.name AS patient_name, p.gender AS patient_gender, p.age AS patient_age,
+            p.date_of_birth AS patient_date_of_birth, p.address AS patient_address, p.contact_no AS patient_contact, p.blood_type,
+            d.doctor_id, d.name AS doctor_name, d.gender AS doctor_gender, d.email,
+            d.speciality, d.contact_no AS doctor_contact, d.addrress AS doctor_address
+        FROM appointments a
+        JOIN Patients p ON a.patient_id = p.patient_id
+        JOIN Doctors d ON a.doctor_id = d.doctor_id
+        WHERE a.doctor_id = ?
+    """;
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, doctorId);
             ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Patient patient = new Patient(
-                        rs.getString("name"),
+                        rs.getString("patient_name"),
                         rs.getInt("patient_id"),
-                        rs.getString("gender"),
-                        rs.getInt("age"),
-                        rs.getString("date_of_birth"),
-                        rs.getInt("contact_no"),
-                        rs.getString("address"),
+                        rs.getString("patient_gender"),
+                        rs.getInt("patient_age"),
+                        rs.getTimestamp("patient_date_of_birth").toString(),
+                        rs.getInt("patient_contact"),
+                        rs.getString("patient_address"),
                         rs.getString("blood_type")
                 );
-                Doctor doctor = new  Doctor(
+                Doctor doctor = new Doctor(
                         rs.getString("doctor_name"),
                         rs.getInt("doctor_id"),
                         rs.getString("doctor_gender"),
@@ -246,18 +238,19 @@ public class DoctorDAO {
                         rs.getInt("doctor_contact"),
                         rs.getString("doctor_address")
                 );
+                LocalDateTime dateCreated = rs.getTimestamp("date_created") != null ? rs.getTimestamp("date_created").toLocalDateTime(): null;
+                LocalDateTime dateScheduled = rs.getTimestamp("date_scheduled") != null ? rs.getTimestamp("date_scheduled").toLocalDateTime() : null;
                 Appointment appointment = new Appointment(
                         rs.getInt("appointment_id"),
-                        rs.getTimestamp("date_made").toLocalDateTime(),
+                        dateCreated,
                         rs.getTimestamp("date_requested").toLocalDateTime(),
-                        rs.getTimestamp("date_scheduled").toLocalDateTime(),
+                        dateScheduled,
                         patient,doctor,
                         rs.getString("status")
                 );
                 appointments.add(appointment);
             }
-
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -279,12 +272,12 @@ public class DoctorDAO {
                 while (rs.next()) {
                     Doctor doctor = new Doctor(
                             rs.getString("name"),
-                            rs.getInt("id"),
+                            rs.getInt("doctor_id"),
                             rs.getString("gender"),
                             rs.getString("email"),
                             rs.getString("speciality"),
                             rs.getInt("contact_no"),
-                            rs.getString("address")
+                            rs.getString("addrress")
                     );
                     doctors.add(doctor);
                 }

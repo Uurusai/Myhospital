@@ -16,7 +16,7 @@ public class Appointment implements Serializable {
     Patient p ;
     Doctor d ;
     String status ;
-    boolean isComplete ;
+    String isComplete ;
     String symptoms ;
 
     //constructor
@@ -35,7 +35,7 @@ public class Appointment implements Serializable {
     }
     //setters
     public void setDiagnosis(String diagnosis){     this.diagnosis = diagnosis ; }
-    public void setComplete(boolean complete) { isComplete = complete;  }
+    public void setComplete(String complete) { isComplete = complete;  }
     public void setSymptoms(String symptoms) {  this.symptoms = symptoms;   }
     public void setStatus(String status) {  this.status = status;   }
     public void setDate_scheduled(LocalDateTime date_scheduled) {  this.date_scheduled = date_scheduled;   }
@@ -56,7 +56,7 @@ public class Appointment implements Serializable {
     }
     //getters
     public String getDiagnosis(){   return diagnosis ;}
-    public boolean isComplete() {   return isComplete;  }
+    public String isComplete() {   return isComplete;  }
     public LocalDateTime  getDate_scheduled(){  return date_scheduled;   }
     public int getId() {
         return id;

@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,11 +68,14 @@ public class patientDashboardController {
             savePatientProfileBtn.setVisible(false);
 
             int currentPatientId = HMSRunner.getCurrentUserId();
-            Patient patient = client.getPatientById(currentPatientId);
+            Patient patient = client.getPatientbyId(currentPatientId);
             if (patient != null) {
                 patientName.setText(patient.getName());
                 patientPhoneNumber.setText(String.valueOf(patient.getContactNo()));
-                patientDateOfBirth.setValue(LocalDate.parse(patient.getDate_of_birth()));
+                String dobString = patient.getDate_of_birth(); // e.g., "2000-07-15 00:00:00.0"
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+                LocalDate dob = LocalDate.parse(dobString, formatter);
+                patientDateOfBirth.setValue(dob);
                 bloodGroup.setText(patient.getBlood_type());
                 patientGenderLabel.setText(patient.getGender());
 

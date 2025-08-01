@@ -136,6 +136,15 @@ public class AdminDash extends StackPane {
     private void switchToView(AnchorPane view) {
         setAllInvisible();
         view.setVisible(true);
+
+        // Load data for the visible view
+        if (view == doctorsView) {
+            loadDoctorsDataAsync();
+        } else if (view == patientsView) {
+            loadPatientsDataAsync();
+        } else if (view == appointmentsView) {
+            loadAppointmentsDataAsync();
+        }
     }
 
     private void setAllInvisible() {
@@ -151,7 +160,7 @@ public class AdminDash extends StackPane {
         doctorNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         doctorContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactNo"));
         doctorEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        doctorSpecializationColumn.setCellValueFactory(new PropertyValueFactory<>("specialization"));
+        doctorSpecializationColumn.setCellValueFactory(new PropertyValueFactory<>("speciality"));
         doctorAdressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
 
         // Add action buttons
@@ -350,6 +359,7 @@ public class AdminDash extends StackPane {
 
         task.setOnSucceeded(e -> {
             doctorsTable.getItems().setAll(task.getValue());
+            doctorsTable.refresh(); // Refresh the table to show new data
         });
 
         task.setOnFailed(e -> {
@@ -369,6 +379,7 @@ public class AdminDash extends StackPane {
 
         task.setOnSucceeded(e -> {
             patientsTable.getItems().setAll(task.getValue());
+            patientsTable.refresh();
         });
 
         task.setOnFailed(e -> {
@@ -376,21 +387,6 @@ public class AdminDash extends StackPane {
         });
 
         new Thread(task).start();
-    }
-
-    private void setupAppointmentsTable() {
-        appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        appointmentPatientNameColumn.setCellValueFactory(cellData -> {
-            Patient patient = cellData.getValue().getPatient();
-            return new SimpleStringProperty(patient != null ? patient.getName() : "N/A");
-        });
-        appointmentDoctorNameColumn.setCellValueFactory(cellData -> {
-            Doctor doctor = cellData.getValue().getDoctor();
-            return new SimpleStringProperty(doctor != null ? doctor.getName() : "N/A");
-        });
-        appointmentDateMadeColumn.setCellValueFactory(new PropertyValueFactory<>("dateMade"));
-        appointmentDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        appointmentStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
     }
 
     private void loadAppointmentsDataAsync() {
@@ -403,6 +399,7 @@ public class AdminDash extends StackPane {
 
         task.setOnSucceeded(e -> {
             appointmentsTable.getItems().setAll(task.getValue());
+            appointmentsTable.refresh();
         });
 
         task.setOnFailed(e -> {
@@ -411,6 +408,44 @@ public class AdminDash extends StackPane {
 
         new Thread(task).start();
     }
+    private void setupAppointmentsTable() {
+        appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        appointmentPatientNameColumn.setCellValueFactory(cellData -> {
+            Patient patient = cellData.getValue().getPatient();
+            return new SimpleStringProperty(patient != null ? patient.getName() : "N/A");
+        });
+        appointmentDoctorNameColumn.setCellValueFactory(cellData -> {
+            Doctor doctor = cellData.getValue().getDoctor();
+            return new SimpleStringProperty(doctor != null ? doctor.getName() : "N/A");
+        });
+        appointmentDateMadeColumn.setCellValueFactory(new PropertyValueFactory<>("date_created"));
+        appointmentDateColumn.setCellValueFactory(new PropertyValueFactory<>("date_requested"));
+        appointmentStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        TableColumn<Appointment, Void> actionColumn = new TableColumn<>("Action");
+        actionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button viewBtn = new Button("View");
+            {
+                viewBtn.setOnAction(event -> {
+                    Appointment appointment = getTableView().getItems().get(getIndex());
+                    showAppointmentDetails(appointment);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(viewBtn);
+                }
+            }
+        });
+
+        appointmentsTable.getColumns().add(actionColumn);
+
+    }
+
 
     private void approveDoctor(int doctorId) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -491,6 +526,18 @@ public class AdminDash extends StackPane {
                         "Name: " + patient.getName() + "\n" +
                         "Gender: " + patient.getGender() + "\n" +
                         "Contact: " + patient.getContactNo()
+        );
+        alert.showAndWait();
+    }
+    private void showAppointmentDetails(Appointment appointment){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Patient Details");
+        alert.setHeaderText("Details for appointment no  " + appointment.getId());
+        alert.setContentText(
+                "Patient: " + appointment.getPatient().getName() + "\n" +
+                        "Doctor: " + appointment.getDoctor().getName() + "\n" +
+                        "Date Scheduled: " + appointment.getDate_requested() + "\n" +
+                        "Symptoms: " + appointment.getSymptoms()
         );
         alert.showAndWait();
     }

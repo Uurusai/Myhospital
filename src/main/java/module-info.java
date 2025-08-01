@@ -13,7 +13,12 @@ module com.hms.myhospital {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires java.desktop;
+
+    opens com.hms.model to javafx.base;
+
+    exports com.hms.myhospital;
+    exports com.hms.model;
 
     opens com.hms.myhospital to javafx.fxml;
-    exports com.hms.myhospital;
 }

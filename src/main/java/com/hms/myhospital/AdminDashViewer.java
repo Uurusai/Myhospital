@@ -9,8 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class HMSRunner extends Application {
-
+public class AdminDashViewer extends Application {
     private static HMSClient client;
     private static Integer currentUserId;
     private static String currentUserType;
@@ -39,7 +38,7 @@ public class HMSRunner extends Application {
 
         try {
             SceneSwitcher.setPrimaryStage(primaryStage);
-            Parent root = FXMLLoader.load(getClass().getResource("/com/hms/myhospital/welcome.fxml"));
+           AdminDash root = new AdminDash(client);
             primaryStage.setTitle("Duckland Hospital");
             primaryStage.setScene(new Scene(root, 1100, 600));
             primaryStage.setResizable(false);

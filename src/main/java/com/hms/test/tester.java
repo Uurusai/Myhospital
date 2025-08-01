@@ -18,16 +18,16 @@ public class tester{
         new Thread(()->new HMSServer().start()).start() ;
         HMSClient client = new HMSClient("192.168.0.104", 12345);
 
-        int doctorId = 14;
-        int patientId = 3;
-        List<Appointment> allAppointments = client.getAllAppointments();
-        for(Appointment app : allAppointments){
-            System.out.println("Appointment ID: " + app.getId() + ", Patient ID: " + app.getPatient().getId() + ", Doctor ID: " + app.getDoctor().getId() + ", Date Requested: " + app.getDate_requested());
-        }
+        int doctorId = 18;
+        int patientId = 11;
+//        List<Appointment> allAppointments = client.getAllAppointments();
+//        for(Appointment app : allAppointments){
+//            System.out.println("Appointment ID: " + app.getId() + ", Patient ID: " + app.getPatient().getId() + ", Doctor ID: " + app.getDoctor().getId() + ", Date Requested: " + app.getDate_requested());
+//        }
 
         // Test autoscheduleAppointment
-//        boolean autoScheduled = client.autoscheduleAppointment(patientId, doctorId,"Headache and nausea,severe pain in forehead,irregular bowel activities");
-//        System.out.println("Auto-schedule appointment: " + (autoScheduled ? "Success" : "Failed"));
+        boolean autoScheduled = client.autoscheduleAppointment(patientId, doctorId,"Headache and nausea,severe pain in forehead,irregular bowel activities");
+        System.out.println("Auto-schedule appointment: " + (autoScheduled ? "Success" : "Failed"));
 
        //testing confirm appointment
         //Appointment app = client.getAppointmentById(patientId, doctorId);

@@ -150,17 +150,6 @@ fx:controller="com.hms.controller.PatientInboxController"
 
 4. Make sure to add these style classes to your CSS file (patientDashboard.css) for better message display:
 
-```css
-.list-cell:unread {
-    -fx-font-weight: bold;
-    -fx-background-color: #f0f8ff;
-}
-
-.list-cell:read {
-    -fx-font-weight: normal;
-    -fx-background-color: white;
-}
-```
 
 5. Update your controller to include the new UI elements:
 

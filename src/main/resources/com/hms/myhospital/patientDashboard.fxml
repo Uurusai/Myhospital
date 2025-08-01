@@ -127,7 +127,7 @@
             <Button fx:id="savePatientProfileBtn" layoutX="524.0" layoutY="25.0" minWidth="60.0" mnemonicParsing="false" onAction="#savePatientProfile" text="Save" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="patientAppointments" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
+      <AnchorPane fx:id="patientAppointments" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="15.0" layoutY="20.0" text="Appointments: " textFill="#4059ad">
@@ -207,7 +207,7 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="patientPrescriptions" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0" visible="false">
+      <AnchorPane fx:id="patientPrescriptions" layoutX="200.0" layoutY="210.0" prefHeight="390.0" prefWidth="700.0">
          <children>
             <Rectangle fill="#6b9ac4" height="75.0" stroke="#4059ad" strokeType="INSIDE" strokeWidth="3.0" width="700.0" />
             <Label layoutX="15.0" layoutY="20.0" text="Prescriptions:" textFill="#4059ad">

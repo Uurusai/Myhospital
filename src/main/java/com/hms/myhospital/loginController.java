@@ -88,8 +88,10 @@ public class loginController {
             return;
         } else if(!isValidUsername(username)) {
             errorLabel.setText("Username is not valid.");
+            return;
         } else if(!isValidPassword(password)) {
             errorLabel.setText("Invalid password.");
+            return;
         }
 
         //TODO: (done, testing still left)  check if the account info matches with anything in doctor, patient or admin database

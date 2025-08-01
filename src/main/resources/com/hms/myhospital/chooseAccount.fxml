@@ -24,7 +24,7 @@
             </Label>
          </children>
       </StackPane>
-      <StackPane fx:id="chooseDoctorBtn1" layoutX="600.0" layoutY="288.0" onMouseClicked="#handleChoosePatient" prefHeight="150.0" prefWidth="200.0" stylesheets="@doctorDashboard.css">
+      <StackPane fx:id="choosePatientBtn" layoutX="600.0" layoutY="288.0" onMouseClicked="#handleChoosePatient" prefHeight="150.0" prefWidth="200.0" stylesheets="@doctorDashboard.css">
          <children>
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#97d8c4" height="150.0" stroke="#97d8c4" strokeType="INSIDE" styleClass="menu-button-selected" width="280.0" />
             <Label styleClass="menu-button-selected" text="PATIENT" textFill="#398c72">

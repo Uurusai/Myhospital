@@ -88,6 +88,9 @@ public class patientDashboardController {
                 originalDateOfBirth = patient.getDate_of_birth();
                 originalBloodGroup = patient.getBlood_type();
                 originalPassword = patient.getPassword();
+            } else {
+                // Handle case where patient is not found
+                System.out.println("Logged in patient not found in database!!!");
             }
 
             savePatientProfileBtn.setVisible(false);

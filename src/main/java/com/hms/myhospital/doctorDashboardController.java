@@ -67,7 +67,7 @@ public class doctorDashboardController {
 
         saveDoctorProfileBtn.setVisible(false);
 
-        int currentDoctorId = HMSRunner.getCurrentUserId(); // TODO: replace with actual logic
+        int currentDoctorId = HMSRunner.getCurrentUserId();
         Doctor doctor = client.getDoctorById(currentDoctorId);
         if (doctor != null) {
             doctorName.setText(doctor.getName());
@@ -82,9 +82,10 @@ public class doctorDashboardController {
             originalPassword = doctor.getPassword();
             originalDateOfBirth = null; // Set if you have date_of_birth
             doctorGender = doctor.getGender();
-
+        } else {
+            System.out.println("Logged in doctor ID was not found!!!");
         }
-        setProfileFieldsEditable(false);
+        //setProfileFieldsEditable(false);
     }
 
     private AnchorPane getCorrespondingScreen(StackPane button) {
@@ -127,7 +128,6 @@ public class doctorDashboardController {
 
     @FXML private Label doctorGenderLabel;
     @FXML private Label specializationLabel;
-    //@FXML private Label doctorEmailLabel;
 
     @FXML private Button saveDoctorProfileBtn;
     @FXML private Button editDoctorProfileBtn;
@@ -140,12 +140,11 @@ public class doctorDashboardController {
     //TODO: Initialize the original values in the initialize method
 
     @FXML private void editDoctorProfile() {
-        //there is an edit button, which, when clicked, sets its own text to cancel, the save button beside it to visible
-        // and allows the user to edit the profile fields
+
         System.out.println("Editing profile...");
 
         if(saveDoctorProfileBtn.isVisible()) {
-            // Cancel edit
+            // Cancel editting
             doctorName.setText(originalName);
             doctorPhoneNumber.setText(originalPhoneNumber);
             doctorPassword.setText(originalPassword);
@@ -177,19 +176,23 @@ public class doctorDashboardController {
     private void saveDoctorProfile() {
 
         if(validateProfileFields()) {
-            // TODO: Update the database with new values
+            // TODO: (done) Update the database with new values
+            Doctor updatedDoctor = client.getDoctorById(HMSRunner.getCurrentUserId());
+            updatedDoctor.setName(doctorName.getText());
+            updatedDoctor.setContactNo(Integer.parseInt(doctorPhoneNumber.getText()));
+            updatedDoctor.setPassword(doctorPassword.getText());
+            client.updateDoctor(updatedDoctor);
+            // updatedDoctor.setAddress(doctorAddress.getText());
+
             setProfileFieldsEditable(false);
             saveDoctorProfileBtn.setVisible(false);
             editDoctorProfileBtn.setText("Edit");
 
         } else {
-            // Show error message to user
             System.out.println("Invalid profile data. Please check your input.");
-            // You can also show a dialog or alert here
             editDoctorProfile(); //cancel edit
         }
 
-        //TODO: show an error message if the field are invalid
     }
 
     private void setProfileFieldsEditable(boolean editable) {
@@ -224,13 +227,14 @@ public class doctorDashboardController {
 
         for (Message msg : messages) {
             try {
+                //TODO: Fix this logic to load the message row from FXML
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/text.fxml"));
                 HBox messageRow = loader.load();
-                Label sender = (Label) loader.getNamespace().get("senderLabel");
-                Label recipient = (Label) loader.getNamespace().get("recipientLabel");
+                Label sender = (Label) loader.getNamespace().get("sentFrom");
+                Label dateAndTime = (Label) loader.getNamespace().get("dateAndTimeSent");
                 Label content = (Label) loader.getNamespace().get("messageLabel");
                 sender.setText(msg.getSenderName());
-                recipient.setText(String.valueOf(msg.getRecipientId()));
+                dateAndTime.setText(String.valueOf(msg.getRecipientId()));
                 content.setText(msg.getContent());
                 doctorInboxMessagesVBox.getChildren().add(messageRow);
             } catch (IOException e) {
@@ -263,7 +267,7 @@ public class doctorDashboardController {
     @FXML private VBox confirmedAppointments;
 
     // Helper to add an appointment row to a VBox
-    private void addAppointmentRow(VBox targetVBox, Appointment appointment, boolean isConfirmed) {
+    public void addAppointmentRow(VBox targetVBox, Appointment appointment, boolean isConfirmed) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hms/myhospital/appointmentRow.fxml"));
             HBox row = loader.load();
@@ -308,9 +312,15 @@ public class doctorDashboardController {
     private void cancelAppointment(Appointment appointment, HBox row) {
         boolean success = client.rejectAppointment(appointment.getId());
         if (success) {
-            requestedAppointments.getChildren().remove(row);
+            if (requestedAppointments.getChildren().contains(row)) {
+                requestedAppointments.getChildren().remove(row);
+            } else {
+                confirmedAppointments.getChildren().remove(row);
+            }
         }
     }
+
+    //Currently Not being used
 
     private void autoscheduleNewAppointment(int patientId) {
         boolean scheduled = client.autoscheduleAppointment(patientId, HMSRunner.getCurrentUserId(),"symptoms");
